@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>M2.3 Capabilities — Knows How to Do the Work | AIS-OS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: {
+      primary: '#FACC15',
+      dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+    } } } }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    /* Light mode base */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    /* Light accent: emerald (T1) */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5,150,105,0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.06); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5,150,105,0.18); }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+    /* Light accent: blue (T2) */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37,99,235,0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.06); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37,99,235,0.18); }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+    /* Light accent: purple (T3) */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124,58,237,0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .bg-purple-900\/20 { background-color: rgba(124,58,237,0.06); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124,58,237,0.25); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124,58,237,0.18); }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; }
+    /* Light - remove gradients + special colors */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185,28,28,0.06); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185,28,28,0.25); }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    /* Light - navbar */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+    /* Dark - softened borders */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+    /* SVG light-mode taming */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+    /* SVG pulse */
+    @keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+      .wf-a:nth-child(2){animation-delay:.25s} .wf-a:nth-child(3){animation-delay:.5s}
+      .wf-a:nth-child(4){animation-delay:.75s} .wf-a:nth-child(5){animation-delay:1s}
+    }
+  </style>
+<link href="https://inematds.github.io/ais-os/curso/trilha2/modulo-2-3.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/ais-os/en/curso/trilha2/modulo-2-3.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/ais-os/es/curso/trilha2/modulo-2-3.html" hreflang="es" rel="alternate"/></head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha2/modulo-2-3.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="modulo-2-3.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">EN</a><a href="../../../es/curso/trilha2/modulo-2-3.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">ES</a></div>
+<!-- NAV — B2: T2 ativa -->
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-14">
+<div class="flex items-center space-x-4">
+<a class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300" href="../../index.html">
+<span class="text-2xl">⚙️</span><span class="font-bold text-lg hidden sm:inline">AIS-OS</span>
+</a>
+<span class="text-neutral-600">|</span>
+<a class="text-sky-400 hover:text-sky-300 text-sm font-medium" href="https://inema.club" target="_blank">INEMA.CLUB</a>
+</div>
+<div class="flex items-center space-x-1 sm:space-x-2">
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" href="../trilha1/index.html"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Brain (3 Ms)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10" href="index.html"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Architecture (4 Cs)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors" href="../trilha3/index.html"><span class="sm:hidden">T3</span><span class="hidden sm:inline">In Practice</span></a>
+<button class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2" id="theme-toggle">
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- BREADCRUMB -->
+<nav aria-label="Breadcrumb" class="flex items-center space-x-2 text-sm text-neutral-400 mb-6">
+<a class="hover:text-blue-400 transition-colors" href="../../index.html">Start</a>
+<span>›</span>
+<a class="hover:text-blue-400 transition-colors" href="index.html">Track 2</a>
+<span>›</span>
+<span class="text-blue-400 font-medium">Module 2.3</span>
+</nav>
+<!-- HEADER -->
+<header class="mb-10">
+<div class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 rounded-2xl border border-blue-500/30 p-8">
+<div class="flex items-center space-x-3 mb-4">
+<span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-bold rounded-full tracking-widest uppercase">Module 2.3</span>
+<span class="inline-block px-3 py-1 bg-dark-700 text-neutral-400 text-xs rounded-full">Track 2 — The Architecture</span>
+</div>
+<h1 class="text-3xl sm:text-4xl font-extrabold mb-3">
+          🧩 Capabilities: Knows how to do the work
+        </h1>
+<p class="text-neutral-300 text-lg leading-relaxed mb-6">
+          One sentence triggers an artifact. Capabilities is the layer that turns intent into execution: deterministic skills, AI-assisted skills, and sub-agents—each in the right place.
+        </p>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+<div class="text-center bg-dark-800/60 rounded-xl p-3">
+<div class="text-2xl font-bold text-blue-400">7</div>
+<div class="text-xs text-neutral-400 mt-1">Topics</div>
+</div>
+<div class="text-center bg-dark-800/60 rounded-xl p-3">
+<div class="text-2xl font-bold text-blue-400">40</div>
+<div class="text-xs text-neutral-400 mt-1">Minutes</div>
+</div>
+<div class="text-center bg-dark-800/60 rounded-xl p-3">
+<div class="text-2xl font-bold text-blue-400">Int.</div>
+<div class="text-xs text-neutral-400 mt-1">Level</div>
+</div>
+<div class="text-center bg-dark-800/60 rounded-xl p-3">
+<div class="text-2xl font-bold text-blue-400">🧩</div>
+<div class="text-xs text-neutral-400 mt-1">Capabilities</div>
+</div>
+</div>
+</div>
+</header>
+<!-- SVG FUTURISTA — Pipeline: frase → skill → artefato -->
+<div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-4 mb-10 overflow-hidden">
+<svg aria-label="An input phrase passes through a capabilities pipeline — deterministic skill, AI-assisted skill, sub-agent — until it produces an output artifact" class="w-full h-auto" role="img" viewbox="0 0 900 200">
+<defs>
+<lineargradient id="cap-grad" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#60a5fa"></stop>
+<stop offset="100%" stop-color="#38bdf8"></stop>
+</lineargradient>
+<filter height="180%" id="cap-glow" width="140%" x="-20%" y="-40%">
+<fegaussianblur result="blur" stddeviation="4"></fegaussianblur>
+<femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<pattern height="30" id="cap-grid" patternunits="userSpaceOnUse" width="30" x="0" y="0">
+<path d="M 30 0 L 0 0 0 30" fill="none" opacity="0.18" stroke="#60a5fa" stroke-width="0.3"></path>
+</pattern>
+<marker id="cap-ah" markerheight="8" markerwidth="8" orient="auto" refx="6" refy="3">
+<path d="M0,0 L0,6 L8,3 z" fill="#60a5fa"></path>
+</marker>
+<marker id="cap-ahc" markerheight="8" markerwidth="8" orient="auto" refx="6" refy="3">
+<path d="M0,0 L0,6 L8,3 z" fill="#38bdf8"></path>
+</marker>
+</defs>
+<rect fill="url(#cap-grid)" height="200" width="900" x="0" y="0"></rect>
+<!-- ENTRADA: frase -->
+<g filter="url(#cap-glow)">
+<rect fill="#0e1622" height="56" rx="12" stroke="#60a5fa" stroke-width="2" width="130" x="20" y="72"></rect>
+</g>
+<text fill="#60a5fa" font-family="Inter,sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="85" y="95">/audit</text>
+<text fill="#93c5fd" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="85" y="113">one sentence</text>
+<!-- seta 1 -->
+<line marker-end="url(#cap-ah)" stroke="#60a5fa" stroke-width="2" x1="150" x2="192" y1="100" y2="100"></line>
+<!-- SKILL DETERMINÍSTICA -->
+<g filter="url(#cap-glow)">
+<rect fill="#0e1622" height="72" rx="12" stroke="#60a5fa" stroke-width="2.2" width="148" x="196" y="64"></rect>
+</g>
+<text fill="#60a5fa" font-family="Inter,sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="270" y="91">Skill</text>
+<text fill="#93c5fd" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="270" y="107">deterministic</text>
+<text fill="#64748b" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="270" y="123">script, no AI</text>
+<!-- seta 2 -->
+<line marker-end="url(#cap-ah)" stroke="#60a5fa" stroke-width="2" x1="344" x2="386" y1="100" y2="100"></line>
+<!-- SKILL IA-ASSISTIDA -->
+<g class="wf-a" filter="url(#cap-glow)">
+<rect fill="#0e1b26" height="72" rx="12" stroke="#38bdf8" stroke-width="2.2" width="148" x="390" y="64"></rect>
+</g>
+<text fill="#38bdf8" font-family="Inter,sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="464" y="91">Skill</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="464" y="107">AI-assisted</text>
+<text fill="#64748b" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="464" y="123">1 LLM call</text>
+<!-- seta 3 -->
+<line marker-end="url(#cap-ahc)" stroke="#38bdf8" stroke-width="2" x1="538" x2="580" y1="100" y2="100"></line>
+<!-- SUB-AGENT (último recurso) -->
+<g class="wf-a" filter="url(#cap-glow)">
+<rect fill="#0e1b26" height="72" rx="12" stroke="#38bdf8" stroke-dasharray="6 3" stroke-width="2" width="148" x="584" y="64"></rect>
+</g>
+<text fill="#38bdf8" font-family="Inter,sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="658" y="91">Sub-agent</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="658" y="107">last resort</text>
+<text fill="#64748b" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="658" y="123">own context</text>
+<!-- seta 4 -->
+<line marker-end="url(#cap-ahc)" stroke="#38bdf8" stroke-width="2" x1="732" x2="774" y1="100" y2="100"></line>
+<!-- ARTEFATO -->
+<g filter="url(#cap-glow)">
+<rect fill="#0e1622" height="56" rx="12" stroke="url(#cap-grad)" stroke-width="2.5" width="104" x="778" y="72"></rect>
+</g>
+<text fill="#60a5fa" font-family="Inter,sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="830" y="95">Artifact</text>
+<text fill="#93c5fd" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="830" y="113">delivered ✓</text>
+<!-- legenda escada Boring-is-Beautiful -->
+<text fill="#64748b" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="450" y="178">Boring-is-Beautiful: use the simplest thing that works. Scale up only when needed.</text>
+</svg>
+</div>
+<!-- DIVISOR -->
+<h2 class="text-2xl font-bold mb-6">Detailed content</h2>
+<!-- TÓPICO 1 -->
+<section class="mb-10" id="topico-1">
+<div class="flex items-center space-x-4 mb-5">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-lg">1</span>
+<h2 class="text-2xl font-bold">The Capabilities test</h2>
+</div>
+<p class="text-neutral-300 leading-relaxed mb-5">
+        An AIOS passes the Capabilities test when you type a short phrase — <code class="bg-dark-700 px-1.5 py-0.5 rounded text-blue-400 text-sm">/audit</code>, <code class="bg-dark-700 px-1.5 py-0.5 rounded text-blue-400 text-sm">/level-up</code>, <code class="bg-dark-700 px-1.5 py-0.5 rounded text-blue-400 text-sm">/onboard</code> — and a multi-step workflow runs on its own, producing a concrete artifact: a report, plan, code, or draft. No further instructions. No micromanagement.
+      </p>
+<!-- Box conceito principal -->
+<div class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-5">
+<h3 class="font-bold text-blue-400 mb-3 flex items-center"><span class="mr-2">🎯</span> Operational definition</h3>
+<p class="text-neutral-300 leading-relaxed">
+<strong class="text-white">Capabilities = registered and ready skills + agents.</strong> Not what Claude <em>could</em> do — that's what it <em>knows</em> do without asking for help. The difference is having a SKILL.md (or agent file) with explicit instructions on when and how to run it.
+        </p>
+</div>
+<!-- Grid conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Trigger</div>
+<div class="text-neutral-400 text-xs">Short phrase or /command that triggers the skill</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Workflow</div>
+<div class="text-neutral-400 text-xs">Sequence of steps defined in SKILL.md</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Artifact</div>
+<div class="text-neutral-400 text-xs">Concrete output: file, report, code</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Zero friction</div>
+<div class="text-neutral-400 text-xs">No micromanagement during execution</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 2 -->
+<section class="mb-10" id="topico-2">
+<div class="flex items-center space-x-4 mb-5">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-lg">2</span>
+<h2 class="text-2xl font-bold">Skills vs. Agents</h2>
+</div>
+<p class="text-neutral-300 leading-relaxed mb-5">
+        These are two types of capability with distinct purposes. Understanding the difference prevents overcomplication: most cases don't need an agent — a well-written skill solves the problem in seconds, with zero model cost.
+      </p>
+<!-- Grid comparativo Skills vs Agents -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-5">
+<h3 class="font-bold text-emerald-400 mb-3 flex items-center"><span class="mr-2">✓</span> Skills (.claude/skills/)</h3>
+<ul class="space-y-2 text-sm text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>SKILL.md file with frontmatter + instructions</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Run in the main session (shared context)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Ideal for sequential, deterministic tasks</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Can use 0 LLM calls (pure script)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Low cost, minimal latency</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-5">
+<h3 class="font-bold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠</span> Agents (.claude/agents/)</h3>
+<ul class="space-y-2 text-sm text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">→</span><span>Sub-assistant with its own model (usually cheaper)</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">→</span><span>Isolated context — doesn’t pollute the main session</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">→</span><span>Ideal for iterative work with tools</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">→</span><span>Always involves LLM calls (higher cost)</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">→</span><span>Last resort: use the skill first</span></li>
+</ul>
+</div>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 border border-primary/30 rounded-xl p-5">
+<h3 class="font-bold text-primary mb-2 flex items-center"><span class="mr-2">💡</span> Golden rule</h3>
+<p class="text-neutral-300 text-sm leading-relaxed">
+          If the task has fixed, predictable steps → skill. If it needs iterative reasoning with tools (read a file, run a command, read the result, decide the next step) → agent. When in doubt, start with a skill and evolve it only if needed.
+        </p>
+</div>
+</section>
+<!-- TÓPICO 3 -->
+<section class="mb-10" id="topico-3">
+<div class="flex items-center space-x-4 mb-5">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-lg">3</span>
+<h2 class="text-2xl font-bold">The 3 skills included in the kit</h2>
+</div>
+<p class="text-neutral-300 leading-relaxed mb-5">
+        The AIS-OS kit comes with three deliberately lean skills—each solves a real problem in the AI work cycle. They’re a starting point, not a ceiling: you build on top of them.
+      </p>
+<!-- Timeline das 3 skills -->
+<div class="space-y-4 mb-5">
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 border-2 border-blue-500/40 flex items-center justify-center text-blue-400 font-bold text-sm">1</div>
+<div class="flex-1 bg-dark-800 rounded-xl border border-dark-600 p-4">
+<div class="flex items-center space-x-2 mb-2">
+<span class="font-mono text-sm text-blue-400 bg-dark-700 px-2 py-0.5 rounded">/onboard</span>
+<span class="text-xs text-neutral-500">Day 1 Setup</span>
+</div>
+<p class="text-neutral-300 text-sm leading-relaxed">Initializes AIOS in a new project: creates the folder structure, generates CLAUDE.md with project context, and configures basic permissions. Run it once—then it’s ready.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 border-2 border-blue-500/40 flex items-center justify-center text-blue-400 font-bold text-sm">2</div>
+<div class="flex-1 bg-dark-800 rounded-xl border border-dark-600 p-4">
+<div class="flex items-center space-x-2 mb-2">
+<span class="font-mono text-sm text-blue-400 bg-dark-700 px-2 py-0.5 rounded">/audit</span>
+<span class="text-xs text-neutral-500">Four-Cs Diagnosis</span>
+</div>
+<p class="text-neutral-300 text-sm leading-relaxed">Audits the current state of AIOS: checks Context, Connections, Capabilities, and Cadence. Produces a report with gaps and prioritized next steps. Run it whenever the system gets stuck.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 border-2 border-blue-500/40 flex items-center justify-center text-blue-400 font-bold text-sm">3</div>
+<div class="flex-1 bg-dark-800 rounded-xl border border-dark-600 p-4">
+<div class="flex items-center space-x-2 mb-2">
+<span class="font-mono text-sm text-blue-400 bg-dark-700 px-2 py-0.5 rounded">/level-up</span>
+<span class="text-xs text-neutral-500">Ship 1 automation/week</span>
+</div>
+<p class="text-neutral-300 text-sm leading-relaxed">The growth engine. Each run identifies 1 repetitive manual task and turns it into an artifact (skill, agent, script). Every artifact starts with <code class="bg-dark-700 px-1 rounded text-xs text-blue-400">bike-method-phase: 1</code> to track maturity.</p>
+</div>
+</div>
+</div>
+<!-- Grid conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Minimum kit</div>
+<div class="text-neutral-400 text-xs">3 Skills to operate from day 1</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Lean</div>
+<div class="text-neutral-400 text-xs">One purpose per skill</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Extensible</div>
+<div class="text-neutral-400 text-xs">You build on top of it</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">bike-method</div>
+<div class="text-neutral-400 text-xs">Artifacts with maturity phases</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 4 -->
+<section class="mb-10" id="topico-4">
+<div class="flex items-center space-x-4 mb-5">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-lg">4</span>
+<h2 class="text-2xl font-bold">Anatomy of a SKILL.md</h2>
+</div>
+<p class="text-neutral-300 leading-relaxed mb-5">
+        Every skill is a Markdown file with YAML frontmatter at the top and execution instructions in the body. Claude reads the frontmatter to know <em>when</em> trigger and the body to know <em>how</em> execute.
+      </p>
+<!-- Box mono: estrutura de um SKILL.md -->
+<div class="bg-dark-800 rounded-xl border border-blue-500/30 p-5 mb-5 font-mono text-sm overflow-x-auto">
+<div class="text-neutral-500 text-xs mb-3 font-sans">📄 .claude/skills/minha-skill/SKILL.md</div>
+<pre class="text-neutral-300 leading-relaxed"><code><span class="text-blue-400">---</span>
+<span class="text-blue-400">name</span>: minha-skill
+<span class="text-blue-400">description</span>: |
+  Quando disparar: descreva o gatilho em linguagem
+  natural. O Claude usa isso para decidir se invoca
+  esta skill. Seja específico — evite sobreposição
+  com outras skills.
+<span class="text-blue-400">---</span>
+
+<span class="text-neutral-400"># Execução</span>
+
+<span class="text-neutral-300">Passo 1: Leia o contexto atual em CLAUDE.md</span>
+<span class="text-neutral-300">Passo 2: Execute [ação específica]</span>
+<span class="text-neutral-300">Passo 3: Produza o artefato em [formato/path]</span>
+<span class="text-neutral-300">Passo 4: Confirme ao usuário com resumo do feito</span></code></pre>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 border border-primary/30 rounded-xl p-5 mb-5">
+<h3 class="font-bold text-primary mb-2 flex items-center"><span class="mr-2">💡</span> Tip: description is the skill’s brain</h3>
+<p class="text-neutral-300 text-sm leading-relaxed">
+          The field <code class="bg-dark-700 px-1 rounded text-xs text-primary">description</code> is what Claude reads to decide whether a skill is relevant to the current message. The clearer the trigger, the lower the chance of confusion with other skills. Use example phrases that trigger it: <em>"Use when the user asks for /onboard or the project’s initial setup."</em>
+</p>
+</div>
+<!-- Grid conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">name</div>
+<div class="text-neutral-400 text-xs">Unique skill identifier</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">description</div>
+<div class="text-neutral-400 text-xs">When to trigger — natural trigger</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">body</div>
+<div class="text-neutral-400 text-xs">Detailed execution steps</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">location</div>
+<div class="text-neutral-400 text-xs">.claude/skills/&lt;nome&gt;/SKILL.md</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 5 -->
+<section class="mb-10" id="topico-5">
+<div class="flex items-center space-x-4 mb-5">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-lg">5</span>
+<h2 class="text-2xl font-bold">Deterministic vs. AI-assisted</h2>
+</div>
+<p class="text-neutral-300 leading-relaxed mb-5">
+        Not every skill needs AI. The principle <strong class="text-white">Boring-is-Beautiful</strong> says: use the simplest solution that works. Move up the complexity ladder only when the step below isn't enough.
+      </p>
+<!-- Grid comparativo: skill determinística vs IA-assistida -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-5">
+<h3 class="font-bold text-emerald-400 mb-3 flex items-center"><span class="mr-2">⚙️</span> Deterministic Skill</h3>
+<ul class="space-y-2 text-sm text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Bash/Python script — zero LLM calls</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>100% predictable and reproducible result</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Zero cost, minimal latency (&lt;1s)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Great for: formatting, moving files, generating boilerplate</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Easy to test and debug</span></li>
+</ul>
+</div>
+<div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-5">
+<h3 class="font-bold text-blue-400 mb-3 flex items-center"><span class="mr-2">🤖</span> AI-assisted skill</h3>
+<ul class="space-y-2 text-sm text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">→</span><span>Instruction for Claude + 1 LLM call</span></li>
+<li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">→</span><span>Result adapted to the current context</span></li>
+<li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">→</span><span>Cost of 1 call, latency of seconds</span></li>
+<li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">→</span><span>Great for: drafting, summarizing, analyzing, classifying</span></li>
+<li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">→</span><span>When the script alone can’t reason</span></li>
+</ul>
+</div>
+</div>
+<!-- Escada Boring-is-Beautiful -->
+<div class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-5">
+<h3 class="font-bold text-blue-400 mb-4 flex items-center"><span class="mr-2">🪜</span> Boring-is-Beautiful Ladder</h3>
+<div class="space-y-2">
+<div class="flex items-center space-x-3 text-sm">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xs font-bold flex-shrink-0">1</span>
+<span class="text-neutral-300"><strong class="text-white">Saved prompt</strong> — CLAUDE.md with a permanent instruction. Zero code.</span>
+</div>
+<div class="flex items-center space-x-3 text-sm">
+<span class="w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xs font-bold flex-shrink-0">2</span>
+<span class="text-neutral-300"><strong class="text-white">Deterministic skill</strong> — A script or sequence of commands. No AI.</span>
+</div>
+<div class="flex items-center space-x-3 text-sm">
+<span class="w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xs font-bold flex-shrink-0">3</span>
+<span class="text-neutral-300"><strong class="text-white">AI-assisted skill</strong> — Instruction + 1 LLM call. Adapts to the context.</span>
+</div>
+<div class="flex items-center space-x-3 text-sm">
+<span class="w-6 h-6 rounded-full bg-neutral-500/20 border border-neutral-500/30 flex items-center justify-center text-neutral-400 text-xs font-bold flex-shrink-0">4</span>
+<span class="text-neutral-400"><strong class="text-neutral-300">Sub-agent</strong> — Last resort. Iterative reasoning with tools.</span>
+</div>
+</div>
+</div>
+<!-- Grid conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Boring</div>
+<div class="text-neutral-400 text-xs">Simple is stable and maintainable</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Beautiful</div>
+<div class="text-neutral-400 text-xs">Clean result without complexity</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Only spin up if</div>
+<div class="text-neutral-400 text-xs">Not solve the next step down</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Rule</div>
+<div class="text-neutral-400 text-xs">Less AI = more reliability</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 6 -->
+<section class="mb-10" id="topico-6">
+<div class="flex items-center space-x-4 mb-5">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-lg">6</span>
+<h2 class="text-2xl font-bold">Build capabilities via /level-up</h2>
+</div>
+<p class="text-neutral-300 leading-relaxed mb-5">
+        The AIOS growth engine is the <code class="bg-dark-700 px-1.5 py-0.5 rounded text-blue-400 text-sm">/level-up</code>. The logic is simple: 1 run = 1 new artifact. Over time, each artifact reduces friction and increases speed.
+      </p>
+<!-- Tip box -->
+<div class="bg-primary/10 border border-primary/30 rounded-xl p-5 mb-5">
+<h3 class="font-bold text-primary mb-2 flex items-center"><span class="mr-2">💡</span> How to build a new skill</h3>
+<p class="text-neutral-300 text-sm leading-relaxed mb-3">
+          Two paths: (1) use a <strong class="text-white">Anthropic's skill-creator</strong> — describe what you want and it generates the SKILL.md; (2) write it by hand using the anatomy from the previous topic. The second option is faster when you already know what you want.
+        </p>
+<div class="bg-dark-800/50 rounded-lg p-3 font-mono text-xs text-neutral-300">
+          /level-up → identifies a repetitive task → generates SKILL.md → saves to .claude/skills/ → ready to use
+        </div>
+</div>
+<!-- Conceito bike-method -->
+<div class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-5">
+<h3 class="font-bold text-blue-400 mb-3 flex items-center"><span class="mr-2">🚲</span> bike-method-phase</h3>
+<p class="text-neutral-300 text-sm leading-relaxed mb-3">
+          Every artifact created by /level-up starts with the frontmatter <code class="bg-dark-700 px-1 rounded text-xs text-blue-400">bike-method-phase: 1</code>. This signals that it’s in the bicycle phase — it works, but still needs manual attention. As it matures, it moves up a phase.
+        </p>
+<div class="grid grid-cols-3 gap-3 text-sm text-center">
+<div class="bg-dark-800/60 rounded-lg p-2">
+<div class="text-blue-400 font-bold">Phase 1</div>
+<div class="text-neutral-400 text-xs mt-1">Works with supervision</div>
+</div>
+<div class="bg-dark-800/60 rounded-lg p-2">
+<div class="text-blue-400 font-bold">Phase 2</div>
+<div class="text-neutral-400 text-xs mt-1">Reliable, little review</div>
+</div>
+<div class="bg-dark-800/60 rounded-lg p-2">
+<div class="text-blue-400 font-bold">Phase 3</div>
+<div class="text-neutral-400 text-xs mt-1">Autonomous, runs on its own</div>
+</div>
+</div>
+</div>
+<!-- Grid conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">1 run</div>
+<div class="text-neutral-400 text-xs">1 new artifact per week</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">skill-creator</div>
+<div class="text-neutral-400 text-xs">Anthropic tool for generating SKILL.md</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">bike-phase</div>
+<div class="text-neutral-400 text-xs">Artifact maturity tracked</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Growth</div>
+<div class="text-neutral-400 text-xs">Capabilities increase week by week</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 7 -->
+<section class="mb-10" id="topico-7">
+<div class="flex items-center space-x-4 mb-5">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-lg">7</span>
+<h2 class="text-2xl font-bold">Sub-agents (.claude/agents/)</h2>
+</div>
+<p class="text-neutral-300 leading-relaxed mb-5">
+        When the task requires iterative reasoning with tools — reading a file, running a command, interpreting the result, deciding the next step, and repeating — a sub-agent is the right tool. The key advantage: it runs in its own context without cluttering the main session.
+      </p>
+<!-- Box conceito principal -->
+<div class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-5">
+<h3 class="font-bold text-blue-400 mb-3 flex items-center"><span class="mr-2">🤖</span> Why isolated context matters</h3>
+<p class="text-neutral-300 leading-relaxed text-sm">
+          Each sub-agent has its own context window. This means long operations (auditing 50 files, iterating over a task list) don’t consume the main session’s context. You can keep chatting and giving direction while the agent works.
+        </p>
+</div>
+<!-- Grid: quando usar agent vs skill -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-5">
+<h3 class="font-bold text-emerald-400 mb-3">Use a skill when:</h3>
+<ul class="space-y-2 text-sm text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Steps are fixed and known before execution</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Doesn’t need to reason about the intermediate result</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Task is short (minutes, not hours)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Shared context is desirable</span></li>
+</ul>
+</div>
+<div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-5">
+<h3 class="font-bold text-blue-400 mb-3">Use an agent when:</h3>
+<ul class="space-y-2 text-sm text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">→</span><span>Requires a loop: read → execute → decide → repeat</span></li>
+<li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">→</span><span>Task is long and would consume the main context</span></li>
+<li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">→</span><span>The cheaper model is sufficient for the subtask</span></li>
+<li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">→</span><span>Parallelism: multiple agents at once</span></li>
+</ul>
+</div>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 border border-primary/30 rounded-xl p-5 mb-5">
+<h3 class="font-bold text-primary mb-2 flex items-center"><span class="mr-2">💡</span> Agent file: same structure, different location</h3>
+<p class="text-neutral-300 text-sm leading-relaxed">
+          An agent file follows the same anatomy as SKILL.md (frontmatter <code class="bg-dark-700 px-1 rounded text-xs text-primary">name</code> + <code class="bg-dark-700 px-1 rounded text-xs text-primary">description</code> + body), but stays in <code class="bg-dark-700 px-1 rounded text-xs text-primary">.claude/agents/</code>. Claude knows to run it as a sub-assistant with isolated context, not as an inline instruction.
+        </p>
+</div>
+<!-- Grid conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Location</div>
+<div class="text-neutral-400 text-xs">.claude/agents/ (different from skills)</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Isolation</div>
+<div class="text-neutral-400 text-xs">Its own context, clean session</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Model</div>
+<div class="text-neutral-400 text-xs">Can use a cheaper model</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 font-semibold text-sm mb-1">Last resort</div>
+<div class="text-neutral-400 text-xs">Always try a skill first</div>
+</div>
+</div>
+</section>
+<!-- RESUMO DO MÓDULO -->
+<section class="mb-12">
+<div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+<h2 class="text-2xl font-bold mb-6 flex items-center">
+<span class="mr-3">🧩</span> Module Summary
+        </h2>
+<div class="space-y-4 mb-8">
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1 font-bold">✓</span>
+<div>
+<strong class="text-white">One sentence triggers an artifact</strong>
+<span class="text-neutral-400"> — this is the test that determines whether Capabilities is in place</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1 font-bold">✓</span>
+<div>
+<strong class="text-white">Skills first, agents only when needed</strong>
+<span class="text-neutral-400"> — Boring-is-Beautiful lowers cost and increases reliability</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1 font-bold">✓</span>
+<div>
+<strong class="text-white">Kit of 3 lean skills</strong>
+<span class="text-neutral-400"> — /onboard, /audit, and /level-up cover the full cycle from day 1</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1 font-bold">✓</span>
+<div>
+<strong class="text-white">SKILL.md = frontmatter + body</strong>
+<span class="text-neutral-400"> — name and description define the trigger; body defines the execution</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1 font-bold">✓</span>
+<div>
+<strong class="text-white">Complexity ladder</strong>
+<span class="text-neutral-400"> — saved prompt → deterministic skill → AI-assisted skill → sub-agent</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1 font-bold">✓</span>
+<div>
+<strong class="text-white">/level-up = growth engine</strong>
+<span class="text-neutral-400"> — 1 run per week, 1 new artifact, bike-method-phase tracks maturity</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1 font-bold">✓</span>
+<div>
+<strong class="text-white">Sub-agents isolate context</strong>
+<span class="text-neutral-400"> — long-running work in .claude/agents/ without cluttering the main session</span>
+</div>
+</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-4 mb-8 border border-dark-600">
+<h3 class="font-semibold text-blue-400 mb-2">Next Module:</h3>
+<p class="text-neutral-300">2.4 — Cadence: Runs without being asked ⏰</p>
+<p class="text-neutral-500 text-sm mt-1">The final layer of the 4 Cs: automations that trigger on their own, without you having to ask.</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 justify-start">
+<a class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors" href="index.html">
+            ← Back to Track
+          </a>
+<a class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors" href="modulo-2-4.html">
+            Next Module →
+          </a>
+</div>
+</div>
+</section>
+</main>
+<!-- FOOTER -->
+<footer class="border-t border-dark-600 py-8 mt-16">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm space-y-1">
+<p>⚙️ AIS-OS — Your AI Operating System in Claude Code · <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" target="_blank">INEMA.CLUB</a> · 2026</p>
+<p>Based on the AIS-OS kit (MIT license). The Three Ms of AI™ and The Four Cs of an AIOS™ are trademarks of Nate Herk. © 2026 Nate Herk.</p>
+</div>
+</footer>
+<!-- SCRIPTS D1 -->
+<script>
+    const themeToggle=document.getElementById('theme-toggle'),tdi=document.getElementById('theme-toggle-dark-icon'),tli=document.getElementById('theme-toggle-light-icon'),H=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){tdi.classList.remove('hidden');H.classList.remove('dark');}else{tli.classList.remove('hidden');}
+    themeToggle.addEventListener('click',()=>{tdi.classList.toggle('hidden');tli.classList.toggle('hidden');H.classList.toggle('dark');localStorage.setItem('theme',H.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

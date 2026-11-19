@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>M1.3 Machine — Cómo construir y operar | AIS-OS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: {
+      primary: '#FACC15',
+      dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+    } } } }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    /* Light mode base */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    /* Light mode - cores de acento (trilha emerald) */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5, 150, 105, 0.18); }
+    html:not(.dark) .from-emerald-900\/30 { --tw-gradient-from: rgba(6, 78, 59, 0.15); }
+    html:not(.dark) .from-emerald-900\/40 { --tw-gradient-from: rgba(6, 78, 59, 0.18); }
+    /* Light mode - remove gradientes */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    /* Light mode - cores especiais */
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161, 98, 7, 0.20); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    /* Light mode - nav */
+    html:not(.dark) nav { background-color: rgba(255,255,255,0.9) !important; border-color: #e5e7eb; }
+    html:not(.dark) nav a { color: #374151; }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    /* Dark mode bordas suavizadas */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+    /* SVG light mode */
+    html:not(.dark) svg[role="img"] { filter: saturate(.82) brightness(.96); }
+  </style>
+<link href="https://inematds.github.io/ais-os/curso/trilha1/modulo-1-3.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/ais-os/en/curso/trilha1/modulo-1-3.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/ais-os/es/curso/trilha1/modulo-1-3.html" hreflang="es" rel="alternate"/></head>
+<body class="min-h-screen bg-dark-900 text-neutral-100"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha1/modulo-1-3.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="../../../en/curso/trilha1/modulo-1-3.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">EN</a><a href="modulo-1-3.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">ES</a></div>
+<!-- NAV B1 — Trilha 1 ativa (emerald) -->
+<nav class="sticky top-0 z-40 bg-dark-900/80 backdrop-blur-sm border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-16">
+<!-- Logo -->
+<div class="flex items-center space-x-3">
+<a class="flex items-center space-x-2 hover:opacity-80 transition-opacity" href="../../index.html">
+<span class="text-2xl">⚙️</span>
+<div class="flex flex-col leading-tight">
+<span class="font-bold text-neutral-100 text-sm">AIS-OS</span>
+<span class="text-xs text-sky-400 hover:text-sky-300 hidden sm:inline">INEMA.CLUB</span>
+</div>
+</a>
+<span class="text-neutral-600 hidden sm:inline">|</span>
+<a class="text-sky-400 hover:text-sky-300 text-sm font-medium sm:hidden" href="https://inema.club" target="_blank">INEMA.CLUB</a>
+</div>
+<!-- Trilhas + toggle -->
+<div class="flex items-center space-x-1 sm:space-x-2">
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10" href="index.html">
+<span class="sm:hidden">T1</span><span class="hidden sm:inline">Cerebro (3 Ms)</span>
+</a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors" href="../trilha2/index.html">
+<span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitectura (4 Cs)</span>
+</a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors" href="../trilha3/index.html">
+<span class="sm:hidden">T3</span><span class="hidden sm:inline">En la práctica</span>
+</a>
+<button class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2" id="theme-toggle">
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- BREADCRUMB -->
+<nav aria-label="breadcrumb" class="mb-6">
+<ol class="flex items-center space-x-2 text-sm text-neutral-500">
+<li><a class="hover:text-emerald-400 transition-colors" href="../../index.html">Inicio</a></li>
+<li><span class="mx-1">/</span></li>
+<li><a class="hover:text-emerald-400 transition-colors" href="index.html">Ruta 1</a></li>
+<li><span class="mx-1">/</span></li>
+<li class="text-emerald-400 font-medium">Módulo 1.3</li>
+</ol>
+</nav>
+<!-- HEADER DO MÓDULO -->
+<header class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-2xl border border-emerald-500/30 p-8 mb-8">
+<div class="mb-4">
+<span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-full text-xs font-bold tracking-widest uppercase">MÓDULO 1.3</span>
+</div>
+<h1 class="text-2xl font-bold text-neutral-100 mb-3">🛠️ Máquina — Cómo construir y operar</h1>
+<p class="text-neutral-400 text-base leading-relaxed mb-6">
+        Boring es hermoso. Aprende a montar pipelines de IA como líneas de ensamblaje: cada bloque hace un trabajo, cada salida se valida antes de pasar a la siguiente y todo el sistema se puede apagar sin culpa.
+      </p>
+<!-- Stats -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+<div class="bg-dark-900/60 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-emerald-400">7</div>
+<div class="text-xs text-neutral-500 mt-1">Temas</div>
+</div>
+<div class="bg-dark-900/60 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-emerald-400">40</div>
+<div class="text-xs text-neutral-500 mt-1">Minutos</div>
+</div>
+<div class="bg-dark-900/60 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-emerald-400">🟢</div>
+<div class="text-xs text-neutral-500 mt-1">Principiante</div>
+</div>
+<div class="bg-dark-900/60 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-emerald-400">🔨</div>
+<div class="text-xs text-neutral-500 mt-1">Práctica</div>
+</div>
+</div>
+</header>
+<!-- SVG FUTURISTA — Assembly Line / Lego Pipeline -->
+<div class="rounded-2xl border border-emerald-500/30 bg-dark-900/40 p-6 mb-10">
+<svg aria-label="Diagrama de pipeline Lego: bloques encadenados input→bloque1→bloque-IA→bloque3→output, con el paso de IA destacado en cian" class="w-full h-auto" font-family="Inter,sans-serif" role="img" viewbox="0 0 720 200" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<filter height="160%" id="m13-glow-em" width="160%" x="-30%" y="-30%">
+<fegaussianblur result="blur" stddeviation="1.8"></fegaussianblur>
+<femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<filter height="160%" id="m13-glow-cy" width="160%" x="-30%" y="-30%">
+<fegaussianblur result="blur" stddeviation="2.2"></fegaussianblur>
+<femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<!-- grid de fundo -->
+<pattern height="24" id="m13-grid" patternunits="userSpaceOnUse" width="24">
+<path d="M 24 0 L 0 0 0 24" fill="none" stroke="#34d39915" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<!-- fundo grid -->
+<rect fill="url(#m13-grid)" height="200" width="720"></rect>
+<!-- INPUT -->
+<rect fill="#0e2018" filter="url(#m13-glow-em)" height="50" rx="8" stroke="#34d399" stroke-width="2" width="90" x="20" y="75"></rect>
+<text fill="#34d399" font-size="11" font-weight="600" text-anchor="middle" x="65" y="97">INPUT</text>
+<text fill="#9ad6c0" font-size="9" text-anchor="middle" x="65" y="113">tu dato sin procesar</text>
+<!-- seta 1 -->
+<line stroke="#34d399" stroke-dasharray="4 2" stroke-width="1.5" x1="110" x2="148" y1="100" y2="100"></line>
+<polygon fill="#34d399" points="148,95 158,100 148,105"></polygon>
+<!-- BLOCO 1 — determinístico -->
+<rect fill="#0e2018" filter="url(#m13-glow-em)" height="64" rx="8" stroke="#34d399" stroke-width="2" width="110" x="160" y="68"></rect>
+<text fill="#34d399" font-size="11" font-weight="600" text-anchor="middle" x="215" y="92">Bloque 1</text>
+<text fill="#9ad6c0" font-size="9" text-anchor="middle" x="215" y="107">determinístico</text>
+<text fill="#6ee7b7" font-size="8" text-anchor="middle" x="215" y="121">parse / format</text>
+<!-- seta 2 -->
+<line stroke="#34d399" stroke-dasharray="4 2" stroke-width="1.5" x1="270" x2="308" y1="100" y2="100"></line>
+<polygon fill="#34d399" points="308,95 318,100 308,105"></polygon>
+<!-- BLOCO IA — ciano destaque -->
+<rect fill="#0e1b26" filter="url(#m13-glow-cy)" height="84" rx="10" stroke="#38bdf8" stroke-width="2.5" width="120" x="320" y="58"></rect>
+<text fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle" x="380" y="86">Bloque de IA</text>
+<text fill="#9ad6ff" font-size="9" text-anchor="middle" x="380" y="103">1 tarea especializada</text>
+<text fill="#bfe6ff" font-size="8" text-anchor="middle" x="380" y="118">copy / razonamiento / clas.</text>
+<text fill="#38bdf8" font-size="8" font-weight="600" text-anchor="middle" x="380" y="132">✓ valida antes de avanzar</text>
+<!-- seta 3 -->
+<line stroke="#34d399" stroke-dasharray="4 2" stroke-width="1.5" x1="440" x2="478" y1="100" y2="100"></line>
+<polygon fill="#34d399" points="478,95 488,100 478,105"></polygon>
+<!-- BLOCO 3 — determinístico -->
+<rect fill="#0e2018" filter="url(#m13-glow-em)" height="64" rx="8" stroke="#34d399" stroke-width="2" width="110" x="490" y="68"></rect>
+<text fill="#34d399" font-size="11" font-weight="600" text-anchor="middle" x="545" y="92">Bloque 3</text>
+<text fill="#9ad6c0" font-size="9" text-anchor="middle" x="545" y="107">determinístico</text>
+<text fill="#6ee7b7" font-size="8" text-anchor="middle" x="545" y="121">envío / store</text>
+<!-- seta 4 -->
+<line stroke="#34d399" stroke-dasharray="4 2" stroke-width="1.5" x1="600" x2="638" y1="100" y2="100"></line>
+<polygon fill="#34d399" points="638,95 648,100 638,105"></polygon>
+<!-- OUTPUT -->
+<rect fill="#0e2018" filter="url(#m13-glow-em)" height="50" rx="8" stroke="#34d399" stroke-width="2" width="50" x="650" y="75"></rect>
+<text fill="#34d399" font-size="10" font-weight="600" text-anchor="middle" x="675" y="97">OUT</text>
+<text fill="#9ad6c0" font-size="8" text-anchor="middle" x="675" y="112">PUT</text>
+<!-- labels de validação embaixo -->
+<text fill="#6ee7b7" font-size="8" text-anchor="middle" x="215" y="155">→ ejecuta → confirma</text>
+<text fill="#38bdf8" font-size="8" text-anchor="middle" x="380" y="158">→ valida el output real</text>
+<text fill="#6ee7b7" font-size="8" text-anchor="middle" x="545" y="155">→ encadena</text>
+<!-- título -->
+<text fill="#34d399" font-size="13" font-weight="700" text-anchor="middle" x="360" y="20">Línea de ensamblaje — Pipeline Lego</text>
+<text fill="#9ca3af" font-size="9" text-anchor="middle" x="360" y="36">primero los pasos sin IA · 1 entrada / 1 salida por bloque · IA solo donde aporte valor</text>
+<style>
+          @media (prefers-reduced-motion: no-preference) {
+            #m13-glow-cy feGaussianBlur { animation: m13-pulse 3s ease-in-out infinite; }
+            @keyframes m13-pulse { 0%,100%{stdDeviation:2.2} 50%{stdDeviation:3.5} }
+          }
+        </style>
+</svg>
+<p class="text-xs text-neutral-500 text-center mt-3">Lego Principle + línea de ensamblaje: bloques modulares, validación en cada eslabón, IA solo donde sea necesario</p>
+</div>
+<!-- H2 CONTEÚDO DETALHADO -->
+<h2 class="text-2xl font-bold mb-6">Contenido detallado</h2>
+<!-- TÓPICO 1 — Lego Principle -->
+<section class="mb-16" id="topico-1">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg">1</span>
+<h2 class="text-xl font-bold text-neutral-100">Lego Principle — El paso más pequeño posible</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">
+        Cada bloque de tu sistema debe tener exactamente 1 entrada y 1 salida. La salida del bloque 1 es la entrada del bloque 2. Esta modularidad no es solo elegancia: es la diferencia entre un sistema que entiendes y uno que te domina.
+      </p>
+<!-- Box conceito principal -->
+<div class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-emerald-400 mb-3 flex items-center">
+<span class="mr-2">🧱</span> Principio central
+        </h3>
+<p class="text-neutral-300 leading-relaxed">
+<strong class="text-white">Empieza por los pasos sin IA</strong> — los determinísticos. Si puedes hacerlo con código simple (parseo, validación, formato), hazlo así. La IA solo entra donde realmente agrega valor. Esto reduce el costo, la latencia y los puntos de falla.
+        </p>
+<div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+<div class="bg-dark-900/60 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 font-semibold mb-1">Modularidad</div>
+<div class="text-neutral-400">Cada bloque se puede cambiar sin afectar a los demás</div>
+</div>
+<div class="bg-dark-900/60 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 font-semibold mb-1">Libertad</div>
+<div class="text-neutral-400">Cambia modelos, proveedores o lógica por bloque</div>
+</div>
+<div class="bg-dark-900/60 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 font-semibold mb-1">Depuración sencilla</div>
+<div class="text-neutral-400">¿Problema en el bloque 2? Aíslalo y corrige solo ese</div>
+</div>
+</div>
+</div>
+<!-- Grid fazer/evitar -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ Qué HACER</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>1 entrada → transformación → 1 salida por bloque</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Nombra los bloques según lo que hacen («clasifica la intención», «da formato a la respuesta»)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Mantén los bloques lo suficientemente pequeños para probarlos de forma aislada</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Documentar el contrato de I/O de cada bloque</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ Qué NO hacer</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Crear un "mega prompt" que haga parse + razonamiento + formato + envío</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Bloques con 3+ entradas de diferentes fuentes simultáneas</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Usar IA cuando el código determinístico resuelve igual de bien</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>No documentes el esquema de salida esperado</span></li>
+</ul>
+</div>
+</div>
+<!-- Conceitos-chave mini-cards -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🧱</div>
+<div class="text-xs font-semibold text-neutral-300">1 entrada/salida por bloque</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🔌</div>
+<div class="text-xs font-semibold text-neutral-300">Componibilidad</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">⚡</div>
+<div class="text-xs font-semibold text-neutral-300">Primero, cero IA</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🔧</div>
+<div class="text-xs font-semibold text-neutral-300">Reemplazable</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 2 — Assembly Line -->
+<section class="mb-16" id="topico-2">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg">2</span>
+<h2 class="text-xl font-bold text-neutral-100">Línea de ensamblaje — Especialización por llamada</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">
+        No construyas un generalista. Una llamada de IA debe hacer UN trabajo especializado: o escribe textos publicitarios, o razona sobre datos, o clasifica la intención. Mezclar tareas hace que el sistema sea difícil de depurar y mejorar.
+      </p>
+<!-- Box dados/pesquisa -->
+<div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+<span class="mr-2">📊</span> Por qué gana la especialización
+        </h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-neutral-300">
+<div>
+<div class="font-semibold text-blue-300 mb-2">Modelo especializado</div>
+<ul class="space-y-1">
+<li>• Prompt más corto → menor costo</li>
+<li>• Evaluación directa: resultado correcto o incorrecto</li>
+<li>• Cambia de modelo sin reescribir todo</li>
+<li>• Fine-tuning posible en una tarea aislada</li>
+</ul>
+</div>
+<div>
+<div class="font-semibold text-blue-300 mb-2">Modelo generalista (antipatrón)</div>
+<ul class="space-y-1">
+<li>• Prompt gigante → contexto saturado</li>
+<li>• Un fallo en A → afecta a B y C</li>
+<li>• Imposible sustituir solo la parte mala</li>
+<li>• Latencia alta para tareas simples</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">💡</span> Consejo práctico
+        </h3>
+<p class="text-neutral-300">
+          Si necesitas cambiar el prompt porque la <em>clasificación</em> empeoró, no debería ser necesario revalidar la parte de <em>formato</em>. Si ambos están en el mismo paso, avanzas. Sepáralos.
+        </p>
+</div>
+<!-- Conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🎯</div>
+<div class="text-xs font-semibold text-neutral-300">1 tarea/llamada</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🔀</div>
+<div class="text-xs font-semibold text-neutral-300">Cambio de modelo</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🐛</div>
+<div class="text-xs font-semibold text-neutral-300">Depuración aislada</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">💰</div>
+<div class="text-xs font-semibold text-neutral-300">Costo optimizado</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 3 — Validation Chain -->
+<section class="mb-16" id="topico-3">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg">3</span>
+<h2 class="text-xl font-bold text-neutral-100">Validation Chain — Valida antes de encadenar</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">
+        No construyas todo el pipeline para probarlo al final. Valida el resultado de cada bloque antes de conectar el siguiente. Bloque 1 → ejecútalo → confirma → bloque 2 con el resultado real → confirma → encadena.
+      </p>
+<!-- Box conceito -->
+<div class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+<span class="mr-2">🔗</span> El protocolo de encadenamiento seguro
+        </h3>
+<!-- mini pipeline mono -->
+<div class="font-mono text-sm bg-dark-900/70 rounded-lg p-4 border border-dark-600 text-neutral-300 space-y-1">
+<div><span class="text-emerald-400">→ bloque1</span>(input_raw)     <span class="text-neutral-500"># ejecuta solo el bloque 1</span></div>
+<div><span class="text-yellow-400">→ assert</span> output_b1 matches schema  <span class="text-neutral-500"># VALIDA ahora</span></div>
+<div><span class="text-emerald-400">→ bloque2</span>(output_b1)     <span class="text-neutral-500"># solo después conecta</span></div>
+<div><span class="text-yellow-400">→ assert</span> output_b2 matches schema  <span class="text-neutral-500"># VALIDA de nuevo</span></div>
+<div><span class="text-emerald-400">→ bloque3</span>(output_b2)     <span class="text-neutral-500"># encadena con confianza</span></div>
+<div class="text-neutral-500 pt-2"># Nunca: bloque1 → bloque2 → bloque3 → prueba todo al final</div>
+</div>
+</div>
+<!-- Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ Validation Chain correcta</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Ejecuta cada bloque con datos reales antes de conectarlo</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Define el esquema de salida esperado (JSON schema, regex, enum)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Falla rápido y explícitamente en cada eslabón</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Usa output real (no mock) para probar el siguiente bloque</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ Antipatrón frecuente</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Armar el pipeline completo y probar al final</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Usar datos simulados para simular el output intermedio</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Asumir que «si el bloque 1 funciona, el bloque 2 también funcionará»</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Sin un esquema definido → no sabes qué validar</span></li>
+</ul>
+</div>
+</div>
+<!-- Conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">✅</div>
+<div class="text-xs font-semibold text-neutral-300">Valida bloque por bloque</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">📋</div>
+<div class="text-xs font-semibold text-neutral-300">Esquema de salida</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🎯</div>
+<div class="text-xs font-semibold text-neutral-300">Datos reales</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">⚡</div>
+<div class="text-xs font-semibold text-neutral-300">Fail fast</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 4 — Iteration Mindset -->
+<section class="mb-16" id="topico-4">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg">4</span>
+<h2 class="text-xl font-bold text-neutral-100">Mentalidad de iteración — No hay un producto terminado con IA</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">
+        Los scripts deterministas PUEDEN estar «listos». Los pasos de IA evolucionan constantemente: el modelo mejora, el contexto cambia y el uso real revela casos límite. El perfeccionismo es enemigo del deploy. Publica el POC y amplíalo a partir del uso real.
+      </p>
+<!-- Box tip -->
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">🚀</span> La regla de empezar por el POC
+        </h3>
+<p class="text-neutral-300 leading-relaxed">
+          Un sistema de IA en producción con un 70% de calidad, funcionando y generando datos reales, enseña más en 1 semana que 2 meses de iteración offline. El uso real revela lo que el entorno de pruebas nunca mostrará.
+        </p>
+</div>
+<!-- Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ Mentalidad de iteración</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Pon el POC en marcha cuanto antes y observa el uso real</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Mejora basada en datos de producción, no en suposiciones</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Acepta que los pasos de IA nunca están «completos»</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Versionado de prompts como código</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ Perfeccionismo paralizante</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Semanas iterando sin conexión antes del primer deploy</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>"Tiene que estar 100% listo antes de pasar a producción"</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Medir la calidad solo con benchmarks artificiales</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Tratar el prompt como código final sin control de versiones</span></li>
+</ul>
+</div>
+</div>
+<!-- Conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🔄</div>
+<div class="text-xs font-semibold text-neutral-300">Evoluciono siempre</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">📦</div>
+<div class="text-xs font-semibold text-neutral-300">Primero, POC</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">📊</div>
+<div class="text-xs font-semibold text-neutral-300">Datos reales</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🗂️</div>
+<div class="text-xs font-semibold text-neutral-300">Versiona los prompts</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 5 — Bike Method (Timeline das 4 fases) -->
+<section class="mb-16" id="topico-5">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg">5</span>
+<h2 class="text-xl font-bold text-neutral-100">Bike Method — implementación en 4 fases</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">
+        Incluso un sistema con un 90% de confianza debe empezar con el 10% del volumen. El Bike Method define cuatro fases de autonomía creciente, y solo avanzas cuando los datos lo justifican.
+      </p>
+<!-- Box conceito -->
+<div class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-emerald-400 mb-2 flex items-center">
+<span class="mr-2">🚲</span> Las 4 fases de autonomía
+        </h3>
+<p class="text-sm text-neutral-400 mb-4">Umbrales: confianza alta → automático, media → cola de borradores, baja → humano</p>
+</div>
+<!-- TIMELINE das 4 fases -->
+<div class="space-y-4 mb-6">
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+<span class="text-emerald-400 font-bold">1</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+<div class="flex items-center justify-between mb-2">
+<h4 class="font-semibold text-white">🚼 Rueditas — Manual con supervisión total</h4>
+<span class="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">Fase 1</span>
+</div>
+<p class="text-sm text-neutral-400 mb-2">El sistema lo genera y tú lo ejecutas o lo corriges manualmente.</p>
+<p class="text-sm text-neutral-300">Validas el 100% de los outputs. El objetivo es entender dónde se equivoca el sistema antes de soltar el control. <strong class="text-emerald-400">Nunca te saltes esta fase.</strong></p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+<span class="text-emerald-400 font-bold">2</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+<div class="flex items-center justify-between mb-2">
+<h4 class="font-semibold text-white">🧑‍🏫 Guiado — Funciona, pero tú revisas todo</h4>
+<span class="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">Fase 2</span>
+</div>
+<p class="text-sm text-neutral-400 mb-2">El sistema redacta un borrador; tú lo apruebas antes del envío.</p>
+<p class="text-sm text-neutral-300">Redacta, pero no envía. Revisas cada elemento antes de que pase a producción. Empieza con el 10% del volumen aunque estés en la fase 2.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+<span class="text-emerald-400 font-bold">3</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+<div class="flex items-center justify-between mb-2">
+<h4 class="font-semibold text-white">👁️ Supervisado — Autónomo con monitoreo activo</h4>
+<span class="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">Fase 3</span>
+</div>
+<p class="text-sm text-neutral-400 mb-2">El sistema ejecuta; tú supervisas + alertas configuradas.</p>
+<p class="text-sm text-neutral-300">Alertas y dashboards activos. Aún revisas muestras con regularidad, no solo cuando algo falla. <strong class="text-white">Las alertas no sustituyen la revisión periódica.</strong></p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+<span class="text-emerald-400 font-bold">4</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+<div class="flex items-center justify-between mb-2">
+<h4 class="font-semibold text-white">🙌 Manos Libres — Autónomo con revisión periódica</h4>
+<span class="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">Fase 4</span>
+</div>
+<p class="text-sm text-neutral-400 mb-2">Confianza establecida a partir de datos históricos.</p>
+<p class="text-sm text-neutral-300">Revisión quincenal o mensual de los registros. El sistema está en «producción confiable», pero sigue evolucionando (Iteration Mindset). La revisión periódica es sagrada.</p>
+</div>
+</div>
+</div>
+<!-- Conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🚼</div>
+<div class="text-xs font-semibold text-neutral-300">Con ruedas de apoyo</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🧑‍🏫</div>
+<div class="text-xs font-semibold text-neutral-300">Guiado</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">👁️</div>
+<div class="text-xs font-semibold text-neutral-300">Supervisado</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🙌</div>
+<div class="text-xs font-semibold text-neutral-300">Manos libres</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 6 — Intern Rule -->
+<section class="mb-16" id="topico-6">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg">6</span>
+<h2 class="text-xl font-bold text-neutral-100">Intern Rule — Trata a la IA como a una persona contratada desde el día 1</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">
+        "No confiarías tu cuenta bancaria a alguien que acabas de conocer." Trata a la IA exactamente como a una nueva contratación: identidad propia, solo lectura por defecto, sin credenciales personales y con un registro de auditoría completo.
+      </p>
+<!-- Box conceito -->
+<div class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+<span class="mr-2">🧑‍💼</span> Lista de verificación de permisos del contratista
+        </h3>
+<!-- Monospace checklist da Intern Rule -->
+<div class="font-mono text-sm bg-dark-900/70 rounded-lg p-4 border border-dark-600 space-y-2">
+<div class="text-neutral-400"># Intern Rule — permisos mínimos (el alcance siempre)</div>
+<div><span class="text-emerald-400">✓</span> <span class="text-neutral-300">identidad propia         </span><span class="text-neutral-500"># correo/cuenta dedicada, no tu cuenta personal</span></div>
+<div><span class="text-emerald-400">✓</span> <span class="text-neutral-300">read-only por defecto       </span><span class="text-neutral-500"># escritura solo cuando sea explícitamente necesario</span></div>
+<div><span class="text-emerald-400">✓</span> <span class="text-neutral-300">nunca se hace pasar por ti     </span><span class="text-neutral-500"># firma como "asistente de IA de [nombre]"</span></div>
+<div><span class="text-emerald-400">✓</span> <span class="text-neutral-300">sin credenciales personales   </span><span class="text-neutral-500"># no tiene acceso a tu contraseña/cuenta bancaria</span></div>
+<div><span class="text-emerald-400">✓</span> <span class="text-neutral-300">trazabilidad de auditoría        </span><span class="text-neutral-500"># registro de todo lo que el agente hace y decide</span></div>
+<div><span class="text-emerald-400">✓</span> <span class="text-neutral-300">permisos con alcance mín. </span><span class="text-neutral-500"># solo lo necesario para la tarea específica</span></div>
+<div class="pt-1"><span class="text-red-400">✗</span> <span class="text-neutral-300">acceso irrestricto          </span><span class="text-neutral-500"># aunque "confíes en el modelo"</span></div>
+</div>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">🔑</span> Por qué esto importa ahora
+        </h3>
+<p class="text-neutral-300 leading-relaxed">
+          Los agentes de IA con amplio acceso a correos electrónicos, calendarios y sistemas pueden causar daños irreversibles por un solo error de juicio. La protección no es desconfianza: es arquitectura responsable. El alcance mínimo es un estándar de la industria para cualquier sistema con autonomía.
+        </p>
+</div>
+<!-- Conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🪪</div>
+<div class="text-xs font-semibold text-neutral-300">Identidad propia</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🔒</div>
+<div class="text-xs font-semibold text-neutral-300">Solo lectura por defecto</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">📝</div>
+<div class="text-xs font-semibold text-neutral-300">Ruta de auditoría</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🎯</div>
+<div class="text-xs font-semibold text-neutral-300">Alcance mínimo</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 7 — Kill Switch + Princípios Governantes -->
+<section class="mb-16" id="topico-7">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg">7</span>
+<h2 class="text-xl font-bold text-neutral-100">Kill Switch + principios rectores</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">
+        Si una automatización necesita parches constantemente, produce baja calidad o cuesta más de lo que ahorra: desmóntala. Sin costos hundidos. Tres principios fundamentales rigen todas las decisiones de Machine.
+      </p>
+<!-- ALERTA — Kill Switch sunk cost -->
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center">
+<span class="mr-2">🔴</span> Atención: el costo hundido es una trampa
+        </h3>
+<p class="text-neutral-300 leading-relaxed">
+          "Ya invertí 3 semanas en esta automatización" no es motivo para mantenerla en marcha cuando cuesta más de lo que aporta. El tiempo invertido <strong class="text-white">no recupera</strong> — solo cuenta el valor futuro. Si aparecen las siguientes señales: desármalo sin culpa.
+        </p>
+<ul class="mt-3 space-y-2 text-sm text-neutral-400">
+<li class="flex items-start space-x-2"><span class="text-red-400">⚠</span><span>Pasas más tiempo reparando la automatización que usándola</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">⚠</span><span>La calidad del output se mantiene por debajo del threshold</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">⚠</span><span>El costo (tiempo + dinero + estrés) supera el beneficio generado</span></li>
+</ul>
+</div>
+<!-- 3 Princípios — com alerta em cada -->
+<div class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-emerald-400 mb-6 flex items-center">
+<span class="mr-2">⚖️</span> Los 3 principios rectores
+        </h3>
+<div class="space-y-4">
+<!-- Princípio 1 -->
+<div class="bg-dark-900/60 rounded-xl p-5 border border-dark-600">
+<div class="flex items-start space-x-3">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
+<span class="text-emerald-400 font-bold text-sm">1</span>
+</div>
+<div>
+<h4 class="font-bold text-white mb-1">Boring es hermoso</h4>
+<p class="text-sm text-neutral-400">El sistema más confiable no es el más sofisticado, sino el más predecible. Resiste la tentación de complicarlo. Si una regex lo resuelve, usa regex. Si lo resuelve un script sencillo, usa un script sencillo.</p>
+<div class="mt-2 inline-block px-2 py-0.5 bg-red-900/30 border border-red-500/30 rounded text-xs text-red-400">
+                  ⚠ Alerta: la complejidad por estética es deuda técnica disfrazada
+                </div>
+</div>
+</div>
+</div>
+<!-- Princípio 2 -->
+<div class="bg-dark-900/60 rounded-xl p-5 border border-dark-600">
+<div class="flex items-start space-x-3">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
+<span class="text-emerald-400 font-bold text-sm">2</span>
+</div>
+<div>
+<h4 class="font-bold text-white mb-1">Los pasos determinísticos terminan; los pasos de IA evolucionan siempre</h4>
+<p class="text-sm text-neutral-400">Trata tus bloques de IA como organismos vivos: necesitan revisiones periódicas. Los bloques determinísticos pueden tener un SLA de "funciona hasta que cambie el schema". Los bloques de IA necesitan revisión incluso si el código no cambia.</p>
+<div class="mt-2 inline-block px-2 py-0.5 bg-red-900/30 border border-red-500/30 rounded text-xs text-red-400">
+                  ⚠ Alerta: un modelo actualizado por el proveedor puede cambiar su comportamiento sin que toques el código
+                </div>
+</div>
+</div>
+</div>
+<!-- Princípio 3 -->
+<div class="bg-dark-900/60 rounded-xl p-5 border border-dark-600">
+<div class="flex items-start space-x-3">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
+<span class="text-emerald-400 font-bold text-sm">3</span>
+</div>
+<div>
+<h4 class="font-bold text-white mb-1">Fail fast, learn faster</h4>
+<p class="text-sm text-neutral-400">Las fallas rápidas en un entorno controlado son baratas. Las fallas lentas en producción son caras. Diseña tus sistemas para que fallen de forma explícita y temprana, con mensajes de error claros, logs detallados y puntos de interrupción.</p>
+<div class="mt-2 inline-block px-2 py-0.5 bg-red-900/30 border border-red-500/30 rounded text-xs text-red-400">
+                  ⚠ Alerta: los sistemas que fallan en silencio son los más peligrosos
+                </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🔴</div>
+<div class="text-xs font-semibold text-neutral-300">Kill Switch</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">😴</div>
+<div class="text-xs font-semibold text-neutral-300">Boring es hermoso</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🔄</div>
+<div class="text-xs font-semibold text-neutral-300">La IA evoluciona constantemente</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">⚡</div>
+<div class="text-xs font-semibold text-neutral-300">Fail fast</div>
+</div>
+</div>
+</section>
+<!-- RESUMO DO MÓDULO -->
+<section class="mb-12">
+<div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+<h2 class="text-2xl font-bold mb-6 flex items-center">
+<span class="mr-3">🛠️</span> Resumen del módulo
+        </h2>
+<div class="space-y-4 mb-8">
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Lego Principle</strong>
+<span class="text-neutral-400"> — 1 input / 1 output por bloque; empieza por los pasos sin IA</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Línea de ensamblaje</strong>
+<span class="text-neutral-400"> — cada llamada de IA hace UN trabajo especializado, más fácil de depurar y cambiar</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Validation Chain</strong>
+<span class="text-neutral-400"> — valida el resultado de cada bloque antes de encadenarlos; nunca pruebes todo el pipeline al final</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Mentalidad de iteración</strong>
+<span class="text-neutral-400"> — los pasos de IA evolucionan constantemente; sube el POC y aprende del uso real</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Bike Method</strong>
+<span class="text-neutral-400"> — 4 fases (Con rueditas → Guiado → Supervisado → Manos libres); empieza con el 10% del volumen</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Intern Rule</strong>
+<span class="text-neutral-400"> — identidad propia, solo lectura de forma predeterminada, registro de auditoría, alcance mínimo</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Kill Switch + 3 principios</strong>
+<span class="text-neutral-400"> — desármalo sin culpa; lo simple es hermoso; falla rápido, aprende más rápido</span>
+</div>
+</div>
+</div>
+<!-- Próximo -->
+<div class="bg-dark-800/50 rounded-lg p-4 mb-8 border border-dark-600">
+<h3 class="font-semibold text-emerald-400 mb-1">Siguiente: Ruta 2 — La arquitectura (4 Cs)</h3>
+<p class="text-neutral-300 text-sm">Context · Connections · Capabilities · Cadence. Los 4 pilares de un sistema operativo de IA completo.</p>
+</div>
+<!-- Botões -->
+<div class="flex flex-col sm:flex-row gap-4 justify-start">
+<a class="px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors text-center" href="index.html">
+            ← Volver a Ruta
+          </a>
+<a class="px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors text-center" href="../trilha2/index.html">
+            Ir a la Ruta 2 →
+          </a>
+</div>
+</div>
+</section>
+</main>
+<!-- FOOTER C -->
+<footer class="border-t border-dark-600 py-8 mt-16">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm space-y-1">
+<p>⚙️ AIS-OS — Tu sistema operativo de IA en Claude Code · <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" target="_blank">INEMA.CLUB</a> · 2026</p>
+<p>Basado en el kit AIS-OS (licencia MIT). The Three Ms of AI™ y The Four Cs of an AIOS™ son marcas de Nate Herk. © 2026 Nate Herk.</p>
+</div>
+</footer>
+<!-- SCRIPTS D1 — só theme toggle -->
+<script>
+    const themeToggle=document.getElementById('theme-toggle'),tdi=document.getElementById('theme-toggle-dark-icon'),tli=document.getElementById('theme-toggle-light-icon'),H=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){tdi.classList.remove('hidden');H.classList.remove('dark');}else{tli.classList.remove('hidden');}
+    themeToggle.addEventListener('click',()=>{tdi.classList.toggle('hidden');tli.classList.toggle('hidden');H.classList.toggle('dark');localStorage.setItem('theme',H.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

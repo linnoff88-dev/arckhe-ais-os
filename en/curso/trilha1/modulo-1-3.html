@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>M1.3 Machine — How to Build and Operate | AIS-OS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: {
+      primary: '#FACC15',
+      dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+    } } } }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    /* Light mode base */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    /* Light mode - cores de acento (trilha emerald) */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5, 150, 105, 0.18); }
+    html:not(.dark) .from-emerald-900\/30 { --tw-gradient-from: rgba(6, 78, 59, 0.15); }
+    html:not(.dark) .from-emerald-900\/40 { --tw-gradient-from: rgba(6, 78, 59, 0.18); }
+    /* Light mode - remove gradientes */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    /* Light mode - cores especiais */
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161, 98, 7, 0.20); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    /* Light mode - nav */
+    html:not(.dark) nav { background-color: rgba(255,255,255,0.9) !important; border-color: #e5e7eb; }
+    html:not(.dark) nav a { color: #374151; }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    /* Dark mode bordas suavizadas */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+    /* SVG light mode */
+    html:not(.dark) svg[role="img"] { filter: saturate(.82) brightness(.96); }
+  </style>
+<link href="https://inematds.github.io/ais-os/curso/trilha1/modulo-1-3.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/ais-os/en/curso/trilha1/modulo-1-3.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/ais-os/es/curso/trilha1/modulo-1-3.html" hreflang="es" rel="alternate"/></head>
+<body class="min-h-screen bg-dark-900 text-neutral-100"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha1/modulo-1-3.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="modulo-1-3.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">EN</a><a href="../../../es/curso/trilha1/modulo-1-3.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">ES</a></div>
+<!-- NAV B1 — Trilha 1 ativa (emerald) -->
+<nav class="sticky top-0 z-40 bg-dark-900/80 backdrop-blur-sm border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-16">
+<!-- Logo -->
+<div class="flex items-center space-x-3">
+<a class="flex items-center space-x-2 hover:opacity-80 transition-opacity" href="../../index.html">
+<span class="text-2xl">⚙️</span>
+<div class="flex flex-col leading-tight">
+<span class="font-bold text-neutral-100 text-sm">AIS-OS</span>
+<span class="text-xs text-sky-400 hover:text-sky-300 hidden sm:inline">INEMA.CLUB</span>
+</div>
+</a>
+<span class="text-neutral-600 hidden sm:inline">|</span>
+<a class="text-sky-400 hover:text-sky-300 text-sm font-medium sm:hidden" href="https://inema.club" target="_blank">INEMA.CLUB</a>
+</div>
+<!-- Trilhas + toggle -->
+<div class="flex items-center space-x-1 sm:space-x-2">
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10" href="index.html">
+<span class="sm:hidden">T1</span><span class="hidden sm:inline">Brain (3 Ms)</span>
+</a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors" href="../trilha2/index.html">
+<span class="sm:hidden">T2</span><span class="hidden sm:inline">Architecture (4 Cs)</span>
+</a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors" href="../trilha3/index.html">
+<span class="sm:hidden">T3</span><span class="hidden sm:inline">In Practice</span>
+</a>
+<button class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2" id="theme-toggle">
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- BREADCRUMB -->
+<nav aria-label="breadcrumb" class="mb-6">
+<ol class="flex items-center space-x-2 text-sm text-neutral-500">
+<li><a class="hover:text-emerald-400 transition-colors" href="../../index.html">Start</a></li>
+<li><span class="mx-1">/</span></li>
+<li><a class="hover:text-emerald-400 transition-colors" href="index.html">Track 1</a></li>
+<li><span class="mx-1">/</span></li>
+<li class="text-emerald-400 font-medium">Module 1.3</li>
+</ol>
+</nav>
+<!-- HEADER DO MÓDULO -->
+<header class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-2xl border border-emerald-500/30 p-8 mb-8">
+<div class="mb-4">
+<span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-full text-xs font-bold tracking-widest uppercase">MODULE 1.3</span>
+</div>
+<h1 class="text-2xl font-bold text-neutral-100 mb-3">🛠️ Machine — How to Build and Operate</h1>
+<p class="text-neutral-400 text-base leading-relaxed mb-6">
+        Boring is beautiful. Learn to build AI pipelines like assembly lines: each block does one job, each output is validated before the next, and the whole system can be shut down without guilt.
+      </p>
+<!-- Stats -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+<div class="bg-dark-900/60 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-emerald-400">7</div>
+<div class="text-xs text-neutral-500 mt-1">Topics</div>
+</div>
+<div class="bg-dark-900/60 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-emerald-400">40</div>
+<div class="text-xs text-neutral-500 mt-1">Minutes</div>
+</div>
+<div class="bg-dark-900/60 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-emerald-400">🟢</div>
+<div class="text-xs text-neutral-500 mt-1">Beginner</div>
+</div>
+<div class="bg-dark-900/60 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-emerald-400">🔨</div>
+<div class="text-xs text-neutral-500 mt-1">Practice</div>
+</div>
+</div>
+</header>
+<!-- SVG FUTURISTA — Assembly Line / Lego Pipeline -->
+<div class="rounded-2xl border border-emerald-500/30 bg-dark-900/40 p-6 mb-10">
+<svg aria-label="Lego pipeline diagram: linked blocks input→block1→AI-block→block3→output, with the AI step highlighted in cyan" class="w-full h-auto" font-family="Inter,sans-serif" role="img" viewbox="0 0 720 200" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<filter height="160%" id="m13-glow-em" width="160%" x="-30%" y="-30%">
+<fegaussianblur result="blur" stddeviation="1.8"></fegaussianblur>
+<femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<filter height="160%" id="m13-glow-cy" width="160%" x="-30%" y="-30%">
+<fegaussianblur result="blur" stddeviation="2.2"></fegaussianblur>
+<femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<!-- grid de fundo -->
+<pattern height="24" id="m13-grid" patternunits="userSpaceOnUse" width="24">
+<path d="M 24 0 L 0 0 0 24" fill="none" stroke="#34d39915" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<!-- fundo grid -->
+<rect fill="url(#m13-grid)" height="200" width="720"></rect>
+<!-- INPUT -->
+<rect fill="#0e2018" filter="url(#m13-glow-em)" height="50" rx="8" stroke="#34d399" stroke-width="2" width="90" x="20" y="75"></rect>
+<text fill="#34d399" font-size="11" font-weight="600" text-anchor="middle" x="65" y="97">INPUT</text>
+<text fill="#9ad6c0" font-size="9" text-anchor="middle" x="65" y="113">your raw data</text>
+<!-- seta 1 -->
+<line stroke="#34d399" stroke-dasharray="4 2" stroke-width="1.5" x1="110" x2="148" y1="100" y2="100"></line>
+<polygon fill="#34d399" points="148,95 158,100 148,105"></polygon>
+<!-- BLOCO 1 — determinístico -->
+<rect fill="#0e2018" filter="url(#m13-glow-em)" height="64" rx="8" stroke="#34d399" stroke-width="2" width="110" x="160" y="68"></rect>
+<text fill="#34d399" font-size="11" font-weight="600" text-anchor="middle" x="215" y="92">Block 1</text>
+<text fill="#9ad6c0" font-size="9" text-anchor="middle" x="215" y="107">deterministic</text>
+<text fill="#6ee7b7" font-size="8" text-anchor="middle" x="215" y="121">parse / format</text>
+<!-- seta 2 -->
+<line stroke="#34d399" stroke-dasharray="4 2" stroke-width="1.5" x1="270" x2="308" y1="100" y2="100"></line>
+<polygon fill="#34d399" points="308,95 318,100 308,105"></polygon>
+<!-- BLOCO IA — ciano destaque -->
+<rect fill="#0e1b26" filter="url(#m13-glow-cy)" height="84" rx="10" stroke="#38bdf8" stroke-width="2.5" width="120" x="320" y="58"></rect>
+<text fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle" x="380" y="86">AI Block</text>
+<text fill="#9ad6ff" font-size="9" text-anchor="middle" x="380" y="103">1 specialized task</text>
+<text fill="#bfe6ff" font-size="8" text-anchor="middle" x="380" y="118">copy / reasoning / classification.</text>
+<text fill="#38bdf8" font-size="8" font-weight="600" text-anchor="middle" x="380" y="132">✓ Validate before moving on</text>
+<!-- seta 3 -->
+<line stroke="#34d399" stroke-dasharray="4 2" stroke-width="1.5" x1="440" x2="478" y1="100" y2="100"></line>
+<polygon fill="#34d399" points="478,95 488,100 478,105"></polygon>
+<!-- BLOCO 3 — determinístico -->
+<rect fill="#0e2018" filter="url(#m13-glow-em)" height="64" rx="8" stroke="#34d399" stroke-width="2" width="110" x="490" y="68"></rect>
+<text fill="#34d399" font-size="11" font-weight="600" text-anchor="middle" x="545" y="92">Block 3</text>
+<text fill="#9ad6c0" font-size="9" text-anchor="middle" x="545" y="107">deterministic</text>
+<text fill="#6ee7b7" font-size="8" text-anchor="middle" x="545" y="121">submission / store</text>
+<!-- seta 4 -->
+<line stroke="#34d399" stroke-dasharray="4 2" stroke-width="1.5" x1="600" x2="638" y1="100" y2="100"></line>
+<polygon fill="#34d399" points="638,95 648,100 638,105"></polygon>
+<!-- OUTPUT -->
+<rect fill="#0e2018" filter="url(#m13-glow-em)" height="50" rx="8" stroke="#34d399" stroke-width="2" width="50" x="650" y="75"></rect>
+<text fill="#34d399" font-size="10" font-weight="600" text-anchor="middle" x="675" y="97">OUT</text>
+<text fill="#9ad6c0" font-size="8" text-anchor="middle" x="675" y="112">PUT</text>
+<!-- labels de validação embaixo -->
+<text fill="#6ee7b7" font-size="8" text-anchor="middle" x="215" y="155">→ run → confirm</text>
+<text fill="#38bdf8" font-size="8" text-anchor="middle" x="380" y="158">→ validate real output</text>
+<text fill="#6ee7b7" font-size="8" text-anchor="middle" x="545" y="155">→ chain</text>
+<!-- título -->
+<text fill="#34d399" font-size="13" font-weight="700" text-anchor="middle" x="360" y="20">Assembly Line — Lego Pipeline</text>
+<text fill="#9ca3af" font-size="9" text-anchor="middle" x="360" y="36">zero-AI steps first · 1 input / 1 output per block · AI only where it adds value</text>
+<style>
+          @media (prefers-reduced-motion: no-preference) {
+            #m13-glow-cy feGaussianBlur { animation: m13-pulse 3s ease-in-out infinite; }
+            @keyframes m13-pulse { 0%,100%{stdDeviation:2.2} 50%{stdDeviation:3.5} }
+          }
+        </style>
+</svg>
+<p class="text-xs text-neutral-500 text-center mt-3">Lego Principle + Assembly Line: modular blocks, validation at every link, AI only where needed</p>
+</div>
+<!-- H2 CONTEÚDO DETALHADO -->
+<h2 class="text-2xl font-bold mb-6">Detailed content</h2>
+<!-- TÓPICO 1 — Lego Principle -->
+<section class="mb-16" id="topico-1">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg">1</span>
+<h2 class="text-xl font-bold text-neutral-100">Lego Principle — Smallest Possible Step</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">
+        Each block in your system should have exactly 1 input and 1 output. The output of block 1 is the input of block 2. This modularity isn’t just elegant—it’s the difference between a system you understand and one that controls you.
+      </p>
+<!-- Box conceito principal -->
+<div class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-emerald-400 mb-3 flex items-center">
+<span class="mr-2">🧱</span> Core Principle
+        </h3>
+<p class="text-neutral-300 leading-relaxed">
+<strong class="text-white">Start with the zero-AI steps</strong> — deterministic tasks. If you can do it with simple code (parsing, validation, formatting), do it that way. AI only comes in where it genuinely adds value. This reduces cost, latency, and points of failure.
+        </p>
+<div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+<div class="bg-dark-900/60 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 font-semibold mb-1">Modularity</div>
+<div class="text-neutral-400">Each block can be swapped out without affecting the others</div>
+</div>
+<div class="bg-dark-900/60 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 font-semibold mb-1">Freedom</div>
+<div class="text-neutral-400">Switch models, providers, or logic by block</div>
+</div>
+<div class="bg-dark-900/60 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 font-semibold mb-1">Simple debugging</div>
+<div class="text-neutral-400">Problem in block 2? Isolate and fix only that one</div>
+</div>
+</div>
+</div>
+<!-- Grid fazer/evitar -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ What to DO</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>1 input → transformation → 1 output per block</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Name blocks by what they do (“classifies intent,” “formats response”)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Keep blocks small enough to test in isolation</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Document the I/O contract for each block</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ What NOT to do</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Create a "mega prompt" that handles parsing + reasoning + formatting + sending</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Blocks with 3+ simultaneous inputs from different sources</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Using AI where deterministic code works just as well</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Don’t document the expected output schema</span></li>
+</ul>
+</div>
+</div>
+<!-- Conceitos-chave mini-cards -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🧱</div>
+<div class="text-xs font-semibold text-neutral-300">1 I/O per block</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🔌</div>
+<div class="text-xs font-semibold text-neutral-300">Composability</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">⚡</div>
+<div class="text-xs font-semibold text-neutral-300">Zero AI first</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🔧</div>
+<div class="text-xs font-semibold text-neutral-300">Replaceable</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 2 — Assembly Line -->
+<section class="mb-16" id="topico-2">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg">2</span>
+<h2 class="text-xl font-bold text-neutral-100">Assembly Line — Specialization by Call</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">
+        Don’t build a generalist. An AI call should do ONE specialized job: write copy, reason about data, or classify intent. Mixing them makes the system difficult to debug and improve.
+      </p>
+<!-- Box dados/pesquisa -->
+<div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+<span class="mr-2">📊</span> Why specialization wins
+        </h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-neutral-300">
+<div>
+<div class="font-semibold text-blue-300 mb-2">Specialized model</div>
+<ul class="space-y-1">
+<li>• Shorter prompt → lower cost</li>
+<li>• Direct evaluation: output right or wrong</li>
+<li>• Switch models without rewriting everything</li>
+<li>• Fine-tuning possible on an isolated task</li>
+</ul>
+</div>
+<div>
+<div class="font-semibold text-blue-300 mb-2">General-purpose model (anti-pattern)</div>
+<ul class="space-y-1">
+<li>• Huge prompt → cluttered context</li>
+<li>• Failure in A → affects B and C</li>
+<li>• Impossible to replace only the bad part</li>
+<li>• High latency for simple tasks</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">💡</span> Practical Tip
+        </h3>
+<p class="text-neutral-300">
+          If you need to change the prompt because the <em>classification</em> got worse; you shouldn’t need to revalidate the part about <em>formatting</em>. If both are at the same step, you go. Separate them.
+        </p>
+</div>
+<!-- Conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🎯</div>
+<div class="text-xs font-semibold text-neutral-300">1 task/call</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🔀</div>
+<div class="text-xs font-semibold text-neutral-300">Model switching</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🐛</div>
+<div class="text-xs font-semibold text-neutral-300">Isolated debugging</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">💰</div>
+<div class="text-xs font-semibold text-neutral-300">Optimized cost</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 3 — Validation Chain -->
+<section class="mb-16" id="topico-3">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg">3</span>
+<h2 class="text-xl font-bold text-neutral-100">Validation Chain — Validate Before Chaining</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">
+        Don’t build the entire pipeline and test it at the end. Validate each block’s output before connecting the next one. Block 1 → run → confirm → block 2 with the real output → confirm → connect them.
+      </p>
+<!-- Box conceito -->
+<div class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+<span class="mr-2">🔗</span> The safe chaining protocol
+        </h3>
+<!-- mini pipeline mono -->
+<div class="font-mono text-sm bg-dark-900/70 rounded-lg p-4 border border-dark-600 text-neutral-300 space-y-1">
+<div><span class="text-emerald-400">→ block1</span>(input_raw)     <span class="text-neutral-500"># run only block 1</span></div>
+<div><span class="text-yellow-400">→ assert</span> output_b1 matches schema  <span class="text-neutral-500"># VALIDATE now</span></div>
+<div><span class="text-emerald-400">→ block2</span>(output_b1)     <span class="text-neutral-500"># connect only afterward</span></div>
+<div><span class="text-yellow-400">→ assert</span> output_b2 matches schema  <span class="text-neutral-500"># VALIDATE again</span></div>
+<div><span class="text-emerald-400">→ block3</span>(output_b2)     <span class="text-neutral-500"># chain with confidence</span></div>
+<div class="text-neutral-500 pt-2"># Never: block1 → block2 → block3 → test everything at the end</div>
+</div>
+</div>
+<!-- Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ Correct Validation Chain</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Run each block with real data before connecting it</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Defines the expected output schema (JSON schema, regex, enum)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Fail fast and explicitly at every link</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Uses real output (not a mock) to test the next block</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ Frequent anti-pattern</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Build the complete pipeline and test at the end</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Using mocked data to simulate the intermediate output</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Assuming that "if block 1 works, block 2 will work"</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>No schema defined → you don’t know what to validate</span></li>
+</ul>
+</div>
+</div>
+<!-- Conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">✅</div>
+<div class="text-xs font-semibold text-neutral-300">Validate each block</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">📋</div>
+<div class="text-xs font-semibold text-neutral-300">Output schema</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🎯</div>
+<div class="text-xs font-semibold text-neutral-300">Real data</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">⚡</div>
+<div class="text-xs font-semibold text-neutral-300">Fail fast</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 4 — Iteration Mindset -->
+<section class="mb-16" id="topico-4">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg">4</span>
+<h2 class="text-xl font-bold text-neutral-100">Iteration Mindset — There Is No Finished Product with AI</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">
+        Deterministic scripts CAN be “ready.” AI steps are always evolving—the model improves, the context changes, and real-world use reveals edge cases. Perfectionism is the enemy of deployment. Ship the POC, then expand based on real-world use.
+      </p>
+<!-- Box tip -->
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">🚀</span> The POC-first rule
+        </h3>
+<p class="text-neutral-300 leading-relaxed">
+          A production AI system running at 70% quality and generating real data teaches you more in 1 week than 2 months of offline iteration. Real-world use reveals what the test environment never will.
+        </p>
+</div>
+<!-- Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ Iteration Mindset</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Get the POC up as soon as possible and observe real-world usage</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Improve based on production data, not assumptions</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Accepts that AI steps are never "complete"</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Prompt versioning as code</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ Paralyzing perfectionism</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Weeks iterating offline before the first deploy</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>"It needs to be 100% complete before going to production"</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Measure quality only with artificial benchmarks</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Treating a prompt as final code without version control</span></li>
+</ul>
+</div>
+</div>
+<!-- Conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🔄</div>
+<div class="text-xs font-semibold text-neutral-300">I always improve</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">📦</div>
+<div class="text-xs font-semibold text-neutral-300">POC first</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">📊</div>
+<div class="text-xs font-semibold text-neutral-300">Real data</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🗂️</div>
+<div class="text-xs font-semibold text-neutral-300">Version your prompts</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 5 — Bike Method (Timeline das 4 fases) -->
+<section class="mb-16" id="topico-5">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg">5</span>
+<h2 class="text-xl font-bold text-neutral-100">Bike Method — 4-Phase Rollout</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">
+        Even a system with 90% confidence should start with 10% of the volume. The Bike Method defines four phases of increasing autonomy—and you only move forward when the data justifies it.
+      </p>
+<!-- Box conceito -->
+<div class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-emerald-400 mb-2 flex items-center">
+<span class="mr-2">🚲</span> The 4 phases of autonomy
+        </h3>
+<p class="text-sm text-neutral-400 mb-4">Thresholds: high confidence → auto, medium → draft queue, low → human</p>
+</div>
+<!-- TIMELINE das 4 fases -->
+<div class="space-y-4 mb-6">
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+<span class="text-emerald-400 font-bold">1</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+<div class="flex items-center justify-between mb-2">
+<h4 class="font-semibold text-white">🚼 Training Wheels — Manual with Full Supervision</h4>
+<span class="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">Phase 1</span>
+</div>
+<p class="text-sm text-neutral-400 mb-2">The system generates it; you execute it or fix it by hand.</p>
+<p class="text-sm text-neutral-300">You validate 100% of the outputs. The goal is to understand where the system makes mistakes before letting go of control. <strong class="text-emerald-400">Never skip this phase.</strong></p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+<span class="text-emerald-400 font-bold">2</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+<div class="flex items-center justify-between mb-2">
+<h4 class="font-semibold text-white">🧑‍🏫 Guided — It runs, but you review everything</h4>
+<span class="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">Phase 2</span>
+</div>
+<p class="text-sm text-neutral-400 mb-2">The system drafts; you approve before sending.</p>
+<p class="text-sm text-neutral-300">Drafts but doesn’t send. You review each item before it goes to production. Start with 10% of the volume even in Phase 2.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+<span class="text-emerald-400 font-bold">3</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+<div class="flex items-center justify-between mb-2">
+<h4 class="font-semibold text-white">👁️ Monitored — Autonomous with Active Monitoring</h4>
+<span class="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">Phase 3</span>
+</div>
+<p class="text-sm text-neutral-400 mb-2">The system runs; you monitor it + alerts are configured.</p>
+<p class="text-sm text-neutral-300">Alerts and dashboards are active. You still review a regular sample—not only when something breaks. <strong class="text-white">Alerts don’t replace periodic reviews.</strong></p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+<span class="text-emerald-400 font-bold">4</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+<div class="flex items-center justify-between mb-2">
+<h4 class="font-semibold text-white">🙌 Hands-Free — Autonomous with Periodic Review</h4>
+<span class="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">Phase 4</span>
+</div>
+<p class="text-sm text-neutral-400 mb-2">Confidence established in historical data.</p>
+<p class="text-sm text-neutral-300">Review the logs every two weeks/monthly. The system is in "reliable production" — but it’s still evolving (Iteration Mindset). Periodic review is sacred.</p>
+</div>
+</div>
+</div>
+<!-- Conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🚼</div>
+<div class="text-xs font-semibold text-neutral-300">Training wheels</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🧑‍🏫</div>
+<div class="text-xs font-semibold text-neutral-300">Guided</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">👁️</div>
+<div class="text-xs font-semibold text-neutral-300">Monitored</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🙌</div>
+<div class="text-xs font-semibold text-neutral-300">Hands-Free</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 6 — Intern Rule -->
+<section class="mb-16" id="topico-6">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg">6</span>
+<h2 class="text-xl font-bold text-neutral-100">Intern Rule — Treat AI Like a Contractor on Day 1</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">
+        "You wouldn’t trust your bank account to someone you just met." Treat AI exactly like a new hire: its own identity, read-only by default, no personal credentials, and a complete audit trail.
+      </p>
+<!-- Box conceito -->
+<div class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+<span class="mr-2">🧑‍💼</span> Contractor permissions checklist
+        </h3>
+<!-- Monospace checklist da Intern Rule -->
+<div class="font-mono text-sm bg-dark-900/70 rounded-lg p-4 border border-dark-600 space-y-2">
+<div class="text-neutral-400"># Intern Rule — minimum permissions (scope always)</div>
+<div><span class="text-emerald-400">✓</span> <span class="text-neutral-300">distinct identity         </span><span class="text-neutral-500"># dedicated email/account, not your personal account</span></div>
+<div><span class="text-emerald-400">✓</span> <span class="text-neutral-300">read-only by default       </span><span class="text-neutral-500"># write only when explicitly necessary</span></div>
+<div><span class="text-emerald-400">✓</span> <span class="text-neutral-300">never impersonates you     </span><span class="text-neutral-500"># sign as "[name]'s AI assistant"</span></div>
+<div><span class="text-emerald-400">✓</span> <span class="text-neutral-300">without personal credentials   </span><span class="text-neutral-500"># it doesn't have access to your password/bank account</span></div>
+<div><span class="text-emerald-400">✓</span> <span class="text-neutral-300">audit trail        </span><span class="text-neutral-500"># log everything the agent does and decides</span></div>
+<div><span class="text-emerald-400">✓</span> <span class="text-neutral-300">permissions with mín. scope </span><span class="text-neutral-500"># only what's needed for the specific task</span></div>
+<div class="pt-1"><span class="text-red-400">✗</span> <span class="text-neutral-300">unrestricted access          </span><span class="text-neutral-500"># even if you "trust the model"</span></div>
+</div>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">🔑</span> Why this matters now
+        </h3>
+<p class="text-neutral-300 leading-relaxed">
+          AI agents with broad access to email, calendars, and systems can cause irreversible harm with a single lapse in judgment. The safeguard isn’t distrust—it’s responsible architecture. Least privilege is an industry standard for any autonomous system.
+        </p>
+</div>
+<!-- Conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🪪</div>
+<div class="text-xs font-semibold text-neutral-300">Own identity</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🔒</div>
+<div class="text-xs font-semibold text-neutral-300">Read-only default</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">📝</div>
+<div class="text-xs font-semibold text-neutral-300">Audit trail</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🎯</div>
+<div class="text-xs font-semibold text-neutral-300">Minimum scope</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 7 — Kill Switch + Princípios Governantes -->
+<section class="mb-16" id="topico-7">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg">7</span>
+<h2 class="text-xl font-bold text-neutral-100">Kill Switch + Governing Principles</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">
+        If an automation constantly needs patches, produces low quality, or costs more than it saves: dismantle it. No sunk cost. Three core principles govern all of the Machine’s decisions.
+      </p>
+<!-- ALERTA — Kill Switch sunk cost -->
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center">
+<span class="mr-2">🔴</span> Caution — sunk cost is a trap
+        </h3>
+<p class="text-neutral-300 leading-relaxed">
+          "I’ve already invested 3 weeks in this automation" is no reason to keep it running when it costs more than it delivers. The time invested <strong class="text-white">doesn’t recover</strong> — only future value counts. If the signals below appear: dismantle it without guilt.
+        </p>
+<ul class="mt-3 space-y-2 text-sm text-neutral-400">
+<li class="flex items-start space-x-2"><span class="text-red-400">⚠</span><span>You spend more time fixing the automation than using it</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">⚠</span><span>Output quality is consistently below the threshold</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">⚠</span><span>The cost (time + money + stress) outweighs the benefit generated</span></li>
+</ul>
+</div>
+<!-- 3 Princípios — com alerta em cada -->
+<div class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-emerald-400 mb-6 flex items-center">
+<span class="mr-2">⚖️</span> The 3 Governing Principles
+        </h3>
+<div class="space-y-4">
+<!-- Princípio 1 -->
+<div class="bg-dark-900/60 rounded-xl p-5 border border-dark-600">
+<div class="flex items-start space-x-3">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
+<span class="text-emerald-400 font-bold text-sm">1</span>
+</div>
+<div>
+<h4 class="font-bold text-white mb-1">Boring is beautiful</h4>
+<p class="text-sm text-neutral-400">The most reliable system isn’t the most sophisticated—it’s the most predictable. Resist the temptation to add complexity. If a regex works, use a regex. If a simple script works, use a simple script.</p>
+<div class="mt-2 inline-block px-2 py-0.5 bg-red-900/30 border border-red-500/30 rounded text-xs text-red-400">
+                  ⚠ Warning: complexity for aesthetics is technical debt in disguise
+                </div>
+</div>
+</div>
+</div>
+<!-- Princípio 2 -->
+<div class="bg-dark-900/60 rounded-xl p-5 border border-dark-600">
+<div class="flex items-start space-x-3">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
+<span class="text-emerald-400 font-bold text-sm">2</span>
+</div>
+<div>
+<h4 class="font-bold text-white mb-1">Deterministic steps are finite; AI steps keep evolving</h4>
+<p class="text-sm text-neutral-400">Treat your AI blocks like living organisms — they need periodic review. Deterministic blocks can have an SLA of "works until the schema changes." AI blocks need review even when the code hasn’t changed.</p>
+<div class="mt-2 inline-block px-2 py-0.5 bg-red-900/30 border border-red-500/30 rounded text-xs text-red-400">
+                  ⚠ Warning: a model updated by the provider can change behavior without you touching the code
+                </div>
+</div>
+</div>
+</div>
+<!-- Princípio 3 -->
+<div class="bg-dark-900/60 rounded-xl p-5 border border-dark-600">
+<div class="flex items-start space-x-3">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
+<span class="text-emerald-400 font-bold text-sm">3</span>
+</div>
+<div>
+<h4 class="font-bold text-white mb-1">Fail fast, learn faster</h4>
+<p class="text-sm text-neutral-400">Fast failures in a controlled environment are cheap. Slow failures in production are expensive. Design your systems to fail explicitly and early — with clear error messages, detailed logs, and breakpoints.</p>
+<div class="mt-2 inline-block px-2 py-0.5 bg-red-900/30 border border-red-500/30 rounded text-xs text-red-400">
+                  ⚠ Warning: systems that fail silently are the most dangerous
+                </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🔴</div>
+<div class="text-xs font-semibold text-neutral-300">Kill Switch</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">😴</div>
+<div class="text-xs font-semibold text-neutral-300">Boring is beautiful</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">🔄</div>
+<div class="text-xs font-semibold text-neutral-300">AI keeps evolving</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-lg mb-1">⚡</div>
+<div class="text-xs font-semibold text-neutral-300">Fail fast</div>
+</div>
+</div>
+</section>
+<!-- RESUMO DO MÓDULO -->
+<section class="mb-12">
+<div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+<h2 class="text-2xl font-bold mb-6 flex items-center">
+<span class="mr-3">🛠️</span> Module Summary
+        </h2>
+<div class="space-y-4 mb-8">
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Lego Principle</strong>
+<span class="text-neutral-400"> — 1 input / 1 output per block; start with the zero-AI steps</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Assembly Line</strong>
+<span class="text-neutral-400"> — each AI call does ONE specialized job, making it easier to debug and swap out</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Validation Chain</strong>
+<span class="text-neutral-400"> — validate each block’s output before chaining them; never test the entire pipeline at the end</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Iteration Mindset</strong>
+<span class="text-neutral-400"> — AI steps are always evolving; ship the POC and learn from real-world use</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Bike Method</strong>
+<span class="text-neutral-400"> — 4 phases (Training Wheels → Guided → Supervised → Hands Free); start with 10% of the volume</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Intern Rule</strong>
+<span class="text-neutral-400"> — its own identity, read-only by default, audit trail, minimum scope</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Kill Switch + 3 Principles</strong>
+<span class="text-neutral-400"> — dismantle without guilt; boring is beautiful; fail fast, learn faster</span>
+</div>
+</div>
+</div>
+<!-- Próximo -->
+<div class="bg-dark-800/50 rounded-lg p-4 mb-8 border border-dark-600">
+<h3 class="font-semibold text-emerald-400 mb-1">Next: Track 2 — The Architecture (4 Cs)</h3>
+<p class="text-neutral-300 text-sm">Context · Connections · Capabilities · Cadence. The 4 pillars of a complete AI Operating System.</p>
+</div>
+<!-- Botões -->
+<div class="flex flex-col sm:flex-row gap-4 justify-start">
+<a class="px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors text-center" href="index.html">
+            ← Back to Track
+          </a>
+<a class="px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors text-center" href="../trilha2/index.html">
+            Go to Track 2 →
+          </a>
+</div>
+</div>
+</section>
+</main>
+<!-- FOOTER C -->
+<footer class="border-t border-dark-600 py-8 mt-16">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm space-y-1">
+<p>⚙️ AIS-OS — Your AI Operating System in Claude Code · <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" target="_blank">INEMA.CLUB</a> · 2026</p>
+<p>Based on the AIS-OS kit (MIT license). The Three Ms of AI™ and The Four Cs of an AIOS™ are trademarks of Nate Herk. © 2026 Nate Herk.</p>
+</div>
+</footer>
+<!-- SCRIPTS D1 — só theme toggle -->
+<script>
+    const themeToggle=document.getElementById('theme-toggle'),tdi=document.getElementById('theme-toggle-dark-icon'),tli=document.getElementById('theme-toggle-light-icon'),H=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){tdi.classList.remove('hidden');H.classList.remove('dark');}else{tli.classList.remove('hidden');}
+    themeToggle.addEventListener('click',()=>{tdi.classList.toggle('hidden');tli.classList.toggle('hidden');H.classList.toggle('dark');localStorage.setItem('theme',H.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

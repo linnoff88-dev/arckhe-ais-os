@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>/audit: Diagnóstico Four-Cs | AIS-OS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: {
+      primary: '#FACC15',
+      dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+    } } } }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    /* Light mode base */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    /* Light accent: emerald (T1) */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5,150,105,0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.06); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5,150,105,0.18); }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+    /* Light accent: blue (T2) */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37,99,235,0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.06); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37,99,235,0.18); }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+    /* Light accent: purple (T3) */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124,58,237,0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .bg-purple-900\/20 { background-color: rgba(124,58,237,0.06); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124,58,237,0.25); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124,58,237,0.18); }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; }
+    /* Light - remove gradients + special colors */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185,28,28,0.06); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185,28,28,0.25); }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    /* Light - navbar */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+    /* Dark - softened borders */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+    /* SVG light-mode taming */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+    /* SVG pulse */
+    @keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+      .wf-a:nth-child(2){animation-delay:.25s} .wf-a:nth-child(3){animation-delay:.5s}
+      .wf-a:nth-child(4){animation-delay:.75s} .wf-a:nth-child(5){animation-delay:1s}
+    }
+  </style>
+<link href="https://inematds.github.io/ais-os/curso/trilha3/modulo-3-2.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/ais-os/en/curso/trilha3/modulo-3-2.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/ais-os/es/curso/trilha3/modulo-3-2.html" hreflang="es" rel="alternate"/></head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha3/modulo-3-2.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="../../../en/curso/trilha3/modulo-3-2.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">EN</a><a href="modulo-3-2.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">ES</a></div>
+<!-- NAVIGATION B3 — T3 ativa (purple) -->
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-14">
+<div class="flex items-center space-x-4">
+<a class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300" href="../../index.html">
+<span class="text-2xl">⚙️</span><span class="font-bold text-lg hidden sm:inline">AIS-OS</span>
+</a>
+<span class="text-neutral-600">|</span>
+<a class="text-sky-400 hover:text-sky-300 text-sm font-medium" href="https://inema.club" target="_blank">INEMA.CLUB</a>
+</div>
+<div class="flex items-center space-x-1 sm:space-x-2">
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" href="../trilha1/index.html"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Cerebro (3 Ms)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors" href="../trilha2/index.html"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitectura (4 Cs)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10" href="index.html"><span class="sm:hidden">T3</span><span class="hidden sm:inline">En la práctica</span></a>
+<button class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2" id="theme-toggle">
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<!-- BREADCRUMB -->
+<nav class="flex items-center space-x-2 text-sm text-neutral-400 mb-8">
+<a class="hover:text-purple-400 transition-colors" href="../../index.html">Inicio</a>
+<span>/</span>
+<a class="hover:text-purple-400 transition-colors" href="index.html">Ruta 3</a>
+<span>/</span>
+<span class="text-purple-400 font-medium">Módulo 3.2</span>
+</nav>
+<!-- HEADER -->
+<header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 rounded-2xl border border-purple-500/30 p-8 mb-10">
+<div class="flex items-center space-x-3 mb-4">
+<span class="px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full text-purple-400 text-sm font-bold tracking-wide">MÓDULO 3.2</span>
+</div>
+<h1 class="text-3xl sm:text-4xl font-bold mb-3">📊 /audit: Diagnóstico de las Four Cs</h1>
+<p class="text-neutral-300 text-lg mb-6">Mira cómo sube el puntaje. Ejecuta /audit, entiende el score, prioriza las brechas según su impacto y convierte el diagnóstico en acción cada semana.</p>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+<div class="bg-dark-900/50 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-purple-400">7</div>
+<div class="text-xs text-neutral-400 mt-1">Temas</div>
+</div>
+<div class="bg-dark-900/50 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-purple-400">35</div>
+<div class="text-xs text-neutral-400 mt-1">Minutos</div>
+</div>
+<div class="bg-dark-900/50 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-purple-400">Principiante</div>
+<div class="text-xs text-neutral-400 mt-1">Nivel</div>
+</div>
+<div class="bg-dark-900/50 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-purple-400">Diagnóstico</div>
+<div class="text-xs text-neutral-400 mt-1">Tipo</div>
+</div>
+</div>
+</header>
+<!-- SVG FUTURISTA — Scoreboard Four-Cs -->
+<div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-6 mb-10">
+<svg aria-label="Marcador Four-Cs: cuatro barras de puntuación (Context, Connections, Capabilities, Cadence) de 0 a 25, con estilo de panel futurista" class="w-full h-auto" role="img" viewbox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<filter height="140%" id="glow-purple" width="140%" x="-20%" y="-20%">
+<fegaussianblur result="blur" stddeviation="3"></fegaussianblur>
+<femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<filter height="140%" id="glow-cyan" width="140%" x="-20%" y="-20%">
+<fegaussianblur result="blur" stddeviation="2"></fegaussianblur>
+<femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<!-- Grid lines -->
+<pattern height="30" id="grid-bg" patternunits="userSpaceOnUse" width="30">
+<path d="M 30 0 L 0 0 0 30" fill="none" stroke="#1f2937" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<!-- Background -->
+<rect fill="#111827" height="260" rx="16" width="600"></rect>
+<rect fill="url(#grid-bg)" height="260" opacity="0.6" rx="16" width="600"></rect>
+<!-- Title -->
+<text fill="#c084fc" filter="url(#glow-purple)" font-family="monospace" font-size="13" font-weight="700" text-anchor="middle" x="300" y="32">/audit — Four-Cs Scoreboard</text>
+<text fill="#9ca3af" font-family="monospace" font-size="10" text-anchor="middle" x="300" y="50">ilustrativo · total: 100 pts · cada C vale hasta 25</text>
+<!-- Bar track labels -->
+<!-- Context -->
+<text fill="#c084fc" font-family="monospace" font-size="11" font-weight="600" x="18" y="90">Context</text>
+<rect fill="#1f2937" height="18" rx="4" stroke="#4b5563" stroke-width="0.5" width="340" x="110" y="76"></rect>
+<rect class="wf-a" fill="#c084fc" filter="url(#glow-purple)" height="18" opacity="0.8" rx="4" width="272" x="110" y="76"></rect>
+<text fill="#c084fc" font-family="monospace" font-size="11" font-weight="700" x="462" y="90">20/25</text>
+<text fill="#6b7280" font-family="monospace" font-size="10" x="530" y="90">Sólido</text>
+<!-- Connections -->
+<text fill="#38bdf8" font-family="monospace" font-size="11" font-weight="600" x="18" y="126">Conexiones</text>
+<rect fill="#1f2937" height="18" rx="4" stroke="#4b5563" stroke-width="0.5" width="340" x="110" y="112"></rect>
+<rect class="wf-a" fill="#38bdf8" filter="url(#glow-cyan)" height="18" opacity="0.75" rx="4" width="187" x="110" y="112"></rect>
+<text fill="#38bdf8" font-family="monospace" font-size="11" font-weight="700" x="462" y="126">14/25</text>
+<text fill="#6b7280" font-family="monospace" font-size="10" x="530" y="126">Delgado</text>
+<!-- Capabilities -->
+<text fill="#c084fc" font-family="monospace" font-size="11" font-weight="600" x="18" y="162">Capabilities</text>
+<rect fill="#1f2937" height="18" rx="4" stroke="#4b5563" stroke-width="0.5" width="340" x="110" y="148"></rect>
+<rect class="wf-a" fill="#c084fc" filter="url(#glow-purple)" height="18" opacity="0.8" rx="4" width="204" x="110" y="148"></rect>
+<text fill="#c084fc" font-family="monospace" font-size="11" font-weight="700" x="462" y="162">15/25</text>
+<text fill="#6b7280" font-family="monospace" font-size="10" x="530" y="162">Sólido</text>
+<!-- Cadence -->
+<text fill="#38bdf8" font-family="monospace" font-size="11" font-weight="600" x="18" y="198">Cadence</text>
+<rect fill="#1f2937" height="18" rx="4" stroke="#4b5563" stroke-width="0.5" width="340" x="110" y="184"></rect>
+<rect class="wf-a" fill="#38bdf8" filter="url(#glow-cyan)" height="18" opacity="0.75" rx="4" width="102" x="110" y="184"></rect>
+<text fill="#38bdf8" font-family="monospace" font-size="11" font-weight="700" x="462" y="198">8/25</text>
+<text fill="#e87070" font-family="monospace" font-size="10" x="530" y="198">Missing</text>
+<!-- Total bar -->
+<line stroke="#374151" stroke-width="0.5" x1="18" x2="582" y1="218" y2="218"></line>
+<text fill="#c084fc" filter="url(#glow-purple)" font-family="monospace" font-size="13" font-weight="700" text-anchor="middle" x="300" y="240">Total: 57 / 100 — Stage 1: Built</text>
+<!-- Scale markers -->
+<text fill="#4b5563" font-family="monospace" font-size="9" text-anchor="middle" x="110" y="250">0</text>
+<text fill="#4b5563" font-family="monospace" font-size="9" text-anchor="middle" x="195" y="250">6</text>
+<text fill="#4b5563" font-family="monospace" font-size="9" text-anchor="middle" x="280" y="250">12</text>
+<text fill="#4b5563" font-family="monospace" font-size="9" text-anchor="middle" x="365" y="250">18</text>
+<text fill="#4b5563" font-family="monospace" font-size="9" text-anchor="middle" x="450" y="250">25</text>
+</svg>
+<p class="text-xs text-neutral-500 text-center mt-2">Valores ilustrativos. Tu /audit genera el puntaje real de tu AIOS.</p>
+</div>
+<!-- CONTEÚDO DETALHADO -->
+<h2 class="text-2xl font-bold mb-6">Contenido detallado</h2>
+<!-- TÓPICO 1 -->
+<section class="mb-16" id="topico-1">
+<div class="flex items-center space-x-4 mb-6">
+<span class="w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-lg flex-shrink-0">1</span>
+<h2 class="text-2xl font-bold">Qué hace /audit</h2>
+</div>
+<p class="text-neutral-300 mb-6">O <code class="font-mono text-purple-400 bg-purple-500/10 px-1 rounded">/audit</code> es una skill de diagnóstico que recorre la estructura de tu AIOS y devuelve una puntuación de 0 a 100. Lee —nunca escribe— todos los archivos que componen el sistema: manual, memoria, skills, agents, MCPs, decisiones y referencias. La pregunta central es simple: <strong>"¿el AIOS está bien construido?"</strong></p>
+<!-- Grid Fazer vs Evitar -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<div class="bg-emerald-900/20 border border-emerald-500/30 rounded-xl p-5">
+<h3 class="font-semibold text-emerald-400 mb-3 flex items-center"><span class="mr-2">✓</span> Lo que hace /audit</h3>
+<ul class="space-y-2 text-neutral-300 text-sm">
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Lee el manual, la memoria, las skills, los agentes y los MCP</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Asigna de 0 a 25 puntos a cada C (total: 100)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Enumera las brechas priorizadas según su apalancamiento</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Guarda <code class="font-mono text-xs">audits/audit-{data}.md</code> (opcional)</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 border border-red-500/30 rounded-xl p-5">
+<h3 class="font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">✗</span> Lo que /audit NO hace</h3>
+<ul class="space-y-2 text-neutral-300 text-sm">
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>No escribe ningún archivo del sistema (solo lectura)</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>No ejecutes skills ni agents durante la auditoría</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>No evalúa la calidad de las automatizaciones en sí</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>No sugiere nuevas automatizaciones (eso es /level-up)</span></li>
+</ul>
+</div>
+</div>
+<!-- Conceitos-chave -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Solo lectura</div><div class="text-neutral-400 text-xs mt-1">Nunca modifica archivos</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">0–100 pts</div><div class="text-neutral-400 text-xs mt-1">25 por cada C</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Estructural</div><div class="text-neutral-400 text-xs mt-1">Forma, no función</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Brechas</div><div class="text-neutral-400 text-xs mt-1">Por apalancamiento</div></div>
+</div>
+</section>
+<!-- TÓPICO 2 -->
+<section class="mb-16" id="topico-2">
+<div class="flex items-center space-x-4 mb-6">
+<span class="w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-lg flex-shrink-0">2</span>
+<h2 class="text-2xl font-bold">Estructural, no capability</h2>
+</div>
+<p class="text-neutral-300 mb-6">Existe una distinción fundamental que la mayoría de los usuarios confunde la primera vez: el /audit mide si el AIOS está bien <strong>construido</strong> (estructura), no si es capaz de hacer algo nuevo (capacidad). La pregunta "¿podrías crear un brief diario automático?" corresponde a <code class="font-mono text-purple-400 bg-purple-500/10 px-1 rounded">/level-up</code>, no de /audit.</p>
+<!-- Conceito Principal -->
+<div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 border border-purple-500/30 rounded-xl p-6 mb-6">
+<h3 class="font-semibold text-purple-400 mb-3">🎯 La división fundamental</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<div class="text-sm font-semibold text-purple-300 mb-2 uppercase tracking-wide">Estructural (/audit)</div>
+<ul class="space-y-1 text-neutral-300 text-sm">
+<li>→ ¿Existe CLAUDE.md y tiene secciones completas?</li>
+<li>→ ¿Están cubiertos los 7 dominios de conexión?</li>
+<li>→ ¿Hay al menos 1 trigger recurrente?</li>
+<li>→ ¿Hay al menos 3 skills funcionando?</li>
+</ul>
+</div>
+<div>
+<div class="text-sm font-semibold text-sky-300 mb-2 uppercase tracking-wide">Capability (/level-up)</div>
+<ul class="space-y-1 text-neutral-300 text-sm">
+<li>→ ¿Debería haber una skill para el brief semanal?</li>
+<li>→ ¿Hace falta un agent para clasificar correos?</li>
+<li>→ ¿Falta automatizar la actualización del CRM?</li>
+<li>→ ¿Cuál es la próxima automatización de mayor impacto?</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 border border-primary/30 rounded-xl p-5 mb-6">
+<div class="flex items-start space-x-3">
+<span class="text-primary text-xl mt-0.5">💡</span>
+<div>
+<div class="font-semibold text-primary mb-1">Consejo práctico</div>
+<p class="text-neutral-300 text-sm">Si /audit devuelve vacíos como "podrías construir X", anótalos y llévalos a /level-up. La auditoría es un espejo de forma, no un consultor de estrategia. Usarlos en la misma sesión genera confusión de alcance.</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Forma</div><div class="text-neutral-400 text-xs mt-1">/audit mide esto</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Función</div><div class="text-neutral-400 text-xs mt-1">/level-up amplía esto</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Distinción</div><div class="text-neutral-400 text-xs mt-1">No mezcles los dos</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Workflow</div><div class="text-neutral-400 text-xs mt-1">Auditoría → subir de nivel</div></div>
+</div>
+</section>
+<!-- TÓPICO 3 -->
+<section class="mb-16" id="topico-3">
+<div class="flex items-center space-x-4 mb-6">
+<span class="w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-lg flex-shrink-0">3</span>
+<h2 class="text-2xl font-bold">Cómo puntúa los 4 Cs</h2>
+</div>
+<p class="text-neutral-300 mb-6">Cada C se puntúa de 0 a 25. El /audit verifica criterios específicos en cada dimensión: no es subjetivo. A continuación están los criterios exactos que determinan tu puntuación.</p>
+<!-- Box mono — critérios de pontuação -->
+<div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5 mb-6 font-mono text-sm overflow-x-auto">
+<div class="text-purple-400 mb-3 font-bold text-xs uppercase tracking-wider">Criterios de puntuación — /audit</div>
+<div class="space-y-4">
+<div>
+<div class="text-purple-300 font-semibold mb-1">Context (0–25)</div>
+<div class="text-neutral-400 text-xs space-y-0.5">
+<div>• CLAUDE.md existe y tiene secciones completas        +8</div>
+<div>• Identidad/voz definida                            +4</div>
+<div>• Memoria (.claude/memory.md o similar)             +5</div>
+<div>• References (.claude/references/)                   +4</div>
+<div>• Decisiones documentadas                              +4</div>
+</div>
+</div>
+<div>
+<div class="text-sky-300 font-semibold mb-1">Conexiones (0–25)</div>
+<div class="text-neutral-400 text-xs space-y-0.5">
+<div>• Cobertura de los 7 dominios de conexión             +14</div>
+<div>• Guías de API / docs de herramientas                 +4</div>
+<div>• Freshness (última actualización &lt; 30 días)        +4</div>
+<div>• Balance read/write bien definido                    +3</div>
+</div>
+</div>
+<div>
+<div class="text-purple-300 font-semibold mb-1">Capabilities (0–25)</div>
+<div class="text-neutral-400 text-xs space-y-0.5">
+<div>• 3+ skills activas (.claude/skills/)                 +9</div>
+<div>• 1+ skill propia (no del kit estándar)              +8</div>
+<div>• 1+ agent (.claude/agents/)                         +8</div>
+</div>
+</div>
+<div>
+<div class="text-sky-300 font-semibold mb-1">Cadence (0–25)</div>
+<div class="text-neutral-400 text-xs space-y-0.5">
+<div>• Trigger recurrente configurado                     +10</div>
+<div>• Actividad reciente (últimos 7 días)                 +8</div>
+<div>• Templates de workflow                              +7</div>
+</div>
+</div>
+</div>
+<div class="text-neutral-600 text-xs mt-3 border-t border-dark-600 pt-2">recreación ilustrativa de los criterios — los valores exactos dependen de la versión del kit</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Context</div><div class="text-neutral-400 text-xs mt-1">Manual, voz, memoria</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-sky-400 font-bold text-sm">Conexiones</div><div class="text-neutral-400 text-xs mt-1">7 dominios, actualización</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Capabilities</div><div class="text-neutral-400 text-xs mt-1">Skills + agentes</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-sky-400 font-bold text-sm">Cadence</div><div class="text-neutral-400 text-xs mt-1">Actividad de triggers</div></div>
+</div>
+</section>
+<!-- TÓPICO 4 — Tabela de Stages -->
+<section class="mb-16" id="topico-4">
+<div class="flex items-center space-x-4 mb-6">
+<span class="w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-lg flex-shrink-0">4</span>
+<h2 class="text-2xl font-bold">Etapas — rangos de puntuación</h2>
+</div>
+<p class="text-neutral-300 mb-6">El puntaje total (0–100) se clasifica en 4 stages. Cada stage tiene un nombre, un rango y una lectura práctica del estado de AIOS. La mayoría de los proyectos nuevos queda entre 40 y 70: es el progreso esperado, no un fallo.</p>
+<!-- Tabela de stages -->
+<div class="overflow-x-auto mb-6">
+<table class="w-full text-sm border border-dark-600 rounded-xl overflow-hidden">
+<thead>
+<tr class="bg-dark-700 text-neutral-300">
+<th class="text-left px-4 py-3 font-semibold border-b border-dark-600">Puntuación</th>
+<th class="text-left px-4 py-3 font-semibold border-b border-dark-600">Etapa</th>
+<th class="text-left px-4 py-3 font-semibold border-b border-dark-600">Nombre</th>
+<th class="text-left px-4 py-3 font-semibold border-b border-dark-600 hidden md:table-cell">Lectura práctica</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-dark-600">
+<tr class="bg-dark-800 hover:bg-dark-700 transition-colors">
+<td class="px-4 py-3 font-mono text-red-400 font-bold">0–39</td>
+<td class="px-4 py-3"><span class="px-2 py-0.5 rounded bg-red-900/30 border border-red-500/30 text-red-400 text-xs font-bold">Etapa 0</span></td>
+<td class="px-4 py-3 font-semibold text-neutral-300">Fundamentos</td>
+<td class="px-4 py-3 text-neutral-400 hidden md:table-cell">AIOS incompleto. Faltan piezas esenciales. Ejecuta /onboard primero.</td>
+</tr>
+<tr class="bg-dark-800 hover:bg-dark-700 transition-colors">
+<td class="px-4 py-3 font-mono text-yellow-400 font-bold">40–69</td>
+<td class="px-4 py-3"><span class="px-2 py-0.5 rounded bg-yellow-900/30 border border-yellow-500/30 text-yellow-400 text-xs font-bold">Etapa 1</span></td>
+<td class="px-4 py-3 font-semibold text-neutral-300">Built</td>
+<td class="px-4 py-3 text-neutral-400 hidden md:table-cell">Estructura funcional. Todavía hay brechas de impacto. Usa /level-up cada semana.</td>
+</tr>
+<tr class="bg-dark-800 hover:bg-dark-700 transition-colors">
+<td class="px-4 py-3 font-mono text-purple-400 font-bold">70–89</td>
+<td class="px-4 py-3"><span class="px-2 py-0.5 rounded bg-purple-900/30 border border-purple-500/30 text-purple-400 text-xs font-bold">Etapa 2</span></td>
+<td class="px-4 py-3 font-semibold text-neutral-300">Compounding</td>
+<td class="px-4 py-3 text-neutral-400 hidden md:table-cell">AIOS sólido. Las automatizaciones se retroalimentan. Enfoque en calidad y cobertura.</td>
+</tr>
+<tr class="bg-dark-800 hover:bg-dark-700 transition-colors">
+<td class="px-4 py-3 font-mono text-sky-400 font-bold">90–100</td>
+<td class="px-4 py-3"><span class="px-2 py-0.5 rounded bg-sky-900/30 border border-sky-500/30 text-sky-400 text-xs font-bold">Etapa 3</span></td>
+<td class="px-4 py-3 font-semibold text-neutral-300">Autonomous</td>
+<td class="px-4 py-3 text-neutral-400 hidden md:table-cell">AIOS en plena operación. Score 95 es flex: sistema casi sin fricción manual.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- SVG escada de stages -->
+<div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-4 mb-6">
+<svg aria-label="Escalera de los 4 stages: Foundation, Built, Compounding, Autonomous — niveles crecientes con rangos de score" class="w-full h-auto" role="img" viewbox="0 0 500 180" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<filter height="140%" id="glow-s" width="140%" x="-20%" y="-20%">
+<fegaussianblur result="b" stddeviation="2"></fegaussianblur>
+<femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+</defs>
+<rect fill="#111827" height="180" rx="12" width="500"></rect>
+<!-- Degraus -->
+<rect fill="#1a1230" height="40" opacity="0.6" rx="4" stroke="#c084fc" stroke-width="1" width="90" x="20" y="120"></rect>
+<text fill="#c084fc" font-family="monospace" font-size="9" font-weight="700" text-anchor="middle" x="65" y="138">Etapa 0</text>
+<text fill="#9ca3af" font-family="monospace" font-size="8" text-anchor="middle" x="65" y="152">0–39</text>
+<rect fill="#1a1230" height="65" opacity="0.7" rx="4" stroke="#fbbf24" stroke-width="1" width="90" x="130" y="95"></rect>
+<text fill="#fbbf24" font-family="monospace" font-size="9" font-weight="700" text-anchor="middle" x="175" y="113">Etapa 1</text>
+<text fill="#9ca3af" font-family="monospace" font-size="8" text-anchor="middle" x="175" y="127">40–69</text>
+<text fill="#fbbf24" font-family="monospace" font-size="8" text-anchor="middle" x="175" y="141">Built</text>
+<rect fill="#1a1230" filter="url(#glow-s)" height="95" opacity="0.85" rx="4" stroke="#c084fc" stroke-width="1.5" width="90" x="240" y="65"></rect>
+<text fill="#c084fc" font-family="monospace" font-size="9" font-weight="700" text-anchor="middle" x="285" y="83">Etapa 2</text>
+<text fill="#9ca3af" font-family="monospace" font-size="8" text-anchor="middle" x="285" y="97">70–89</text>
+<text fill="#c084fc" font-family="monospace" font-size="8" text-anchor="middle" x="285" y="111">Compounding</text>
+<rect fill="#0e1b26" filter="url(#glow-s)" height="130" rx="4" stroke="#38bdf8" stroke-width="2" width="130" x="350" y="30"></rect>
+<text fill="#38bdf8" font-family="monospace" font-size="9" font-weight="700" text-anchor="middle" x="415" y="55">Etapa 3</text>
+<text fill="#9ca3af" font-family="monospace" font-size="8" text-anchor="middle" x="415" y="70">90–100</text>
+<text fill="#38bdf8" font-family="monospace" font-size="9" font-weight="700" text-anchor="middle" x="415" y="85">Autonomous</text>
+<text fill="#9ca3af" font-family="monospace" font-size="7" text-anchor="middle" x="415" y="100">95 = flex 💪</text>
+<text fill="#4b5563" font-family="monospace" font-size="9" text-anchor="middle" x="250" y="170">ilustrativo</text>
+</svg>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+<div class="bg-dark-800 border border-red-500/30 rounded-lg p-3 text-center"><div class="text-red-400 font-bold text-sm">0–39</div><div class="text-neutral-400 text-xs mt-1">Fundamentos</div></div>
+<div class="bg-dark-800 border border-yellow-500/30 rounded-lg p-3 text-center"><div class="text-yellow-400 font-bold text-sm">40–69</div><div class="text-neutral-400 text-xs mt-1">Built</div></div>
+<div class="bg-dark-800 border border-purple-500/30 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">70–89</div><div class="text-neutral-400 text-xs mt-1">Compounding</div></div>
+<div class="bg-dark-800 border border-sky-500/30 rounded-lg p-3 text-center"><div class="text-sky-400 font-bold text-sm">90–100</div><div class="text-neutral-400 text-xs mt-1">Autonomous</div></div>
+</div>
+</section>
+<!-- TÓPICO 5 — Lacunas por alavancagem -->
+<section class="mb-16" id="topico-5">
+<div class="flex items-center space-x-4 mb-6">
+<span class="w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-lg flex-shrink-0">5</span>
+<h2 class="text-2xl font-bold">Brechas según su apalancamiento</h2>
+</div>
+<p class="text-neutral-300 mb-6">/audit no enumera las brechas en orden aleatorio. Usa una fórmula de apalancamiento para priorizar qué resolver primero: <strong>leverage = puntos perdidos × multiplicador de impacto</strong>. Las 3 brechas de mayor leverage vienen con un next-step concreto.</p>
+<!-- Fórmula mono -->
+<div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5 mb-6 font-mono text-sm">
+<div class="text-purple-400 font-bold text-xs uppercase tracking-wider mb-3">Fórmula de apalancamiento</div>
+<div class="text-neutral-300 mb-2">leverage = puntos_perdidos × multiplicador</div>
+<div class="border-t border-dark-600 pt-3 space-y-1 text-xs text-neutral-400">
+<div>puntos_perdidos  = 25 − score_do_C</div>
+<div>multiplicador    → depende del tipo de brecha:</div>
+<div class="pl-4 space-y-0.5 mt-1">
+<div>0 dominios Tier-1 (email, calendar, files)  → ×4</div>
+<div>CLAUDE.md superficial / sin secciones               → ×3</div>
+<div>sin skills propias                       → ×2</div>
+<div>todo de solo lectura (sin escrituras)               → ×2</div>
+<div>sin trigger recurrente                    → ×2</div>
+</div>
+</div>
+<div class="text-neutral-600 text-xs mt-3 border-t border-dark-600 pt-2">recreación ilustrativa de la lógica de priorización</div>
+</div>
+<!-- Timeline de prioridades -->
+<div class="space-y-4 mb-6">
+<h3 class="font-semibold text-neutral-300 mb-3">Ejemplo: Top-3 de brechas priorizadas</h3>
+<div class="flex items-start space-x-4">
+<div class="w-10 h-10 rounded-full bg-red-900/40 border border-red-500/30 flex items-center justify-center text-red-400 font-bold text-sm flex-shrink-0">1</div>
+<div class="bg-dark-800 border border-dark-600 rounded-xl p-4 flex-1">
+<div class="font-semibold text-neutral-200 mb-1">Conexiones Tier-1 ausentes <span class="text-red-400 text-xs ml-2">leverage: 44</span></div>
+<p class="text-neutral-400 text-sm">El correo y el calendario no están conectados. Bloquean automatizaciones con mayor ROI.</p>
+<div class="mt-2 text-xs text-purple-300">Siguiente paso: <code class="font-mono bg-dark-700 px-1 rounded">adicionar MCP Gmail + Google Calendar</code></div>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="w-10 h-10 rounded-full bg-yellow-900/40 border border-yellow-500/30 flex items-center justify-center text-yellow-400 font-bold text-sm flex-shrink-0">2</div>
+<div class="bg-dark-800 border border-dark-600 rounded-xl p-4 flex-1">
+<div class="font-semibold text-neutral-200 mb-1">CLAUDE.md superficial <span class="text-yellow-400 text-xs ml-2">leverage: 27</span></div>
+<p class="text-neutral-400 text-sm">Las secciones de identidad y decisiones están casi vacías. Cada sesión empieza desde cero.</p>
+<div class="mt-2 text-xs text-purple-300">Siguiente paso: <code class="font-mono bg-dark-700 px-1 rounded">expandir seções Business, Voice, Decisions</code></div>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="w-10 h-10 rounded-full bg-purple-900/40 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-sm flex-shrink-0">3</div>
+<div class="bg-dark-800 border border-dark-600 rounded-xl p-4 flex-1">
+<div class="font-semibold text-neutral-200 mb-1">Sin skills propias <span class="text-purple-400 text-xs ml-2">leverage: 16</span></div>
+<p class="text-neutral-400 text-sm">Solo las 3 skills del kit. Ninguna personalizada para el negocio.</p>
+<div class="mt-2 text-xs text-purple-300">Siguiente paso: <code class="font-mono bg-dark-700 px-1 rounded">/level-up → criar 1 skill de brief semanal</code></div>
+</div>
+</div>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 border border-primary/30 rounded-xl p-5 mb-6">
+<div class="flex items-start space-x-3">
+<span class="text-primary text-xl mt-0.5">💡</span>
+<div>
+<div class="font-semibold text-primary mb-1">No resuelvas todo de una vez</div>
+<p class="text-neutral-300 text-sm">La lista de brechas puede tener de 8 a 12 elementos. Enfócate solo en los 3 principales en términos de leverage. Resolver el primero suele elevar el puntaje entre 10 y 15 puntos y cambiar el orden de los demás. Vuelve a ejecutar /audit después de cada mejora.</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Apalancamiento</div><div class="text-neutral-400 text-xs mt-1">pts × multiplicador</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Top 3</div><div class="text-neutral-400 text-xs mt-1">Siempre el foco</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Siguiente paso</div><div class="text-neutral-400 text-xs mt-1">Concreto por brecha</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Volver a ejecutar</div><div class="text-neutral-400 text-xs mt-1">Después de cada mejora</div></div>
+</div>
+</section>
+<!-- TÓPICO 6 — Read-only + Scoreboard mock -->
+<section class="mb-16" id="topico-6">
+<div class="flex items-center space-x-4 mb-6">
+<span class="w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-lg flex-shrink-0">6</span>
+<h2 class="text-2xl font-bold">Solo lectura + marcador</h2>
+</div>
+<p class="text-neutral-300 mb-6">/audit es estrictamente de solo lectura: nunca modifica archivos del sistema. El único efecto opcional de escritura es guardar el resultado en <code class="font-mono text-purple-400 bg-purple-500/10 px-1 rounded">audits/audit-{data}.md</code> para rastrear la evolución del score semana a semana. El formato usa barras <code class="font-mono text-purple-400 bg-purple-500/10 px-1 rounded">##</code> cada 5 puntos con etiquetas descriptivas.</p>
+<!-- Mock do report -->
+<div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5 mb-6 font-mono text-sm overflow-x-auto">
+<div class="flex items-center space-x-2 mb-3">
+<div class="w-3 h-3 rounded-full bg-red-500"></div>
+<div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+<div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+<span class="text-neutral-500 text-xs ml-2">audits/audit-2026-06-01.md — <span class="text-purple-400">ilustrativo</span></span>
+</div>
+<div class="text-neutral-300 space-y-1 text-xs leading-relaxed">
+<div class="text-purple-400 font-bold"># /audit — AIS-OS Score · 2026-06-01</div>
+<div class="text-neutral-500"> </div>
+<div class="text-sky-300">## Contexto (20/25)</div>
+<div>████████████████████░░░░░  Fuerte</div>
+<div class="text-neutral-500">+ manual completo, memoria activa, references ok</div>
+<div class="text-neutral-500">- decisiones poco detalladas (-5)</div>
+<div class="text-neutral-500"> </div>
+<div class="text-sky-300">## Conexiones (14/25)</div>
+<div>██████████████░░░░░░░░░░░  Escaso</div>
+<div class="text-neutral-500">+ files, notion conectados</div>
+<div class="text-neutral-500">- email, calendar, CRM ausentes (-11)</div>
+<div class="text-neutral-500"> </div>
+<div class="text-sky-300">## Capacidades (15/25)</div>
+<div>███████████████░░░░░░░░░░  Sólido</div>
+<div class="text-neutral-500">+ 3 skills del kit activas</div>
+<div class="text-neutral-500">- 0 skills propias, 0 agents (-10)</div>
+<div class="text-neutral-500"> </div>
+<div class="text-sky-300">## Cadencia (8/25)</div>
+<div>████████░░░░░░░░░░░░░░░░░  Faltante</div>
+<div class="text-neutral-500">- sin trigger recurrente, sin templates (-17)</div>
+<div class="text-neutral-500"> </div>
+<div class="text-purple-400 font-bold">TOTAL: 57/100 — Stage 1: Built</div>
+<div class="text-neutral-500"> </div>
+<div class="text-yellow-400">## Las 3 principales brechas (por leverage)</div>
+<div>1. Conexiones Tier-1 ausentes        → leverage 44 → add MCP Gmail+Cal</div>
+<div>2. CLAUDE.md superficial                  → leverage 27 → amplía las secciones</div>
+<div>3. Sin Skills propias             → leverage 16 → /level-up</div>
+</div>
+</div>
+<!-- Grid Fazer vs Evitar -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<div class="bg-emerald-900/20 border border-emerald-500/30 rounded-xl p-5">
+<h3 class="font-semibold text-emerald-400 mb-3">✓ Buenas prácticas con el scoreboard</h3>
+<ul class="space-y-2 text-neutral-300 text-sm">
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Guarda el audit cada semana en <code class="font-mono text-xs">audits/</code></span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Compara el score actual con el de la semana anterior</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Celebra cada +5 puntos — es progreso real</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 border border-red-500/30 rounded-xl p-5">
+<h3 class="font-semibold text-red-400 mb-3">✗ Trampas comunes</h3>
+<ul class="space-y-2 text-neutral-300 text-sm">
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>No le pidas a /audit que «sea generoso»: la honestidad es el objetivo</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>No intentes resolver 8 brechas de una vez</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>No olvides volver a ejecutarlo después de cada mejora</span></li>
+</ul>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">## barras</div><div class="text-neutral-400 text-xs mt-1">Formato visual</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Etiquetas</div><div class="text-neutral-400 text-xs mt-1">Sólido/Robusto/Delgado/Ausente</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Semanal</div><div class="text-neutral-400 text-xs mt-1">Seguimiento de la evolución</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Honesto</div><div class="text-neutral-400 text-xs mt-1">Nunca generoso</div></div>
+</div>
+</section>
+<!-- TÓPICO 7 — Ritual semanal -->
+<section class="mb-16" id="topico-7">
+<div class="flex items-center space-x-4 mb-6">
+<span class="w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-lg flex-shrink-0">7</span>
+<h2 class="text-2xl font-bold">Ritual semanal</h2>
+</div>
+<p class="text-neutral-300 mb-6">/audit es el mecanismo de crecimiento acumulativo de AIOS. La primera ejecución crea la línea de base el Día 7. A partir de ahí, cada semana lo ejecutas, resuelves el elemento principal de leverage y ves cómo sube el puntaje. Es el ciclo que transforma la configuración en un sistema.</p>
+<!-- Timeline do ritual -->
+<div class="space-y-4 mb-6">
+<h3 class="font-semibold text-neutral-300 mb-3">Ciclo semanal de auditoría</h3>
+<div class="flex items-start space-x-4">
+<div class="w-10 h-10 rounded-full bg-purple-900/40 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-xs flex-shrink-0">Día 7</div>
+<div class="bg-dark-800 border border-dark-600 rounded-xl p-4 flex-1">
+<div class="font-semibold text-neutral-200 mb-1">Primera ejecución — baseline</div>
+<p class="text-neutral-400 text-sm">Ejecuta /audit por primera vez. Acepta el score sin juzgarlo. Guárdalo en <code class="font-mono text-xs bg-dark-700 px-1 rounded">audits/audit-semana-1.md</code>. Este es el punto cero.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="w-10 h-10 rounded-full bg-purple-900/40 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-xs flex-shrink-0">Lun</div>
+<div class="bg-dark-800 border border-dark-600 rounded-xl p-4 flex-1">
+<div class="font-semibold text-neutral-200 mb-1">Revisa el Top-1 de la semana anterior</div>
+<p class="text-neutral-400 text-sm">Abre el último audit.md. ¿Cuál fue el Top-1 de leverage? ¿Se resolvió? Anota el estado antes de abrir una nueva sesión.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="w-10 h-10 rounded-full bg-sky-900/40 border border-sky-500/30 flex items-center justify-center text-sky-400 font-bold text-xs flex-shrink-0">/audit</div>
+<div class="bg-dark-800 border border-dark-600 rounded-xl p-4 flex-1">
+<div class="font-semibold text-neutral-200 mb-1">Ejecutar el /audit</div>
+<p class="text-neutral-400 text-sm">Ejecuta la skill. Se genera un nuevo score. Compáralo con el de la semana anterior. ¿Cuánto subió? Se identificó un nuevo Top-3 de leverage.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="w-10 h-10 rounded-full bg-purple-900/40 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-xs flex-shrink-0">→</div>
+<div class="bg-dark-800 border border-dark-600 rounded-xl p-4 flex-1">
+<div class="font-semibold text-neutral-200 mb-1">Entregar al /level-up</div>
+<p class="text-neutral-400 text-sm">Toma el Top-1 de leverage de /audit y llévalo directamente a /level-up. Una brecha → una automatización. Cierra el ciclo de la semana.</p>
+</div>
+</div>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 border border-primary/30 rounded-xl p-5 mb-6">
+<div class="flex items-start space-x-3">
+<span class="text-primary text-xl mt-0.5">💡</span>
+<div>
+<div class="font-semibold text-primary mb-1">El efecto compounding es real</div>
+<p class="text-neutral-300 text-sm">Resuelve 1 brecha de alto impacto por semana. En 4 semanas, un AIOS Stage 1 (57 pts) suele llegar a Stage 2 (75+ pts). El puntaje en aumento es la evidencia de que el sistema funciona, no la automatización individual.</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Día 7</div><div class="text-neutral-400 text-xs mt-1">Baseline</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Semanal</div><div class="text-neutral-400 text-xs mt-1">Ritual fijo</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Top 1</div><div class="text-neutral-400 text-xs mt-1">→ /level-up</div></div>
+<div class="bg-dark-800 border border-dark-600 rounded-lg p-3 text-center"><div class="text-purple-400 font-bold text-sm">Compounding</div><div class="text-neutral-400 text-xs mt-1">El puntaje sube</div></div>
+</div>
+</section>
+<!-- RESUMO DO MÓDULO -->
+<section class="mb-12">
+<div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
+<h2 class="text-2xl font-bold mb-6 flex items-center">
+<span class="mr-3">📊</span> Resumen del módulo
+        </h2>
+<div class="space-y-4 mb-8">
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div>
+<strong class="text-white">/audit es de solo lectura</strong>
+<span class="text-neutral-400"> — lee la estructura, nunca escribe en el sistema operativo de AIOS</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Estructural, no capability</strong>
+<span class="text-neutral-400"> — mide si AIOS está bien construido (forma), no lo que puede hacer (función)</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div>
+<strong class="text-white">4 Cs, 25 pts cada uno</strong>
+<span class="text-neutral-400"> — Context, Connections, Capabilities y Cadence suman 100 puntos en total</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div>
+<strong class="text-white">4 etapas de madurez</strong>
+<span class="text-neutral-400"> — Foundation (0–39), Built (40–69), Compounding (70–89), Autonomous (90–100)</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Apalancamiento = pts × multiplicador</strong>
+<span class="text-neutral-400"> — prioriza las 3 brechas de mayor impacto con un siguiente paso concreto</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Ritual semanal</strong>
+<span class="text-neutral-400"> — El día 7 = línea de base; después, /audit cada semana, el Top-1 pasa a /level-up y la puntuación sube</span>
+</div>
+</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-4 mb-8 border border-purple-500/20">
+<h3 class="font-semibold text-purple-400 mb-2">Próximo módulo: 3.3 — /level-up</h3>
+<p class="text-neutral-300 text-sm">Entendiste el diagnóstico. Ahora aprenderás a construir 1 automatización por semana usando /level-up — el motor de crecimiento de tu AIOS. Cada run = 1 artefacto. Cada semana = un AIOS más capaz.</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 justify-start">
+<a class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors" href="index.html">
+            ← Volver a Ruta
+          </a>
+<a class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors" href="modulo-3-3.html">
+            Próximo módulo →
+          </a>
+</div>
+</div>
+</section>
+</main>
+<!-- FOOTER -->
+<footer class="border-t border-dark-600 py-8 mt-16">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm space-y-1">
+<p>⚙️ AIS-OS — Tu sistema operativo de IA en Claude Code · <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" target="_blank">INEMA.CLUB</a> · 2026</p>
+<p>Basado en el kit AIS-OS (licencia MIT). The Three Ms of AI™ y The Four Cs of an AIOS™ son marcas de Nate Herk. © 2026 Nate Herk.</p>
+</div>
+</footer>
+<script>
+    const themeToggle=document.getElementById('theme-toggle'),tdi=document.getElementById('theme-toggle-dark-icon'),tli=document.getElementById('theme-toggle-light-icon'),H=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){tdi.classList.remove('hidden');H.classList.remove('dark');}else{tli.classList.remove('hidden');}
+    themeToggle.addEventListener('click',()=>{tdi.classList.toggle('hidden');tli.classList.toggle('hidden');H.classList.toggle('dark');localStorage.setItem('theme',H.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>M1.2 — Method (How to Decide) | AIS-OS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: {
+      primary: '#FACC15',
+      dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+    } } } }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    /* Light mode base */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    /* Light accent: emerald (T1) */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5,150,105,0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.06); }
+    html:not(.dark) .bg-emerald-900\/30 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .bg-emerald-900\/40 { background-color: rgba(5,150,105,0.10); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5,150,105,0.18); }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+    /* Light accent: blue (T2) */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37,99,235,0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.06); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    /* Light accent: purple (T3) */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    /* Light special: primary yellow */
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.25); }
+    /* Light special: sky */
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    /* Light special: red */
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220,38,38,0.06); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220,38,38,0.2); }
+    /* Remove gradients in light mode */
+    html:not(.dark) .from-emerald-900\/30,
+    html:not(.dark) .from-emerald-900\/40 { --tw-gradient-from: transparent; background: #f9fafb; }
+    html:not(.dark) .bg-dark-900\/40 { background-color: rgba(249,250,251,0.9); }
+    html:not(.dark) .bg-dark-800\/50 { background-color: rgba(249,250,251,0.7); }
+    /* Navbar light */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+    html:not(.dark) nav { border-bottom-color: #d1d5db; }
+    /* Dark mode borders suavizadas */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+    /* SVG light-mode taming */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+    /* SVG pulse */
+    @keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+      .wf-a:nth-child(2){animation-delay:.25s} .wf-a:nth-child(3){animation-delay:.5s}
+      .wf-a:nth-child(4){animation-delay:.75s} .wf-a:nth-child(5){animation-delay:1s}
+    }
+  </style>
+<link href="https://inematds.github.io/ais-os/curso/trilha1/modulo-1-2.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/ais-os/en/curso/trilha1/modulo-1-2.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/ais-os/es/curso/trilha1/modulo-1-2.html" hreflang="es" rel="alternate"/></head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha1/modulo-1-2.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="modulo-1-2.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">EN</a><a href="../../../es/curso/trilha1/modulo-1-2.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">ES</a></div>
+<!-- NAV B1 — Trilha 1 ativa (emerald) -->
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-14">
+<!-- Logo + INEMA.CLUB -->
+<div class="flex items-center space-x-3">
+<a class="flex items-center space-x-2" href="../../index.html">
+<span class="text-xl font-bold text-primary">⚙️</span>
+<span class="font-bold text-neutral-100 text-sm">AIS-OS</span>
+</a>
+<span class="text-neutral-600 text-sm hidden sm:inline">·</span>
+<a class="text-sky-400 hover:text-sky-300 text-sm font-medium hidden sm:inline" href="https://inema.club" target="_blank">INEMA.CLUB</a>
+</div>
+<!-- Links de trilha + theme toggle -->
+<div class="flex items-center space-x-1">
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10" href="index.html"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Brain (3 Ms)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors" href="../trilha2/index.html"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Architecture (4 Cs)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors" href="../trilha3/index.html"><span class="sm:hidden">T3</span><span class="hidden sm:inline">In Practice</span></a>
+<button class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2" id="theme-toggle">
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- BREADCRUMB -->
+<nav aria-label="Breadcrumb" class="mb-6 text-sm text-neutral-400">
+<ol class="flex items-center space-x-2">
+<li><a class="hover:text-emerald-400 transition-colors" href="../../index.html">Start</a></li>
+<li><span class="text-neutral-600">/</span></li>
+<li><a class="hover:text-emerald-400 transition-colors" href="index.html">Track 1</a></li>
+<li><span class="text-neutral-600">/</span></li>
+<li class="text-emerald-400 font-medium">Module 1.2</li>
+</ol>
+</nav>
+<!-- HEADER DO MÓDULO -->
+<header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 rounded-2xl border border-emerald-500/30 p-8 mb-10">
+<div class="mb-4">
+<span class="inline-block px-3 py-1 bg-emerald-500/20 border border-emerald-500/30 rounded-full text-emerald-400 text-xs font-bold tracking-widest uppercase">MODULE 1.2</span>
+</div>
+<h1 class="text-2xl font-bold text-neutral-100 mb-3">🧭 Method — How to Decide</h1>
+<p class="text-neutral-300 text-lg mb-6">From “I should automate this” to “this is what I’m going to build” — a 6-step framework for making automation decisions clearly and without waste.</p>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 font-bold text-lg">6</div>
+<div class="text-neutral-400 text-xs mt-0.5">Topics</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 font-bold text-lg">40</div>
+<div class="text-neutral-400 text-xs mt-0.5">Minutes</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 font-bold text-lg">🟢</div>
+<div class="text-neutral-400 text-xs mt-0.5">Beginner</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 font-bold text-lg">🧭</div>
+<div class="text-neutral-400 text-xs mt-0.5">Method</div>
+</div>
+</div>
+</header>
+<!-- SVG FUTURISTA — Autonomy Spectrum L0→L4 como escada ascendente + pipeline EAD -->
+<div class="rounded-2xl border border-emerald-500/30 bg-dark-900/40 p-6 mb-10 overflow-hidden">
+<svg aria-label="Illustrative diagram: EAD pipeline (Eliminate → Automate → Delegate) and Autonomy Spectrum L0 to L4 as an ascending staircase" class="w-full h-auto" font-family="Inter,sans-serif" role="img" viewbox="0 0 700 260" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<filter id="m12-glow">
+<fegaussianblur result="blur" stddeviation="1.8"></fegaussianblur>
+<fecomposite in="SourceGraphic" in2="blur" operator="over"></fecomposite>
+</filter>
+<lineargradient id="m12-emerald-grad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#0e2018;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#0a1a10;stop-opacity:1"></stop>
+</lineargradient>
+<lineargradient id="m12-cyan-grad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#0e1b26;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#071219;stop-opacity:1"></stop>
+</lineargradient>
+</defs>
+<!-- Grid de fundo -->
+<rect fill="#0a0f0a" height="260" rx="12" width="700"></rect>
+<line stroke="#1a2e1a" stroke-width="0.5" x1="0" x2="700" y1="52" y2="52"></line>
+<line stroke="#1a2e1a" stroke-width="0.5" x1="0" x2="700" y1="104" y2="104"></line>
+<line stroke="#1a2e1a" stroke-width="0.5" x1="0" x2="700" y1="156" y2="156"></line>
+<line stroke="#1a2e1a" stroke-width="0.5" x1="0" x2="700" y1="208" y2="208"></line>
+<line stroke="#1a2e1a" stroke-width="0.5" x1="140" x2="140" y1="0" y2="260"></line>
+<line stroke="#1a2e1a" stroke-width="0.5" x1="280" x2="280" y1="0" y2="260"></line>
+<line stroke="#1a2e1a" stroke-width="0.5" x1="420" x2="420" y1="0" y2="260"></line>
+<line stroke="#1a2e1a" stroke-width="0.5" x1="560" x2="560" y1="0" y2="260"></line>
+<!-- === LADO ESQUERDO: Pipeline EAD === -->
+<!-- Título -->
+<text fill="#34d399" font-size="9" font-weight="600" letter-spacing="2" x="22" y="22">EAD PIPELINE</text>
+<!-- E — Eliminar -->
+<rect fill="url(#m12-emerald-grad)" filter="url(#m12-glow)" height="44" rx="6" stroke="#34d399" stroke-width="2" width="100" x="14" y="32"></rect>
+<text fill="#34d399" font-size="10" font-weight="700" text-anchor="middle" x="64" y="52">E</text>
+<text fill="#6ee7b7" font-size="8" text-anchor="middle" x="64" y="65">Eliminate</text>
+<text fill="#9ca3af" font-size="7" text-anchor="middle" x="64" y="75">first</text>
+<!-- seta E→A -->
+<line stroke="#34d399" stroke-dasharray="3,2" stroke-width="1.5" x1="64" x2="64" y1="76" y2="94"></line>
+<polygon fill="#34d399" points="64,98 60,90 68,90"></polygon>
+<!-- A — Automatizar -->
+<rect fill="url(#m12-cyan-grad)" height="44" rx="6" stroke="#38bdf8" stroke-width="2" width="100" x="14" y="98"></rect>
+<text fill="#38bdf8" font-size="10" font-weight="700" text-anchor="middle" x="64" y="118">A</text>
+<text fill="#9ad6ff" font-size="8" text-anchor="middle" x="64" y="131">Automate</text>
+<text fill="#9ca3af" font-size="7" text-anchor="middle" x="64" y="141">if there's anything left over</text>
+<!-- seta A→D -->
+<line stroke="#38bdf8" stroke-dasharray="3,2" stroke-width="1.5" x1="64" x2="64" y1="142" y2="160"></line>
+<polygon fill="#38bdf8" points="64,164 60,156 68,156"></polygon>
+<!-- D — Delegar -->
+<rect fill="#1a1208" height="44" rx="6" stroke="#fbbf24" stroke-width="2" width="100" x="14" y="164"></rect>
+<text fill="#fbbf24" font-size="10" font-weight="700" text-anchor="middle" x="64" y="184">D</text>
+<text fill="#fde68a" font-size="8" text-anchor="middle" x="64" y="197">Delegate</text>
+<text fill="#9ca3af" font-size="7" text-anchor="middle" x="64" y="207">complex/judgment</text>
+<!-- regra embaixo -->
+<text fill="#6b7280" font-size="7" text-anchor="middle" x="64" y="240">Don’t automate waste</text>
+<!-- === LADO DIREITO: Autonomy Spectrum como escada === -->
+<text fill="#34d399" font-size="9" font-weight="600" letter-spacing="2" x="178" y="22">AUTONOMY SPECTRUM</text>
+<!-- Escada L0→L4 (degraus crescentes da direita para cima) -->
+<!-- Degrau L0 -->
+<rect class="wf-a" fill="#0e2018" height="34" rx="5" stroke="#34d399" stroke-width="1.5" width="90" x="162" y="200"></rect>
+<text fill="#34d399" font-size="9" font-weight="700" text-anchor="middle" x="207" y="215">L0</text>
+<text fill="#6ee7b7" font-size="8" text-anchor="middle" x="207" y="227">Manual</text>
+<!-- Degrau L1 -->
+<rect class="wf-a" fill="#0e1b26" height="34" rx="5" stroke="#38bdf8" stroke-width="1.5" width="90" x="262" y="170"></rect>
+<text fill="#38bdf8" font-size="9" font-weight="700" text-anchor="middle" x="307" y="185">L1</text>
+<text fill="#9ad6ff" font-size="8" text-anchor="middle" x="307" y="197">Suggested</text>
+<!-- Degrau L2 -->
+<rect class="wf-a" fill="#0e1b26" height="34" rx="5" stroke="#38bdf8" stroke-width="1.5" width="90" x="362" y="140"></rect>
+<text fill="#38bdf8" font-size="9" font-weight="700" text-anchor="middle" x="407" y="155">L2</text>
+<text fill="#9ad6ff" font-size="8" text-anchor="middle" x="407" y="167">Drafted</text>
+<!-- Degrau L3 -->
+<rect class="wf-a" fill="#0e2018" height="34" rx="5" stroke="#34d399" stroke-width="1.5" width="90" x="462" y="110"></rect>
+<text fill="#34d399" font-size="9" font-weight="700" text-anchor="middle" x="507" y="125">L3</text>
+<text fill="#6ee7b7" font-size="8" text-anchor="middle" x="507" y="137">Supervised</text>
+<!-- Degrau L4 — destaque glow -->
+<rect fill="url(#m12-emerald-grad)" filter="url(#m12-glow)" height="42" rx="6" stroke="#34d399" stroke-width="2.5" width="100" x="562" y="76"></rect>
+<text fill="#34d399" font-size="10" font-weight="800" text-anchor="middle" x="612" y="95">L4</text>
+<text fill="#6ee7b7" font-size="8" text-anchor="middle" x="612" y="108">Autonomous</text>
+<!-- Linha de escada (degraus) -->
+<polyline fill="none" opacity="0.4" points="207,200 252,200 252,170 307,170 352,170 352,140 407,140 452,140 452,110 507,110 552,110 552,76 662,76" stroke="#34d399" stroke-dasharray="4,3" stroke-width="1"></polyline>
+<!-- Seta ascendente geral -->
+<line stroke="#4b5563" stroke-width="1" x1="162" x2="672" y1="248" y2="248"></line>
+<polygon fill="#4b5563" points="676,248 668,244 668,252"></polygon>
+<text fill="#6b7280" font-size="7" text-anchor="middle" x="414" y="260">Default = the lowest level that works · Increase only after proving the previous level</text>
+<!-- Divisor vertical -->
+<line stroke="#374151" stroke-width="1" x1="148" x2="148" y1="20" y2="248"></line>
+</svg>
+</div>
+<!-- SEÇÕES DE CONTEÚDO -->
+<h2 class="text-2xl font-bold mb-6">Detailed content</h2>
+<!-- TÓPICO 1 — Find the Constraint -->
+<section class="mb-10" id="topico-1">
+<div class="flex items-start space-x-4 mb-4">
+<span class="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg flex-shrink-0">1</span>
+<div>
+<h2 class="text-xl font-bold text-neutral-100 mb-1">Find the Constraint</h2>
+<p class="text-neutral-400 text-sm">Where every intelligent automation decision starts</p>
+</div>
+</div>
+<p class="text-neutral-300 mb-5">Before building anything, you need to know <em>where the pain is</em>. Don’t automate what’s on the wrong path. Find the real bottleneck — or the real opportunity — using two questions that force your brain out of reactive mode.</p>
+<!-- Box mono: as 2 perguntas-poder -->
+<div class="bg-dark-800 rounded-xl border border-emerald-500/30 p-5 mb-5 font-mono text-sm">
+<div class="text-emerald-400 text-xs font-bold tracking-widest mb-3 font-sans">⚡ TWO POWER QUESTIONS</div>
+<div class="space-y-3">
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-0.5 flex-shrink-0">❶</span>
+<div>
+<span class="text-neutral-100">"If 500 new customers arrived tomorrow, what would break first?"</span>
+<div class="text-neutral-500 text-xs mt-1 font-sans">→ Points to the operational bottleneck. This is where automation has the highest ROI.</div>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-0.5 flex-shrink-0">❷</span>
+<div>
+<span class="text-neutral-100">"What would get you 500 customers tomorrow?"</span>
+<div class="text-neutral-500 text-xs mt-1 font-sans">→ Points to the blocked growth opportunity. It may be more valuable than fixing the bottleneck.</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Grid Conceitos-chave -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 text-xs font-bold mb-1">BOTTLENECK</div>
+<div class="text-neutral-400 text-xs">What breaks as you grow</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 text-xs font-bold mb-1">OPPORTUNITY</div>
+<div class="text-neutral-400 text-xs">What enables growth</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 text-xs font-bold mb-1">PRIORITY</div>
+<div class="text-neutral-400 text-xs">Constraint before optimization</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 text-xs font-bold mb-1">FOCUS</div>
+<div class="text-neutral-400 text-xs">One constraint at a time</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 2 — EAD -->
+<section class="mb-10" id="topico-2">
+<div class="flex items-start space-x-4 mb-4">
+<span class="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg flex-shrink-0">2</span>
+<div>
+<h2 class="text-xl font-bold text-neutral-100 mb-1">EAD — Eliminate, Automate, Delegate</h2>
+<p class="text-neutral-400 text-sm">The sequence that separates smart operators from those who automate waste</p>
+</div>
+</div>
+<p class="text-neutral-300 mb-5">The order <strong class="text-neutral-100">matters</strong>. Many people jump straight to "automate" without asking whether that task should exist. The result: you spend time building a machine that does something useless more efficiently.</p>
+<!-- Grid Fazer vs Evitar -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-5">
+<div class="text-emerald-400 font-bold text-sm mb-3">✓ Correct sequence</div>
+<ul class="space-y-2 text-sm">
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span class="text-neutral-300"><strong>Eliminate first:</strong> "What if we simply stopped doing this?"</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span class="text-neutral-300">If no one would notice → kill the task</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span class="text-neutral-300"><strong>Automate later</strong> what was left</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span class="text-neutral-300"><strong>Finally, Delegate</strong> what’s complex or requires human judgment</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-5">
+<div class="text-red-400 font-bold text-sm mb-3">✗ Common pitfalls</div>
+<ul class="space-y-2 text-sm">
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span class="text-neutral-300">Automating without asking whether the task should exist</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span class="text-neutral-300">Delegate to AI what should be eliminated</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span class="text-neutral-300">Automating workflows that change every week</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span class="text-neutral-300">Delegate critical judgment to an AI without supervision</span></li>
+</ul>
+</div>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 border border-primary/30 rounded-xl p-4 mb-5">
+<div class="text-primary font-bold text-sm mb-1">💡 Golden Rule</div>
+<p class="text-neutral-300 text-sm"><em>Don’t automate waste.</em> An unnecessary task done with AI is just an unnecessary task done faster. The value lies in eliminating it first.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 text-xs font-bold mb-1">ELIMINATE</div>
+<div class="text-neutral-400 text-xs">Always the first question</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 text-xs font-bold mb-1">AUTOMATE</div>
+<div class="text-neutral-400 text-xs">What’s left and repeatable</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 text-xs font-bold mb-1">DELEGATE</div>
+<div class="text-neutral-400 text-xs">Complex, variable, judgment-based</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 text-xs font-bold mb-1">SEQUENCE</div>
+<div class="text-neutral-400 text-xs">The order is the method</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 3 — Regra 60/30/10 -->
+<section class="mb-10" id="topico-3">
+<div class="flex items-start space-x-4 mb-4">
+<span class="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg flex-shrink-0">3</span>
+<div>
+<h2 class="text-xl font-bold text-neutral-100 mb-1">60/30/10 Golden Rule</h2>
+<p class="text-neutral-400 text-sm">The realistic distribution of any mature AI operation</p>
+</div>
+</div>
+<p class="text-neutral-300 mb-5">Full automation is rarely the real goal — and anyone promising 100% is selling you something. Smart operations have three distinct tracks that coexist, and deciding which task goes in which track is the most important decision before you build.</p>
+<!-- Tabela/Visual 60/30/10 em mono -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-5">
+<div class="bg-dark-700 px-4 py-2 border-b border-dark-600">
+<span class="text-emerald-400 text-xs font-bold tracking-widest font-mono">60/30/10 RULE — OPERATIONAL DISTRIBUTION</span>
+</div>
+<div class="divide-y divide-dark-600">
+<div class="flex items-center p-4 space-x-4">
+<div class="w-14 h-14 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center flex-shrink-0">
+<span class="text-emerald-400 font-bold text-xl">60%</span>
+</div>
+<div class="flex-1">
+<div class="text-neutral-100 font-semibold text-sm mb-1">Fully Automated</div>
+<div class="text-neutral-400 text-xs">Runs on its own, without human input. Trigger → Output. Examples: daily reports, FAQ responses, standardized order processing.</div>
+</div>
+</div>
+<div class="flex items-center p-4 space-x-4">
+<div class="w-14 h-14 rounded-xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center flex-shrink-0">
+<span class="text-blue-400 font-bold text-xl">30%</span>
+</div>
+<div class="flex-1">
+<div class="text-neutral-100 font-semibold text-sm mb-1">AI-Assisted (human reviews before it goes out)</div>
+<div class="text-neutral-400 text-xs">AI drafts, a human approves. Draft + Review. Examples: high-value proposals, sensitive communications, decisions with external impact.</div>
+</div>
+</div>
+<div class="flex items-center p-4 space-x-4">
+<div class="w-14 h-14 rounded-xl bg-primary/10 border border-primary/30 flex items-center justify-center flex-shrink-0">
+<span class="text-primary font-bold text-xl">10%</span>
+</div>
+<div class="flex-1">
+<div class="text-neutral-100 font-semibold text-sm mb-1">Manual — Intentionally</div>
+<div class="text-neutral-400 text-xs">Unique human judgment, strategic relationships, original creativity. Not worth automating or cannot be safely automated.</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 border border-primary/30 rounded-xl p-4 mb-5">
+<div class="text-primary font-bold text-sm mb-1">💡 Practical Calibration</div>
+<p class="text-neutral-300 text-sm">Map your 10 most frequent tasks and classify each into one of the 3 tiers. If more than 50% fall into “manual” without a clear reason, you have a level 1 opportunity. If more than 80% are in the fully automated tier, review whether you have enough supervision.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 text-xs font-bold mb-1">60% AUTO</div>
+<div class="text-neutral-400 text-xs">Runs without input</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 text-xs font-bold mb-1">30% ASSISTED</div>
+<div class="text-neutral-400 text-xs">Draft + Review</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-primary text-xs font-bold mb-1">10% MANUAL</div>
+<div class="text-neutral-400 text-xs">Human judgment</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 text-xs font-bold mb-1">BALANCE</div>
+<div class="text-neutral-400 text-xs">100% auto = false promise</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 4 — Map the Process -->
+<section class="mb-10" id="topico-4">
+<div class="flex items-start space-x-4 mb-4">
+<span class="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg flex-shrink-0">4</span>
+<div>
+<h2 class="text-xl font-bold text-neutral-100 mb-1">Map the Process (5 elements)</h2>
+<p class="text-neutral-400 text-sm">If you can’t explain it to a person, you can’t explain it to AI</p>
+</div>
+</div>
+<p class="text-neutral-300 mb-5">Before opening any automation tool, you need to be able to describe the process from start to finish using 5 elements. This map is the minimum spec for any automation that will work.</p>
+<!-- Timeline dos 5 passos -->
+<div class="space-y-3 mb-5">
+<div class="flex items-start space-x-4">
+<div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-sm flex-shrink-0">T</div>
+<div class="flex-1 bg-dark-800 rounded-xl border border-dark-600 p-4">
+<div class="text-neutral-100 font-semibold text-sm mb-1">Trigger — What starts it?</div>
+<div class="text-neutral-400 text-xs">The event that triggers the process. An email arrives, a form is submitted, a specific time, an external system webhook. No clear trigger = process can’t be automated.</div>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="w-10 h-10 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-sm flex-shrink-0">D</div>
+<div class="flex-1 bg-dark-800 rounded-xl border border-dark-600 p-4">
+<div class="text-neutral-100 font-semibold text-sm mb-1">Data Sources — Where does the data come from?</div>
+<div class="text-neutral-400 text-xs">Spreadsheet, CRM, database, API, email. Each source needs to be accessible to the automation. Data trapped in PDFs or in people’s heads creates a bottleneck here.</div>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="w-10 h-10 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-sm flex-shrink-0">X</div>
+<div class="flex-1 bg-dark-800 rounded-xl border border-dark-600 p-4">
+<div class="text-neutral-100 font-semibold text-sm mb-1">Data Transformations — What happens to the data?</div>
+<div class="text-neutral-400 text-xs">Calculations, formatting, enrichment, classification, AI text generation. Each transformation is a discrete logical step. If you can't list them, the process is still too vague.</div>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-sm flex-shrink-0">D</div>
+<div class="flex-1 bg-dark-800 rounded-xl border border-dark-600 p-4">
+<div class="text-neutral-100 font-semibold text-sm mb-1">Decision Points — Where are the choices?</div>
+<div class="text-neutral-400 text-xs">If X, then Y. If the amount is over R$5k, escalate to a human. Complex or poorly defined decision points are where automations fail silently.</div>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-sm flex-shrink-0">F</div>
+<div class="flex-1 bg-dark-800 rounded-xl border border-dark-600 p-4">
+<div class="text-neutral-100 font-semibold text-sm mb-1">Destination — Where does the output go?</div>
+<div class="text-neutral-400 text-xs">CRM updated, email sent, file created, notification triggered, database entry added. The destination determines whether the automation succeeded.</div>
+</div>
+</div>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 border border-primary/30 rounded-xl p-4 mb-5">
+<div class="text-primary font-bold text-sm mb-1">💡 Mapping Test</div>
+<p class="text-neutral-300 text-sm">Explain the process out loud to someone who doesn't understand AI. If you get stuck, there's a vague point. Move on only when you can narrate the 5 elements without pausing.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-xs font-bold mb-1">TRIGGER</div>
+<div class="text-neutral-400 text-xs">What it starts</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-blue-400 text-xs font-bold mb-1">DATA SRC</div>
+<div class="text-neutral-400 text-xs">Where it comes from</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-blue-400 text-xs font-bold mb-1">TRANSFORM</div>
+<div class="text-neutral-400 text-xs">What changes</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-xs font-bold mb-1">DECISION</div>
+<div class="text-neutral-400 text-xs">Where you choose</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600 text-center">
+<div class="text-emerald-400 text-xs font-bold mb-1">DEST</div>
+<div class="text-neutral-400 text-xs">Where it goes</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 5 — Autonomy Spectrum -->
+<section class="mb-10" id="topico-5">
+<div class="flex items-start space-x-4 mb-4">
+<span class="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg flex-shrink-0">5</span>
+<div>
+<h2 class="text-xl font-bold text-neutral-100 mb-1">Autonomy Spectrum (L0→L4)</h2>
+<p class="text-neutral-400 text-sm">Workflows beat agents — move up a level only after proving the previous one</p>
+</div>
+</div>
+<p class="text-neutral-300 mb-5">There is a temptation to jump straight to autonomous agents (L4) because it seems more impressive. That choice is almost always wrong. The correct default is <strong class="text-neutral-100">the lowest level that solves the problem</strong>. Move up only after proving that the level below worked and showed its limits.</p>
+<!-- Tabela Autonomy Spectrum -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-5">
+<div class="bg-dark-700 px-4 py-2 border-b border-dark-600">
+<span class="text-emerald-400 text-xs font-bold tracking-widest">AUTONOMY SPECTRUM — L0 → L4</span>
+</div>
+<div class="divide-y divide-dark-600">
+<div class="grid grid-cols-12 items-center px-4 py-3 gap-3">
+<div class="col-span-2">
+<span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-dark-700 border border-dark-600 text-neutral-400 font-bold text-sm">L0</span>
+</div>
+<div class="col-span-3">
+<div class="text-neutral-100 font-semibold text-sm">Manual</div>
+<div class="text-neutral-500 text-xs">You do everything</div>
+</div>
+<div class="col-span-7 text-neutral-400 text-xs">No automation. Documented process, executed by a human. Mandatory baseline before any automation.</div>
+</div>
+<div class="grid grid-cols-12 items-center px-4 py-3 gap-3">
+<div class="col-span-2">
+<span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 font-bold text-sm">L1</span>
+</div>
+<div class="col-span-3">
+<div class="text-neutral-100 font-semibold text-sm">Suggested</div>
+<div class="text-neutral-500 text-xs">AI suggests</div>
+</div>
+<div class="col-span-7 text-neutral-400 text-xs">The system proposes an action; a human decides. Examples: an email classified as spam (you accept it or not), a suggested reply in the CRM.</div>
+</div>
+<div class="grid grid-cols-12 items-center px-4 py-3 gap-3">
+<div class="col-span-2">
+<span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 font-bold text-sm">L2</span>
+</div>
+<div class="col-span-3">
+<div class="text-neutral-100 font-semibold text-sm">Drafted</div>
+<div class="text-neutral-500 text-xs">AI drafts</div>
+</div>
+<div class="col-span-7 text-neutral-400 text-xs">AI produces a complete draft; a human reviews and approves it before sending. Most business LLM use cases fit here.</div>
+</div>
+<div class="grid grid-cols-12 items-center px-4 py-3 gap-3">
+<div class="col-span-2">
+<span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-bold text-sm">L3</span>
+</div>
+<div class="col-span-3">
+<div class="text-neutral-100 font-semibold text-sm">Supervised</div>
+<div class="text-neutral-500 text-xs">AI executes, human monitors</div>
+</div>
+<div class="col-span-7 text-neutral-400 text-xs">Automation runs, and a human can intervene. Workflow with exception alerts. Requires a well-mapped process and clear escalation criteria.</div>
+</div>
+<div class="grid grid-cols-12 items-center px-4 py-3 gap-3 bg-emerald-900/10">
+<div class="col-span-2">
+<span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-bold text-sm">L4</span>
+</div>
+<div class="col-span-3">
+<div class="text-neutral-100 font-semibold text-sm">Autonomous</div>
+<div class="text-neutral-500 text-xs">Agent decides and acts</div>
+</div>
+<div class="col-span-7 text-neutral-400 text-xs">The agent makes decisions and takes action without human intervention. High risk if not preceded by validated L0→L3. <span class="text-red-400">Last resort, not the default.</span></div>
+</div>
+</div>
+</div>
+<!-- Grid Fazer vs Evitar -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-5">
+<div class="text-emerald-400 font-bold text-sm mb-3">✓ Right approach</div>
+<ul class="space-y-2 text-sm">
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span class="text-neutral-300">Default = the lowest level that works</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span class="text-neutral-300">Prove L2 before moving up to L3</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span class="text-neutral-300">Workflows beat agents (prefer deterministic)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span class="text-neutral-300">Document escalation criteria at L3</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-5">
+<div class="text-red-400 font-bold text-sm mb-3">✗ Frequent errors</div>
+<ul class="space-y-2 text-sm">
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span class="text-neutral-300">Starting at L4 "because it seems more powerful"</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span class="text-neutral-300">Skip steps without validating the previous level</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span class="text-neutral-300">Using an agent where a workflow is enough</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span class="text-neutral-300">L4 without defined intervention criteria</span></li>
+</ul>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 text-xs font-bold mb-1">DEFAULT = MINIMUM</div>
+<div class="text-neutral-400 text-xs">Smallest level that works</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 text-xs font-bold mb-1">WORKFLOWS FIRST</div>
+<div class="text-neutral-400 text-xs">Deterministic &gt; agent</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 text-xs font-bold mb-1">SCALE UP SLOWLY</div>
+<div class="text-neutral-400 text-xs">Prove it before scaling</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-red-400 text-xs font-bold mb-1">L4 = LAST</div>
+<div class="text-neutral-400 text-xs">Not the starting point</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 6 — Tie It to a KPI -->
+<section class="mb-10" id="topico-6">
+<div class="flex items-start space-x-4 mb-4">
+<span class="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg flex-shrink-0">6</span>
+<div>
+<h2 class="text-xl font-bold text-neutral-100 mb-1">Tie It to a KPI</h2>
+<p class="text-neutral-400 text-sm">If your automation doesn’t move a number, why build it?</p>
+</div>
+</div>
+<p class="text-neutral-300 mb-5">Every automation must justify its existence with a real number. <em>"Because it’s cool"</em> isn’t a business case. Without a KPI, you don’t know if it worked, can’t prioritize the next one, and can’t defend the time invested.</p>
+<!-- Box conceito: 3 baldes -->
+<div class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-5">
+<div class="text-emerald-400 text-sm font-bold mb-4">📊 The 3 KPI Buckets</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div class="bg-dark-800/60 rounded-xl p-4 border border-emerald-500/20">
+<div class="text-2xl mb-2">📈</div>
+<div class="text-neutral-100 font-bold text-sm mb-2">Bucket 1 — More Customers</div>
+<div class="text-neutral-400 text-xs space-y-1">
+<div>• Lead conversion rate</div>
+<div>• Response speed to new contacts</div>
+<div>• Number of proposals sent</div>
+<div>• Customer acquisition cost</div>
+</div>
+</div>
+<div class="bg-dark-800/60 rounded-xl p-4 border border-blue-500/20">
+<div class="text-2xl mb-2">💎</div>
+<div class="text-neutral-100 font-bold text-sm mb-2">Bucket 2 — More Value per Customer</div>
+<div class="text-neutral-400 text-xs space-y-1">
+<div>• Average project value</div>
+<div>• NPS / satisfaction</div>
+<div>• Upsell rate</div>
+<div>• Time to deliver to the client</div>
+</div>
+</div>
+<div class="bg-dark-800/60 rounded-xl p-4 border border-primary/20">
+<div class="text-2xl mb-2">⚙️</div>
+<div class="text-neutral-100 font-bold text-sm mb-2">Bucket 3 — Lower Costs</div>
+<div class="text-neutral-400 text-xs space-y-1">
+<div>• Manual hours per week</div>
+<div>• Process error rate</div>
+<div>• Processing time</div>
+<div>• Cost per unit delivered</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Mono box: critérios de KPI válido -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 p-5 mb-5 font-mono text-sm">
+<div class="text-emerald-400 text-xs font-bold tracking-widest mb-3 font-sans">✓ VALID KPI CHECKLIST</div>
+<div class="space-y-2 text-xs">
+<div class="flex items-start space-x-2">
+<span class="text-emerald-400 mt-0.5">□</span>
+<span class="text-neutral-300">Which of the 3 buckets does it belong in? (clients / value / cost)</span>
+</div>
+<div class="flex items-start space-x-2">
+<span class="text-emerald-400 mt-0.5">□</span>
+<span class="text-neutral-300">Is there a baseline number today? (e.g., "currently takes 4h/week")</span>
+</div>
+<div class="flex items-start space-x-2">
+<span class="text-emerald-400 mt-0.5">□</span>
+<span class="text-neutral-300">Is there a specific target? (e.g., "reduce to 30min/week")</span>
+</div>
+<div class="flex items-start space-x-2">
+<span class="text-emerald-400 mt-0.5">□</span>
+<span class="text-neutral-300">Is there a deadline for measuring? (e.g., "in 30 days")</span>
+</div>
+<div class="flex items-start space-x-2">
+<span class="text-emerald-400 mt-0.5">□</span>
+<span class="text-neutral-300">Can you measure it without extra effort?</span>
+</div>
+</div>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 border border-primary/30 rounded-xl p-4 mb-5">
+<div class="text-primary font-bold text-sm mb-1">💡 The Question to Ask Before Building</div>
+<p class="text-neutral-300 text-sm">"If I build this and it works perfectly, what specific number will change?" If you can’t answer in one sentence, take a step back and reframe the question. Building without a KPI is work without direction.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-emerald-400 text-xs font-bold mb-1">BUCKET 1</div>
+<div class="text-neutral-400 text-xs">More customers</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-blue-400 text-xs font-bold mb-1">BUCKET 2</div>
+<div class="text-neutral-400 text-xs">More value per customer</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-primary text-xs font-bold mb-1">BUCKET 3</div>
+<div class="text-neutral-400 text-xs">Lower cost</div>
+</div>
+<div class="bg-dark-800 rounded-lg p-3 border border-dark-600">
+<div class="text-red-400 text-xs font-bold mb-1">"IT’S COOL" ≠ KPI</div>
+<div class="text-neutral-400 text-xs">Move one number</div>
+</div>
+</div>
+</section>
+<!-- RESUMO DO MÓDULO -->
+<section class="mb-12">
+<div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+<h2 class="text-2xl font-bold mb-6 flex items-center">
+<span class="mr-3">🧭</span> Module Summary
+        </h2>
+<div class="space-y-4 mb-8">
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1 flex-shrink-0">✓</span>
+<div>
+<strong class="text-white">Find the Constraint</strong>
+<span class="text-neutral-400"> — 2 power questions reveal where the pain and opportunity are. Start with the real constraint.</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1 flex-shrink-0">✓</span>
+<div>
+<strong class="text-white">EAD in the right order</strong>
+<span class="text-neutral-400"> — Eliminate → Automate → Delegate. Never automate waste.</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1 flex-shrink-0">✓</span>
+<div>
+<strong class="text-white">60/30/10 Rule</strong>
+<span class="text-neutral-400"> — Mature operations live in all three ranges. 100% automation is a false promise.</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1 flex-shrink-0">✓</span>
+<div>
+<strong class="text-white">Map the Process (5 elements)</strong>
+<span class="text-neutral-400"> — Trigger · Data Sources · Transformations · Decision Points · Destination. Define a minimum spec before building.</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1 flex-shrink-0">✓</span>
+<div>
+<strong class="text-white">Autonomy Spectrum L0→L4</strong>
+<span class="text-neutral-400"> — Default = the lowest level that works. Move up only after proving it. Workflows beat agents.</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-emerald-400 mt-1 flex-shrink-0">✓</span>
+<div>
+<strong class="text-white">Tie It to a KPI</strong>
+<span class="text-neutral-400"> — Choose the bucket (clients / value / cost) and a specific metric. No KPI, no build.</span>
+</div>
+</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-4 mb-8 border border-dark-600">
+<h3 class="font-semibold text-emerald-400 mb-2">Next Module:</h3>
+<p class="text-neutral-300">1.3 — Machine (How to Build and Operate) 🛠️ — From decisions to actual implementation: stacks, tools, and the continuous operations cycle.</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 justify-start">
+<a class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors" href="index.html">
+            ← Back to Track
+          </a>
+<a class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors" href="modulo-1-3.html">
+            Next Module →
+          </a>
+</div>
+</div>
+</section>
+</main>
+<!-- FOOTER C -->
+<footer class="border-t border-dark-600 py-8 mt-16">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm space-y-1">
+<p>⚙️ AIS-OS — Your AI Operating System in Claude Code · <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" target="_blank">INEMA.CLUB</a> · 2026</p>
+<p>Based on the AIS-OS kit (MIT license). The Three Ms of AI™ and The Four Cs of an AIOS™ are trademarks of Nate Herk. © 2026 Nate Herk.</p>
+</div>
+</footer>
+<!-- SCRIPTS D1 -->
+<script>
+    const themeToggle=document.getElementById('theme-toggle'),tdi=document.getElementById('theme-toggle-dark-icon'),tli=document.getElementById('theme-toggle-light-icon'),H=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){tdi.classList.remove('hidden');H.classList.remove('dark');}else{tli.classList.remove('hidden');}
+    themeToggle.addEventListener('click',()=>{tdi.classList.toggle('hidden');tli.classList.toggle('hidden');H.classList.toggle('dark');localStorage.setItem('theme',H.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

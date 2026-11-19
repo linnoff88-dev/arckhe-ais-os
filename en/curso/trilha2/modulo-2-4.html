@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>M2.4 Cadence: Runs Without Being Asked | AIS-OS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    /* Light mode overrides - base */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .text-white { color: #111827; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+
+    /* Light mode - cores de acento (trilha blue T2) */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37, 99, 235, 0.18); }
+    html:not(.dark) .from-blue-900\/30 { --tw-gradient-from: rgba(30, 58, 138, 0.15); }
+    html:not(.dark) .from-blue-900\/40 { --tw-gradient-from: rgba(30, 58, 138, 0.18); }
+
+    /* Light mode - remove gradientes de fundo */
+    html:not(.dark) .bg-gradient-to-br { background-image: none; }
+    html:not(.dark) .bg-gradient-to-r { background-image: none; }
+
+    /* Light mode - cores especiais */
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+
+    /* Light mode - nav */
+    html:not(.dark) nav { background-color: rgba(255, 255, 255, 0.95); border-color: #e5e7eb; }
+
+    /* Dark mode - bordas suavizadas */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+
+    /* SVG light mode */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+  </style>
+<link href="https://inematds.github.io/ais-os/curso/trilha2/modulo-2-4.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/ais-os/en/curso/trilha2/modulo-2-4.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/ais-os/es/curso/trilha2/modulo-2-4.html" hreflang="es" rel="alternate"/></head>
+<body class="min-h-screen bg-dark-900 text-neutral-100"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha2/modulo-2-4.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="modulo-2-4.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">EN</a><a href="../../../es/curso/trilha2/modulo-2-4.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">ES</a></div>
+<!-- NAV B2 — Trilha 2 ativa (blue) -->
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-14">
+<a class="flex items-center space-x-2 flex-shrink-0" href="../../index.html">
+<span class="text-primary font-extrabold text-lg tracking-tight">⚙️</span>
+<span class="font-bold text-white text-sm hidden sm:inline">AIS-OS</span>
+<span class="text-neutral-500 text-xs hidden sm:inline">·</span>
+<a class="text-sky-400 hover:text-sky-300 text-xs hidden sm:inline transition-colors" href="https://inema.club" target="_blank">INEMA.CLUB</a>
+</a>
+<div class="flex items-center gap-1">
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" href="../trilha1/index.html"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Brain (3 Ms)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10" href="index.html"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Architecture (4 Cs)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors" href="../trilha3/index.html"><span class="sm:hidden">T3</span><span class="hidden sm:inline">In Practice</span></a>
+<button aria-label="Switch theme" class="ml-2 p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors" id="theme-toggle">
+<svg class="hidden w-4 h-4 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+<svg class="hidden w-4 h-4 text-neutral-300" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<!-- BREADCRUMB -->
+<nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+<div class="flex items-center space-x-2 text-sm text-neutral-400">
+<a class="hover:text-blue-400 transition-colors" href="../../index.html">Start</a>
+<span>/</span>
+<a class="hover:text-blue-400 transition-colors" href="index.html">Track 2</a>
+<span>/</span>
+<span class="text-blue-400">Module 2.4</span>
+</div>
+</nav>
+<!-- HEADER DO MÓDULO -->
+<header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 border-b border-blue-500/30 mb-10">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<div class="flex items-center gap-3 mb-4">
+<span class="px-3 py-1 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold tracking-widest uppercase">Module 2.4</span>
+<span class="px-3 py-1 rounded-full bg-dark-700 text-neutral-400 text-xs font-medium">Track 2 — Architecture (4 Cs)</span>
+</div>
+<h1 class="text-2xl font-bold text-white mb-3">⏰ Cadence: Runs without being asked</h1>
+<p class="text-neutral-400 text-base max-w-2xl mb-8">Laptop closed, brief arrives. The fourth C turns your AIOS from a reactive tool into an autonomous operator — responding, auditing, and evolving without you needing to be there.</p>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+<div class="bg-dark-800/60 rounded-xl border border-blue-500/20 p-4 text-center">
+<div class="text-2xl font-extrabold text-blue-400">6</div>
+<div class="text-xs text-neutral-500 mt-1">Topics</div>
+</div>
+<div class="bg-dark-800/60 rounded-xl border border-blue-500/20 p-4 text-center">
+<div class="text-2xl font-extrabold text-blue-400">35</div>
+<div class="text-xs text-neutral-500 mt-1">Minutes</div>
+</div>
+<div class="bg-dark-800/60 rounded-xl border border-blue-500/20 p-4 text-center">
+<div class="text-2xl font-extrabold text-blue-400">Inter</div>
+<div class="text-xs text-neutral-500 mt-1">Intermediate</div>
+</div>
+<div class="bg-dark-800/60 rounded-xl border border-blue-500/20 p-4 text-center">
+<div class="text-2xl font-extrabold text-blue-400">Auto</div>
+<div class="text-xs text-neutral-500 mt-1">Autonomy</div>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+<!-- SVG FUTURISTA: Grafo de dependência dos 4 Cs -->
+<div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-6 mb-12">
+<svg aria-label="Dependency graph for the 4 Cs: Context (foundation) → Connections and Capabilities (parallel) → Cadence (top)" class="w-full h-auto" font-family="Inter,sans-serif" role="img" viewbox="0 0 720 320" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<filter height="160%" id="m24-glow" width="160%" x="-30%" y="-30%">
+<fegaussianblur result="blur" stddeviation="1.8"></fegaussianblur>
+<femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<filter height="160%" id="m24-glow-cyan" width="160%" x="-30%" y="-30%">
+<fegaussianblur result="blur" stddeviation="2.5"></fegaussianblur>
+<femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<!-- grid de pontos -->
+<pattern height="28" id="m24-dots" patternunits="userSpaceOnUse" width="28" x="0" y="0">
+<circle cx="1" cy="1" fill="#374151" opacity="0.5" r="1"></circle>
+</pattern>
+</defs>
+<!-- background grid -->
+<rect fill="url(#m24-dots)" height="320" rx="12" width="720"></rect>
+<!-- Setas: Context → Connections -->
+<path d="M 200 185 C 240 185 260 130 290 120" fill="none" opacity="0.7" stroke="#60a5fa" stroke-dasharray="6 4" stroke-width="2"></path>
+<!-- Setas: Context → Capabilities -->
+<path d="M 200 195 C 240 195 260 240 290 250" fill="none" opacity="0.7" stroke="#60a5fa" stroke-dasharray="6 4" stroke-width="2"></path>
+<!-- Setas: Connections → Cadence -->
+<path d="M 430 120 C 470 120 490 175 520 185" fill="none" opacity="0.8" stroke="#38bdf8" stroke-dasharray="6 4" stroke-width="2"></path>
+<!-- Setas: Capabilities → Cadence -->
+<path d="M 430 250 C 470 250 490 205 520 195" fill="none" opacity="0.8" stroke="#38bdf8" stroke-dasharray="6 4" stroke-width="2"></path>
+<!-- CONTEXT — base -->
+<rect fill="#0e1622" filter="url(#m24-glow)" height="60" rx="10" stroke="#60a5fa" stroke-width="2" width="150" x="50" y="160"></rect>
+<text fill="#60a5fa" font-size="13" font-weight="600" text-anchor="middle" x="125" y="188">🗂️ Context</text>
+<text fill="#93c5fd" font-size="10" text-anchor="middle" x="125" y="207">BASE — non-skippable</text>
+<!-- CONNECTIONS — paralelo superior -->
+<rect fill="#0e1622" height="55" rx="10" stroke="#60a5fa" stroke-width="2" width="140" x="290" y="95"></rect>
+<text fill="#60a5fa" font-size="13" font-weight="600" text-anchor="middle" x="360" y="121">🔌 Connections</text>
+<text fill="#93c5fd" font-size="10" text-anchor="middle" x="360" y="138">reaches your things</text>
+<!-- CAPABILITIES — paralelo inferior -->
+<rect fill="#0e1622" height="55" rx="10" stroke="#60a5fa" stroke-width="2" width="140" x="290" y="225"></rect>
+<text fill="#60a5fa" font-size="13" font-weight="600" text-anchor="middle" x="360" y="251">🧩 Capabilities</text>
+<text fill="#93c5fd" font-size="10" text-anchor="middle" x="360" y="268">knows how to do the work</text>
+<!-- CADENCE — topo/destino, destaque ciano -->
+<rect fill="#0e1b26" filter="url(#m24-glow-cyan)" height="60" rx="10" stroke="#38bdf8" stroke-width="2.5" width="155" x="520" y="160"></rect>
+<text fill="#38bdf8" font-size="14" font-weight="600" text-anchor="middle" x="597" y="188">⏰ Cadence</text>
+<text fill="#9ad6ff" font-size="10" text-anchor="middle" x="597" y="207">runs without being asked</text>
+<!-- Label paralelo -->
+<text fill="#6b7280" font-size="10" font-style="italic" text-anchor="middle" x="360" y="85">( in parallel )</text>
+<!-- Nota rodapé -->
+<text fill="#4b5563" font-size="10" text-anchor="middle" x="360" y="308">Dependency graph: no C can be skipped · 4 Cs of an AIOS™ © Nate Herk</text>
+<style>
+          @media (prefers-reduced-motion: no-preference) {
+            #m24-glow-cyan feGaussianBlur { animation: m24-pulse 3s ease-in-out infinite alternate; }
+            @keyframes m24-pulse { from { stdDeviation: 2.5; } to { stdDeviation: 4.5; } }
+          }
+        </style>
+</svg>
+</div>
+<!-- "Conteúdo detalhado" — h2 simples -->
+<h2 class="text-2xl font-bold mb-6">Detailed content</h2>
+<!-- TÓPICO 1: O teste do Cadence -->
+<section class="mb-10" id="topico-1">
+<div class="flex items-center gap-4 mb-4">
+<span class="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-lg flex-shrink-0">1</span>
+<h2 class="text-2xl font-bold text-white">The Cadence test</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">There is a simple, unforgiving test to see whether Cadence is working: close your laptop. If a brief arrives in your inbox and a real response emerges without you typing anything — your AIOS has passed. Cadence isn't about automating; it's about <strong class="text-white">presence without presence</strong>.</p>
+<!-- Box conceito principal -->
+<div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+<span class="mr-2">🔑</span> Main Concept
+        </h3>
+<p class="text-neutral-300 mb-3">Cadence is proof that the three previous Cs work. A system that only acts when you’re present <em>isn’t autonomous</em> — it’s an expensive tool to call.</p>
+<p class="text-neutral-300">The closed laptop is the acceptance criterion. When a colleague asks a question and gets a real answer from your AIOS—without you stepping in—the system has proven its operational value.</p>
+</div>
+<!-- Grid Fazer vs Evitar -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ What to DO</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400 flex-shrink-0">✓</span><span>Test the system with the laptop closed before declaring that it's working</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 flex-shrink-0">✓</span><span>Let a real colleague’s question reach AIOS and observe the response</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 flex-shrink-0">✓</span><span>Calibrate the autonomy threshold (what it can answer on its own vs. escalate)</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ What NOT to do</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400 flex-shrink-0">✗</span><span>Consider “Cadence active” just because you configured a hook — testing is required</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 flex-shrink-0">✗</span><span>Give generic answers: AIOS needs to know the real context of the business</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 flex-shrink-0">✗</span><span>Automating without first validating that the workflow works with you present</span></li>
+</ul>
+</div>
+</div>
+<!-- Mini-cards conceitos -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">🔒</div><div class="text-xs text-neutral-400 font-medium">Laptop closed</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">📥</div><div class="text-xs text-neutral-400 font-medium">Brief arrives</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">💬</div><div class="text-xs text-neutral-400 font-medium">Real answer</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">✅</div><div class="text-xs text-neutral-400 font-medium">AIOS passed</div></div>
+</div>
+</section>
+<!-- TÓPICO 2: Triggers recorrentes -->
+<section class="mb-10" id="topico-2">
+<div class="flex items-center gap-4 mb-4">
+<span class="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-lg flex-shrink-0">2</span>
+<h2 class="text-2xl font-bold text-white">Recurring triggers</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">The AIS-OS kit uses two mechanisms to trigger behavior without manual interaction: <strong class="text-white">hooks in settings.json</strong> e <strong class="text-white">skills named by temporal pattern</strong>. These two mechanisms form the infrastructure for Cadence—but remember: infrastructure doesn’t replace ritual.</p>
+<!-- Box monospace: nomes de skills e hook -->
+<div class="bg-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-sm font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">💾</span> Naming convention — Temporal Skills</h3>
+<pre class="font-mono text-sm text-neutral-300 leading-relaxed overflow-x-auto"><code>daily-*       →  roda todo dia (ex: daily-standup, daily-digest)
+weekly-*      →  roda toda semana (ex: weekly-review, weekly-kpis)
+monthly-*     →  roda todo mês (ex: monthly-retro, monthly-goals)
+morning-*     →  rotina matinal (ex: morning-brief, morning-check)
+standup       →  síntese para sync de equipe</code></pre>
+</div>
+<!-- Box monospace: hook em settings.json -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+<h3 class="text-sm font-semibold text-neutral-400 mb-3 flex items-center"><span class="mr-2">⚙️</span> Hook on <span class="font-mono ml-1">.claude/settings.json</span></h3>
+<pre class="font-mono text-sm text-neutral-300 leading-relaxed overflow-x-auto"><code>{
+  "hooks": {
+    "PostToolUse": [{
+      "matcher": "Write",
+      "hooks": [{
+        "type": "command",
+        "command": "node scripts/daily-digest.js"
+      }]
+    }]
+  }
+}</code></pre>
+<p class="text-xs text-neutral-500 mt-3">PostToolUse fires after every tool use. Use sparingly — too many hooks create noise.</p>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">💡</span> Practical Tip
+        </h3>
+<p class="text-neutral-300">Start with <span class="font-mono text-sm bg-dark-700 px-1.5 py-0.5 rounded">morning-brief</span> — a skill that summarizes what’s on the agenda today. It’s the most natural, lowest-risk trigger for validating that Cadence works before more complex automations.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">🪝</div><div class="text-xs text-neutral-400 font-medium">Hooks</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">📅</div><div class="text-xs text-neutral-400 font-medium">daily-* skills</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">📆</div><div class="text-xs text-neutral-400 font-medium">weekly-* skills</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">🌅</div><div class="text-xs text-neutral-400 font-medium">morning-brief</div></div>
+</div>
+</section>
+<!-- TÓPICO 3: Rituais recorrentes -->
+<section class="mb-10" id="topico-3">
+<div class="flex items-center gap-4 mb-4">
+<span class="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-lg flex-shrink-0">3</span>
+<h2 class="text-2xl font-bold text-white">Recurring rituals</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">The AIS-OS kit’s anchor isn’t cron. It’s the <strong class="text-white">ritual</strong>: consistent behavior you perform until it becomes a reflex. Two rituals form the operator's weekly cycle—and together they cover diagnosis + growth.</p>
+<!-- Timeline: ritual semanal -->
+<div class="space-y-5 mb-6">
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+<span class="text-blue-400 font-bold text-sm">Day 7</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1 flex items-center gap-2"><span class="font-mono text-blue-400 text-sm">/audit</span> — Weekly diagnosis</h4>
+<p class="text-sm text-neutral-400 mb-2">Every seven days — the day of the week doesn’t matter; the frequency does</p>
+<p class="text-neutral-300 text-sm">Run the Four-Cs in your current installation. Ask: Does Context still reflect the business? Are Connections broken? Are Capabilities outdated? The output of the <span class="font-mono text-xs bg-dark-700 px-1 py-0.5 rounded">/audit</span> is the input for the next ritual.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+<span class="text-blue-400 font-bold text-sm">Fri</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1 flex items-center gap-2"><span class="font-mono text-blue-400 text-sm">/level-up</span> — Weekly progress</h4>
+<p class="text-sm text-neutral-400 mb-2">Every Friday, 15 minutes — before you shut down your computer</p>
+<p class="text-neutral-300 text-sm">An automation, a new skill, a connection added. The <span class="font-mono text-xs bg-dark-700 px-1 py-0.5 rounded">/level-up</span> doesn’t need to be grand — it needs to be <em>consistent</em>. 1% better per week = 2× better in 70 weeks.</p>
+</div>
+</div>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">⚡</span> Behavior &gt; Infrastructure
+        </h3>
+<p class="text-neutral-300">An AIOS with inconsistent rituals but good infrastructure is less effective than an AIOS with simple infrastructure and rituals performed every week. Habit is the hardest component to replicate — and the most valuable.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">🗓️</div><div class="text-xs text-neutral-400 font-medium">Weekly cadence</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">🔍</div><div class="text-xs text-neutral-400 font-medium">/audit Day 7</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">📈</div><div class="text-xs text-neutral-400 font-medium">/level-up Friday</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">🧠</div><div class="text-xs text-neutral-400 font-medium">Habit &gt; tool</div></div>
+</div>
+</section>
+<!-- TÓPICO 4: Cadence é por ÚLTIMO -->
+<section class="mb-10" id="topico-4">
+<div class="flex items-center gap-4 mb-4">
+<span class="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-lg flex-shrink-0">4</span>
+<h2 class="text-2xl font-bold text-white">Cadence comes LAST</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">There is a dependency graph across the 4 Cs — and it is <strong class="text-white">rigid</strong>. Context is the non-skippable foundation. Connections and Capabilities can be built in parallel. But Cadence only holds up when the three previous ones are in operation.</p>
+<!-- Box destaque: regra de ouro -->
+<div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+<span class="mr-2">⚠️</span> Cadence’s Golden Rule
+        </h3>
+<p class="text-neutral-300 text-lg font-medium mb-4 text-center italic">"Don’t automate workflows that don’t work manually."</p>
+<p class="text-neutral-400">Automation amplifies. If the manual workflow is fragile, automation delivers fragility at scale. If it’s solid, it delivers solidity at scale. The order matters: validate manually first, automate afterward.</p>
+</div>
+<!-- Grid Fazer vs Evitar -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ Correct sequence</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400 flex-shrink-0 mt-0.5">1.</span><span>Context: document the business (CLAUDE.md, .context/)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 flex-shrink-0 mt-0.5">2.</span><span>Connections: connect tools and data sources (MCP, integrations)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 flex-shrink-0 mt-0.5">3.</span><span>Capabilities: configure skills and workflows that work manually</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400 flex-shrink-0 mt-0.5">4.</span><span>Cadence: now automate the validated rituals</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ Shortcuts that break things</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400 flex-shrink-0">✗</span><span>Create a cron job for a task that has never been done manually</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 flex-shrink-0">✗</span><span>Automating a daily digest without documented Context — useless output</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400 flex-shrink-0">✗</span><span>Skip Context and go straight to Cadence — autonomous system without memory</span></li>
+</ul>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">🏗️</div><div class="text-xs text-neutral-400 font-medium">Context first</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">⚡</div><div class="text-xs text-neutral-400 font-medium">C+C in parallel</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">⏰</div><div class="text-xs text-neutral-400 font-medium">Cadence last</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">🔁</div><div class="text-xs text-neutral-400 font-medium">Manual → Auto</div></div>
+</div>
+</section>
+<!-- TÓPICO 5: Os 3 indicadores de sucesso -->
+<section class="mb-10" id="topico-5">
+<div class="flex items-center gap-4 mb-4">
+<span class="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-lg flex-shrink-0">5</span>
+<h2 class="text-2xl font-bold text-white">The 3 indicators of success</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">The 3 indicators of success aren’t KPIs—there’s no dashboard and no numerical target. They are <strong class="text-white">lived experiences</strong> that signal AIOS has irreversibly changed how you work.</p>
+<!-- 3 cards de indicadores -->
+<div class="space-y-5 mb-6">
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+<span class="text-blue-400 text-xl">👥</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Team-reaches-out</h4>
+<p class="text-sm text-neutral-400 mb-2">Indicator 1 of 3</p>
+<p class="text-neutral-300 text-sm">Colleagues start asking you things <em>about the system</em> — "how did you do that?", "can I use your template?" Or better: the system answers for you, and the person doesn't even realize you weren't there. The team starts orbiting the AIOS, not you.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+<span class="text-blue-400 text-xl">🎯</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Context-switching reduction</h4>
+<p class="text-sm text-neutral-400 mb-2">Indicator 2 of 3</p>
+<p class="text-neutral-300 text-sm">You stop being the context bottleneck. You no longer need to explain the same project to five people. AIOS carries the context and distributes it. You find yourself spending less time in "explanation" mode and more time in "decision" mode.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+<span class="text-blue-400 text-xl">🌐</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Knowledge-leaves-your-head</h4>
+<p class="text-sm text-neutral-400 mb-2">Indicator 3 of 3</p>
+<p class="text-neutral-300 text-sm">The knowledge that used to exist only in your head now lives in the system. When you take time off, a project doesn’t stall. When a colleague needs help, the AIOS provides it. Institutional knowledge has left the silo and become part of the infrastructure.</p>
+</div>
+</div>
+</div>
+<!-- Tip box -->
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">💡</span> How to monitor without a dashboard
+        </h3>
+<p class="text-neutral-300">Every Friday in the <span class="font-mono text-sm bg-dark-700 px-1.5 py-0.5 rounded">/level-up</span>, ask: "Has anyone come to me for something the AIOS should answer?" and "Did any knowledge leave my head this week?" If the answer is no for three weeks in a row, go back to Cadence and review the rituals.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">👥</div><div class="text-xs text-neutral-400 font-medium">Team reaches out</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">🎯</div><div class="text-xs text-neutral-400 font-medium">Less context switching</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">🌐</div><div class="text-xs text-neutral-400 font-medium">Externalized knowledge</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">📊</div><div class="text-xs text-neutral-400 font-medium">Experience, not KPI</div></div>
+</div>
+</section>
+<!-- TÓPICO 6: Pessoal → empresa AI-ready -->
+<section class="mb-10" id="topico-6">
+<div class="flex items-center gap-4 mb-4">
+<span class="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-lg flex-shrink-0">6</span>
+<h2 class="text-2xl font-bold text-white">Personal → AI-ready company</h2>
+</div>
+<p class="text-neutral-400 mb-6 leading-relaxed">When all three indicators appear for one person, something important happens: <strong class="text-white">the same architecture scales</strong>. The data, the connections, the capabilities — everything you’ve built personally becomes the blueprint for the team and the company.</p>
+<!-- Box conceito principal -->
+<div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+<span class="mr-2">🚀</span> The scale effect
+        </h3>
+<p class="text-neutral-300 mb-3">A company where every operator runs a personal AIOS is truly an AI-ready company. Not because it adopted an AI platform, but because each person knows how to operate autonomously, and institutional knowledge lives in infrastructure, not in people’s heads.</p>
+<p class="text-neutral-300">Scale happens in three layers: <strong class="text-white">dashboards</strong> (visibility), <strong class="text-white">automations</strong> (execution) and <strong class="text-white">team rollout</strong> (replication). Each layer assumes the previous one is working.</p>
+</div>
+<!-- Grid: escala em 3 camadas -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+<div class="bg-dark-800 rounded-xl border border-blue-500/20 p-5">
+<div class="text-2xl mb-3">📊</div>
+<h4 class="font-semibold text-blue-400 mb-2">Dashboards</h4>
+<p class="text-sm text-neutral-400">Visibility into what AIOS is doing. Business KPIs connected to the system. Lets you observe before scaling.</p>
+</div>
+<div class="bg-dark-800 rounded-xl border border-blue-500/20 p-5">
+<div class="text-2xl mb-3">⚙️</div>
+<h4 class="font-semibold text-blue-400 mb-2">Automations</h4>
+<p class="text-sm text-neutral-400">Workflows that once depended on human intervention now run through hooks, recurring skills, and established integrations.</p>
+</div>
+<div class="bg-dark-800 rounded-xl border border-blue-500/20 p-5">
+<div class="text-2xl mb-3">👥</div>
+<h4 class="font-semibold text-blue-400 mb-2">Team rollout</h4>
+<p class="text-sm text-neutral-400">The personal AIOS becomes a template for other operators. Each onboarded person starts with an architecture already validated by the pilot.</p>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">🧑</div><div class="text-xs text-neutral-400 font-medium">1 operator</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">👥</div><div class="text-xs text-neutral-400 font-medium">Entire team</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">🏢</div><div class="text-xs text-neutral-400 font-medium">Company</div></div>
+<div class="bg-dark-800 rounded-lg border border-dark-600 p-3 text-center"><div class="text-blue-400 text-lg mb-1">🌍</div><div class="text-xs text-neutral-400 font-medium">AI-ready</div></div>
+</div>
+</section>
+<!-- RESUMO DO MÓDULO -->
+<section class="mb-12">
+<div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+<h2 class="text-2xl font-bold mb-6 flex items-center">
+<span class="mr-3">⏰</span> Module Summary
+        </h2>
+<div class="space-y-4 mb-8">
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1 flex-shrink-0">✓</span>
+<div>
+<strong class="text-white">The Cadence test:</strong>
+<span class="text-neutral-400"> laptop closed + brief arrives + real response = AIOS passed</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1 flex-shrink-0">✓</span>
+<div>
+<strong class="text-white">Recurring triggers:</strong>
+<span class="text-neutral-400"> hooks in settings.json + named skills daily-*/weekly-*/morning-*</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1 flex-shrink-0">✓</span>
+<div>
+<strong class="text-white">Kit rituals:</strong>
+<span class="text-neutral-400"> /audit weekly (Day 7) + /level-up every Friday — behavior &gt; infrastructure</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1 flex-shrink-0">✓</span>
+<div>
+<strong class="text-white">Cadence comes last:</strong>
+<span class="text-neutral-400"> don’t automate workflows that don’t work manually — the dependency graph is rigid</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1 flex-shrink-0">✓</span>
+<div>
+<strong class="text-white">3 success indicators:</strong>
+<span class="text-neutral-400"> team-reaches-out · context-switching reduction · knowledge-leaves-your-head</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1 flex-shrink-0">✓</span>
+<div>
+<strong class="text-white">Personal scale → company scale:</strong>
+<span class="text-neutral-400"> the same architecture scales to dashboards, automations, and team rollout</span>
+</div>
+</div>
+</div>
+<!-- Box próximo -->
+<div class="bg-dark-800/50 rounded-lg p-4 mb-8 border border-blue-500/20">
+<h3 class="font-semibold text-blue-400 mb-2">Next: Track 3 — Operate in Practice</h3>
+<p class="text-neutral-300 text-sm">You’ve completed the 4 Cs of architecture. Now it’s time to put everything into operation: /onboard, /audit, /level-up, and real expansions in your business.</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4">
+<a class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors" href="index.html">
+            ← Back to Track
+          </a>
+<a class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors" href="../trilha3/index.html">
+            Go to Track 3 →
+          </a>
+</div>
+</div>
+</section>
+</main>
+<!-- FOOTER C -->
+<footer class="border-t border-dark-600 py-8 mt-16">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm space-y-1">
+<p>⚙️ AIS-OS — Your AI Operating System in Claude Code · <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" target="_blank">INEMA.CLUB</a> · 2026</p>
+<p>Based on the AIS-OS kit (MIT license). The Three Ms of AI™ and The Four Cs of an AIOS™ are trademarks of Nate Herk. © 2026 Nate Herk.</p>
+</div>
+</footer>
+<!-- SCRIPTS D1 -->
+<script>
+    const themeToggle=document.getElementById('theme-toggle'),tdi=document.getElementById('theme-toggle-dark-icon'),tli=document.getElementById('theme-toggle-light-icon'),H=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){tdi.classList.remove('hidden');H.classList.remove('dark');}else{tli.classList.remove('hidden');}
+    themeToggle.addEventListener('click',()=>{tdi.classList.toggle('hidden');tli.classList.toggle('hidden');H.classList.toggle('dark');localStorage.setItem('theme',H.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

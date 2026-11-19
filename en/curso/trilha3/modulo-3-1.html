@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>M3.1 — /onboard: Day 1 Setup | AIS-OS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: {
+      primary: '#FACC15',
+      dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+    } } } }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    /* Light mode base */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    /* Light accent: purple (T3) */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124,58,237,0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .bg-purple-900\/20 { background-color: rgba(124,58,237,0.06); }
+    html:not(.dark) .bg-purple-900\/30 { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .bg-purple-900\/40 { background-color: rgba(124,58,237,0.10); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124,58,237,0.25); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124,58,237,0.18); }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; }
+    /* Light accent: emerald (T1 nav hover) */
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    /* Light accent: blue (T2 nav hover) */
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    /* Light - remove gradients + special colors */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185,28,28,0.06); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185,28,28,0.25); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.06); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    /* Light - navbar */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+    /* Dark - softened borders */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+    /* SVG light-mode taming */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+    /* SVG pulse */
+    @keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+      .wf-a:nth-child(2){animation-delay:.25s} .wf-a:nth-child(3){animation-delay:.5s}
+      .wf-a:nth-child(4){animation-delay:.75s} .wf-a:nth-child(5){animation-delay:1s}
+      .wf-a:nth-child(6){animation-delay:1.25s} .wf-a:nth-child(7){animation-delay:1.5s}
+    }
+  </style>
+<link href="https://inematds.github.io/ais-os/curso/trilha3/modulo-3-1.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/ais-os/en/curso/trilha3/modulo-3-1.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/ais-os/es/curso/trilha3/modulo-3-1.html" hreflang="es" rel="alternate"/></head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha3/modulo-3-1.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="modulo-3-1.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">EN</a><a href="../../../es/curso/trilha3/modulo-3-1.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">ES</a></div>
+<!-- NAVIGATION (B3 — T3 ativa) -->
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-14">
+<div class="flex items-center space-x-4">
+<a class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300" href="../../index.html">
+<span class="text-2xl">⚙️</span><span class="font-bold text-lg hidden sm:inline">AIS-OS</span>
+</a>
+<span class="text-neutral-600">|</span>
+<a class="text-sky-400 hover:text-sky-300 text-sm font-medium" href="https://inema.club" target="_blank">INEMA.CLUB</a>
+</div>
+<div class="flex items-center space-x-1 sm:space-x-2">
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" href="../trilha1/index.html"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Brain (3 Ms)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors" href="../trilha2/index.html"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Architecture (4 Cs)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10" href="index.html"><span class="sm:hidden">T3</span><span class="hidden sm:inline">In Practice</span></a>
+<button class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2" id="theme-toggle">
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<!-- BREADCRUMB -->
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+<div class="flex items-center space-x-2 text-sm text-neutral-400">
+<a class="hover:text-purple-400 transition-colors" href="../../index.html">Start</a>
+<span>/</span>
+<a class="hover:text-purple-400 transition-colors" href="index.html">Track 3</a>
+<span>/</span>
+<span class="text-purple-400">Module 3.1</span>
+</div>
+</div>
+<!-- HEADER -->
+<header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-4">MODULE 3.1</span>
+<h1 class="text-3xl sm:text-4xl font-bold mb-4">🚀 /onboard: Day 1 Setup</h1>
+<p class="text-lg text-neutral-400 max-w-3xl">The wizard that guides you through 7 questions and delivers the complete file set for your AI Operating System in a single session. From zero to live context.</p>
+<div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-purple-400">7</div>
+<div class="text-xs text-neutral-400">Topics</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-purple-400">35</div>
+<div class="text-xs text-neutral-400">Minutes</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-purple-400">Beginner</div>
+<div class="text-xs text-neutral-400">Level</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-purple-400">Setup</div>
+<div class="text-xs text-neutral-400">Type</div>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<!-- SVG FUTURISTA — fan-out 7 perguntas → scaffold Dia 1 -->
+<div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-10 overflow-hidden">
+<svg aria-label="/onboard asks 7 questions (Q1–Q7) in fan-out and produces the Day 1 file set: about-me, about-business, priorities, voice, connections, and CLAUDE.md" class="w-full h-auto" role="img" viewbox="0 0 1000 260">
+<defs>
+<lineargradient id="m31-grad" x1="0" x2="1" y1="0" y2="1">
+<stop offset="0" stop-color="#c084fc"></stop><stop offset="1" stop-color="#a855f7"></stop>
+</lineargradient>
+<filter height="180%" id="m31-glow" width="180%" x="-40%" y="-40%">
+<fegaussianblur result="b" stddeviation="1.8"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<pattern height="32" id="m31-grid" patternunits="userSpaceOnUse" width="32">
+<circle cx="1.3" cy="1.3" fill="#a855f7" opacity="0.12" r="1.3"></circle>
+</pattern>
+<marker id="m31-ah" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#c084fc"></path></marker>
+<marker id="m31-ahc" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"></path></marker>
+</defs>
+<rect fill="url(#m31-grid)" height="260" width="1000" x="0" y="0"></rect>
+<!-- Setas: /onboard → Qi -->
+<g fill="none" opacity="0.6" stroke="#c084fc" stroke-width="2">
+<path d="M196,130 C280,130 300,22 440,22" marker-end="url(#m31-ah)"></path>
+<path d="M196,130 C280,130 300,63 440,63" marker-end="url(#m31-ah)"></path>
+<path d="M196,130 C280,130 300,100 440,100" marker-end="url(#m31-ah)"></path>
+<path d="M196,130 L440,130" marker-end="url(#m31-ah)"></path>
+<path d="M196,130 C280,130 300,160 440,160" marker-end="url(#m31-ah)"></path>
+<path d="M196,130 C280,130 300,197 440,197" marker-end="url(#m31-ah)"></path>
+<path d="M196,130 C280,130 300,234 440,234" marker-end="url(#m31-ah)"></path>
+</g>
+<!-- Setas: Qi → file-set -->
+<g fill="none" opacity="0.5" stroke="#38bdf8" stroke-width="2">
+<path d="M584,22  C690,22  710,130 800,130" marker-end="url(#m31-ahc)"></path>
+<path d="M584,63  C690,63  710,130 800,130" marker-end="url(#m31-ahc)"></path>
+<path d="M584,100 C690,100 710,130 800,130" marker-end="url(#m31-ahc)"></path>
+<path d="M584,130 L800,130" marker-end="url(#m31-ahc)"></path>
+<path d="M584,160 C690,160 710,130 800,130" marker-end="url(#m31-ahc)"></path>
+<path d="M584,197 C690,197 710,130 800,130" marker-end="url(#m31-ahc)"></path>
+<path d="M584,234 C690,234 710,130 800,130" marker-end="url(#m31-ahc)"></path>
+</g>
+<!-- Caixa foco: /onboard -->
+<g filter="url(#m31-glow)">
+<rect fill="#1a1230" height="68" rx="14" stroke="url(#m31-grad)" stroke-width="2.5" width="166" x="30" y="96"></rect>
+</g>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="19" font-weight="600" text-anchor="middle" x="113" y="124">/onboard</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="12" text-anchor="middle" x="113" y="146">wizard · idempotent</text>
+<!-- Perguntas Q1–Q7 -->
+<g font-family="Inter,sans-serif" font-size="12.5" font-weight="600">
+<g class="wf-a"><rect fill="#0e1b26" height="28" rx="8" stroke="#38bdf8" stroke-width="2" width="144" x="440" y="8"></rect><text fill="#bfe6ff" text-anchor="middle" x="512" y="27">Q1 — who/what</text></g>
+<g class="wf-a"><rect fill="#0e1b26" height="28" rx="8" stroke="#38bdf8" stroke-width="2" width="144" x="440" y="49"></rect><text fill="#bfe6ff" text-anchor="middle" x="512" y="68">Q2 — verbatim voice</text></g>
+<g class="wf-a"><rect fill="#0e1b26" height="28" rx="8" stroke="#38bdf8" stroke-width="2" width="144" x="440" y="86"></rect><text fill="#bfe6ff" text-anchor="middle" x="512" y="105">Q3 — 90-day priorities</text></g>
+<g class="wf-a"><rect fill="#0e1b26" height="28" rx="8" stroke="#38bdf8" stroke-width="2" width="144" x="440" y="116"></rect><text fill="#bfe6ff" text-anchor="middle" x="512" y="135">Q4 — revenue</text></g>
+<g class="wf-a"><rect fill="#0e1b26" height="28" rx="8" stroke="#38bdf8" stroke-width="2" width="144" x="440" y="146"></rect><text fill="#bfe6ff" text-anchor="middle" x="512" y="165">Q5 — clients/team</text></g>
+<g class="wf-a"><rect fill="#0e1b26" height="28" rx="8" stroke="#38bdf8" stroke-width="2" width="144" x="440" y="183"></rect><text fill="#bfe6ff" text-anchor="middle" x="512" y="202">Q6 — docs/meetings</text></g>
+<g class="wf-a"><rect fill="#0e1b26" height="28" rx="8" stroke="#38bdf8" stroke-width="2" width="144" x="440" y="220"></rect><text fill="#bfe6ff" text-anchor="middle" x="512" y="239">Q7 — time-consuming task</text></g>
+</g>
+<!-- Caixa foco: file-set -->
+<g filter="url(#m31-glow)">
+<rect fill="#1a1230" height="68" rx="14" stroke="url(#m31-grad)" stroke-width="2.5" width="170" x="800" y="96"></rect>
+</g>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="15" font-weight="600" text-anchor="middle" x="885" y="122">Day 1 file set</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="885" y="143">context/ · voice.md</text>
+<text fill="#d8b4fe" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="885" y="158">CLAUDE.md · backup</text>
+</svg>
+</div>
+<h2 class="text-2xl font-bold mb-6">Detailed content</h2>
+<!-- TÓPICO 1 -->
+<section class="mb-16" id="topico-1">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">1</span>
+<h2 class="text-2xl font-bold">🧩 What /onboard does</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-purple-400">/onboard</strong> is a combined wizard: it reads and writes the <code class="text-purple-400 bg-purple-500/10 px-1 rounded">aios-intake.md</code>, conducts the 7-question interview and scaffolds the complete Day 1 file set at the end. It’s the first action you take after cloning the AIS-OS repository.
+      </p>
+<div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center"><span class="mr-2">🎯</span> What the wizard delivers</h3>
+<ul class="space-y-2 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span>Leads the 7 questions with a strict cap — each answer in under 60 seconds</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span>Generates all Day 1 context files in a single run</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span>Automatically backs up everything that existed before overwriting</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span>Ends with the "wow moment" — your AIOS's first real response</span></li>
+</ul>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+<h4 class="font-bold text-purple-400 mb-4">✓ What to expect</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span>A single ~35-minute session from zero to a living context</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span>Direct questions, no beating around the bush — each with a clear purpose</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span>Idempotent file set — can be run again without destroying what exists</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ What it is NOT</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>It’s not .env configuration or API keys (that’s Day 2)</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Doesn’t generate extra skills—only the base file set</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>No more than 7 questions—never goes deeper on the first run</span></li>
+</ul>
+</div>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Practical Tip</h3>
+<p class="text-neutral-300">Before running /onboard, open the voice files you want to paste into Q2. Emails, posts, transcripts—any text you wrote without thinking about "sounding good." The quality of the <code class="text-primary bg-primary/10 px-1 rounded">references/voice.md</code> determines whether AIOS sounds like you or like a robot.</p>
+</div>
+</section>
+<!-- TÓPICO 2 -->
+<section class="mb-16" id="topico-2">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">2</span>
+<h2 class="text-2xl font-bold">❓ The 7 questions (hard cap)</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        /onboard guides you through exactly <strong class="text-purple-400">7 questions</strong>, each with a specific purpose across the 4 Cs. The cap is strict: no question 8 in the first run. Each answer should take less than 60 seconds — if it takes longer, you’re overthinking it.
+      </p>
+<!-- Timeline das 7 perguntas -->
+<div class="space-y-4 mb-8">
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
+<span class="text-purple-400 font-bold">Q1</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Who you are / What you sell / Who it’s for</h4>
+<p class="text-sm text-neutral-400 mb-2">Feeds: <code class="text-purple-400 bg-purple-500/10 px-1 rounded">context/about-me.md</code> + <code class="text-purple-400 bg-purple-500/10 px-1 rounded">about-business.md</code></p>
+<p class="text-neutral-300 text-sm">Identity, core offering, ICP, and revenue model. Concrete facts, not a sales pitch.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
+<span class="text-purple-400 font-bold">Q2</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Voice samples <span class="text-purple-400 text-sm font-normal">(the rule that doesn't bend)</span></h4>
+<p class="text-sm text-neutral-400 mb-2">Feeds: <code class="text-purple-400 bg-purple-500/10 px-1 rounded">references/voice.md</code></p>
+<p class="text-neutral-300 text-sm">Paste text you wrote naturally. Emails, posts, comments. Never typed in chat during the conversation.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
+<span class="text-purple-400 font-bold">Q3</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Priorities for the next 90 days</h4>
+<p class="text-sm text-neutral-400 mb-2">Feeds: <code class="text-purple-400 bg-purple-500/10 px-1 rounded">context/priorities.md</code></p>
+<p class="text-neutral-300 text-sm">3 to 5 concrete objectives. "Launch product X," "reduce churn by Y%." The wow moment uses these directly.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
+<span class="text-purple-400 font-bold">Q4</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Where the revenue comes in</h4>
+<p class="text-sm text-neutral-400 mb-2">Feeds: <code class="text-purple-400 bg-purple-500/10 px-1 rounded">connections.md</code> Finance line</p>
+<p class="text-neutral-300 text-sm">Stripe, PagSeguro, spreadsheet, ERP — which system records payments. Defines the most critical Tier-1 Domain.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
+<span class="text-purple-400 font-bold">Q5</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Where you talk with clients and the team</h4>
+<p class="text-sm text-neutral-400 mb-2">Feeds: <code class="text-purple-400 bg-purple-500/10 px-1 rounded">connections.md</code> Communication + Clients lines</p>
+<p class="text-neutral-300 text-sm">WhatsApp, Slack, email, Discord — who talks where. Creates the initial Connections map.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
+<span class="text-purple-400 font-bold">Q6</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Where meetings and docs live</h4>
+<p class="text-sm text-neutral-400 mb-2">Feeds: <code class="text-purple-400 bg-purple-500/10 px-1 rounded">connections.md</code> Calendar + Knowledge lines</p>
+<p class="text-neutral-300 text-sm">Google Calendar, Notion, Obsidian, Confluence — where knowledge is recorded and time is organized.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
+<span class="text-purple-400 font-bold">Q7</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">The task that eats up the week</h4>
+<p class="text-sm text-neutral-400 mb-2">Feeds: <code class="text-purple-400 bg-purple-500/10 px-1 rounded">context/priorities.md</code> + /level-up seed</p>
+<p class="text-neutral-300 text-sm">The boring, manual, repetitive thing you do most. It doesn’t need to be “automatable” — just be honest. It’s the first /level-up candidate.</p>
+</div>
+</div>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">⏱️</span> 60-second cap</h3>
+<p class="text-neutral-300">If an answer is taking more than 60 seconds, you’re overthinking it. /onboard wants the facts off the top of your head—not the perfect pitch. You can edit <code class="text-primary bg-primary/10 px-1 rounded">aios-intake.md</code> after and rerun.</p>
+</div>
+</section>
+<!-- TÓPICO 3 -->
+<section class="mb-16" id="topico-3">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">3</span>
+<h2 class="text-2xl font-bold">🎤 The Voice Rule (Q2)</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        Q2 is the only rule that <strong class="text-purple-400">doesn’t bend under any circumstances</strong>. Voice samples need to be pasted verbatim from texts you wrote before this conversation. Never typed during the /onboard session.
+      </p>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Why this matters</h3>
+<p class="text-neutral-300 mb-3">When you type during a conversation with Claude, the text is already being shaped by the conversation’s context — the model’s tone, the questions you just answered, and the expected format. The result isn’t your voice: it’s your voice filtered through the model.</p>
+<p class="text-neutral-300">"If you type here while we’re talking, the sample is already shaped by the conversation." /onboard has an instruction to <strong class="text-red-400">refuse</strong> samples clearly typed in the moment.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+<h4 class="font-bold text-purple-400 mb-4">✓ Valid sources for Q2</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span>Emails you wrote to clients (without editing them to sound "better")</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span>Social media posts from the last 6 months</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span>WhatsApp or Slack messages for the team</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span>Comments on documents or personal notes</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ Invalid sources for Q2</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Text written now, during the /onboard session</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Text reviewed by AI before pasting</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>"A summary of my writing style" that you just put together</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Website or LinkedIn bio copy polished by an agency</span></li>
+</ul>
+</div>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> How much to paste</h3>
+<p class="text-neutral-300">2 to 4 samples from different contexts (email, post, informal message) are enough. Volume isn't quality — the model needs to see context variation, not repetition of the same entry.</p>
+</div>
+</section>
+<!-- TÓPICO 4 -->
+<section class="mb-16" id="topico-4">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">4</span>
+<h2 class="text-2xl font-bold">📁 Day 1 Scaffold</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        At the end of the 7 questions, /onboard scaffolds the <strong class="text-purple-400">complete file set</strong>. It’s not an empty template — each file already contains the processed interview answers, ready for immediate use in a new Claude session.
+      </p>
+<!-- Box monospace com arquivos gerados -->
+<div class="bg-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6 font-mono text-sm">
+<div class="flex items-center space-x-2 mb-4">
+<div class="w-3 h-3 rounded-full bg-red-400"></div>
+<div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+<div class="w-3 h-3 rounded-full bg-green-400"></div>
+<span class="text-neutral-500 text-xs ml-2">file set generated by /onboard</span>
+</div>
+<div class="space-y-1 text-neutral-300">
+<div><span class="text-purple-400">context/</span></div>
+<div class="pl-4"><span class="text-purple-400">├──</span> about-me.md       <span class="text-neutral-500"># identity, role, top pain (Q1)</span></div>
+<div class="pl-4"><span class="text-purple-400">├──</span> about-business.md  <span class="text-neutral-500"># offer, ICP, revenue model (Q1)</span></div>
+<div class="pl-4"><span class="text-purple-400">└──</span> priorities.md      <span class="text-neutral-500"># 90-day objectives + Q7 (Q3+Q7)</span></div>
+<div class="mt-2"><span class="text-purple-400">references/</span></div>
+<div class="pl-4"><span class="text-purple-400">└──</span> voice.md           <span class="text-neutral-500"># pasted verbatim samples (Q2)</span></div>
+<div class="mt-2"><span class="text-purple-400">connections.md</span> <span class="text-neutral-500"># 7-row table — 7 Tier-1 domains (Q4+Q5+Q6)</span></div>
+<div><span class="text-purple-400">CLAUDE.md</span> <span class="text-neutral-500"># operating manual — who you are, how to work</span></div>
+<div class="mt-2"><span class="text-purple-400">archives/</span></div>
+<div class="pl-4"><span class="text-purple-400">└──</span> intake-{ts}/       <span class="text-neutral-500"># automatic backup of originals</span></div>
+</div>
+</div>
+<div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">🗂️</span> What each file does</h3>
+<ul class="space-y-3 text-neutral-300">
+<li><strong class="text-blue-400">about-me.md:</strong> Who you are, what your role is, and your main pain point. Interpreted — not a résumé.</li>
+<li><strong class="text-blue-400">about-business.md:</strong> What the business does, who the ideal customer is, and how revenue comes in. Facts, not a pitch.</li>
+<li><strong class="text-blue-400">priorities.md:</strong> The 3–5 objectives for the next 90 days, plus the task that takes up your week (seed for /level-up).</li>
+<li><strong class="text-blue-400">voice.md:</strong> The verbatim Q2 samples. The model reads these before producing any outward-facing output.</li>
+<li><strong class="text-blue-400">connections.md:</strong> Table filled in with the 7 Tier-1 domains and what you use. Empty where you don't have a tool yet.</li>
+</ul>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Automatic backup</h3>
+<p class="text-neutral-300">/onboard backs up any existing file in <code class="text-primary bg-primary/10 px-1 rounded">archives/intake-{timestamp}/</code> before overwriting. You never lose what was there before—you can compare versions or revert.</p>
+</div>
+</section>
+<!-- TÓPICO 5 -->
+<section class="mb-16" id="topico-5">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">5</span>
+<h2 class="text-2xl font-bold">✨ The "wow moment"</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        The closing prompt in /onboard is designed to plant the <strong class="text-purple-400">Default Shift</strong> immediately. After generating the files, the wizard instructs you to ask your newly configured AIOS your first real question.
+      </p>
+<!-- Box monospace do prompt-wow -->
+<div class="bg-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6 font-mono text-sm">
+<div class="flex items-center space-x-2 mb-4">
+<div class="w-3 h-3 rounded-full bg-red-400"></div>
+<div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+<div class="w-3 h-3 rounded-full bg-green-400"></div>
+<span class="text-neutral-500 text-xs ml-2">the /onboard closing prompt</span>
+</div>
+<p class="text-neutral-400 text-xs mb-3">← instruction to the user after the scaffold</p>
+<p class="text-purple-400 leading-relaxed">"Now open a new Claude session and ask:<br/><br/><span class="text-white">'What should I focus on this week?'</span><br/><br/>The response must use <em>only</em> present 3 bullets in your voice, each tied to a priority in priorities.md, using the context files we just created."</p>
+</div>
+<div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center"><span class="mr-2">🧠</span> Why this is the wow moment</h3>
+<p class="text-neutral-300 mb-3">The response uses <em>only the files you just created</em> — no conversation context, no session memory. This is AIOS responding from scratch, based on what you wrote about yourself.</p>
+<p class="text-neutral-300 mb-3">When the bullets sound like you and align with what you defined as a priority, the Default Shift happens: you stop thinking of AI as a search tool and start treating it as an operating system.</p>
+<ul class="space-y-2 text-neutral-300 mt-4">
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span>If the response is generic → voice.md needs more verbatim samples</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span>If the response is off topic → priorities.md needs more concrete goals</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span>If the response is perfect → you’ve just configured a functional AIOS</span></li>
+</ul>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-5">
+<h4 class="font-semibold text-purple-400 mb-2">A good answer looks like...</h4>
+<p class="text-sm text-neutral-300">"This week, the focus is finishing client X’s onboarding, since that represents the most revenue at risk before the end of the quarter..." <em class="text-neutral-500">(in your tone, with real context)</em></p>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-5">
+<h4 class="font-semibold text-red-400 mb-2">A bad answer looks like...</h4>
+<p class="text-sm text-neutral-300">"To succeed this week, you should focus on high-impact tasks and manage your time efficiently..." <em class="text-neutral-500">(generic — refresh voice.md)</em></p>
+</div>
+</div>
+</section>
+<!-- TÓPICO 6 -->
+<section class="mb-16" id="topico-6">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">6</span>
+<h2 class="text-2xl font-bold">🔄 Idempotency + rerun</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        /onboard is <strong class="text-purple-400">idempotent</strong>: running it again doesn't destroy what's there. Edit the <code class="text-purple-400 bg-purple-500/10 px-1 rounded">aios-intake.md</code> with the answers you want to update and run it again — the wizard updates only the affected files.
+      </p>
+<div class="space-y-4 mb-8">
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+<span class="text-purple-400 font-bold text-sm">1</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Edit aios-intake.md</h4>
+<p class="text-neutral-300 text-sm">Open the file, find the answer you want to update, and edit it directly. The original answers stay commented out for reference.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+<span class="text-purple-400 font-bold text-sm">2</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Run /onboard again</h4>
+<p class="text-neutral-300 text-sm">The wizard detects an existing aios-intake.md, skips questions that have already been answered, and focuses only on the ones that have changed.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+<span class="text-purple-400 font-bold text-sm">3</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Automatic backup before overwriting</h4>
+<p class="text-neutral-300 text-sm">Before updating any file, /onboard creates a new backup in <code class="text-purple-400 bg-purple-500/10 px-1 rounded">archives/intake-{timestamp}/</code>. You can always revert.</p>
+</div>
+</div>
+</div>
+<div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> When to rerun</h3>
+<ul class="space-y-2 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-blue-400">•</span><span><strong>Priorities changed:</strong> new quarter, new goal, business pivot</span></li>
+<li class="flex items-start space-x-2"><span class="text-blue-400">•</span><span><strong>Unsatisfactory voice:</strong> AIOS doesn’t sound like you — more Q2 samples</span></li>
+<li class="flex items-start space-x-2"><span class="text-blue-400">•</span><span><strong>New connected systems:</strong> update Q4/Q5/Q6 to reflect them in connections.md</span></li>
+<li class="flex items-start space-x-2"><span class="text-blue-400">•</span><span><strong>Onboarding someone else:</strong> clone it and run /onboard in her new project</span></li>
+</ul>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Quarterly review</h3>
+<p class="text-neutral-300">The CLAUDE.md recommends a quarterly review. Use /onboard as the official update mechanism—don’t edit context files directly on an ad hoc basis. Keeping aios-intake.md as the source of truth prevents discrepancies between files.</p>
+</div>
+</section>
+<!-- TÓPICO 7 -->
+<section class="mb-16" id="topico-7">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">7</span>
+<h2 class="text-2xl font-bold">🚫 What /onboard Does NOT Do</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        Knowing what /onboard does is just as important as knowing what it <strong class="text-purple-400">doesn’t do</strong>. These limitations are intentional—they aren’t bugs or gaps to fix.
+      </p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ Intentional limitations</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><strong>No more than 7 questions:</strong> depth comes with time, not on Day 1</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><strong>Doesn’t configure .env:</strong> API keys and credentials come on Day 2</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><strong>Doesn’t generate extra skills:</strong> only the base file set — skills come from /level-up</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><strong>Doesn’t write to 3ms-framework.md:</strong> framework documentation is read-only</span></li>
+</ul>
+</div>
+<div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+<h4 class="font-bold text-purple-400 mb-4">✓ What comes next</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span><strong>Day 2:</strong> configure the connections — MCPs, scripts, API keys</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span><strong>Day 7:</strong> run /audit to see the 4 Cs score</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span><strong>Every Friday:</strong> /level-up — one automation per week</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span><strong>With each new use:</strong> edit aios-intake.md and rerun it to keep it up to date</span></li>
+</ul>
+</div>
+</div>
+<div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center"><span class="mr-2">🗺️</span> Recommended kit cadence</h3>
+<div class="space-y-3">
+<div class="flex items-center space-x-3">
+<span class="w-14 text-purple-400 font-semibold text-sm flex-shrink-0">Day 1</span>
+<div class="flex-1 bg-purple-500/10 rounded-lg px-3 py-2 text-sm text-neutral-300">Clone → <strong>/onboard</strong> → wow moment → use AIOS</div>
+</div>
+<div class="flex items-center space-x-3">
+<span class="w-14 text-purple-400 font-semibold text-sm flex-shrink-0">Day 2</span>
+<div class="flex-1 bg-dark-700/50 rounded-lg px-3 py-2 text-sm text-neutral-300">Configure connections — MCPs, scripts, APIs (Module 3.2)</div>
+</div>
+<div class="flex items-center space-x-3">
+<span class="w-14 text-purple-400 font-semibold text-sm flex-shrink-0">Day 7</span>
+<div class="flex-1 bg-dark-700/50 rounded-lg px-3 py-2 text-sm text-neutral-300"><strong>/audit</strong> — first 4 Cs score, baseline (Module 3.2)</div>
+</div>
+<div class="flex items-center space-x-3">
+<span class="w-14 text-purple-400 font-semibold text-sm flex-shrink-0">Day 14</span>
+<div class="flex-1 bg-dark-700/50 rounded-lg px-3 py-2 text-sm text-neutral-300"><strong>/level-up</strong> — first automation shipped (Module 3.3)</div>
+</div>
+<div class="flex items-center space-x-3">
+<span class="w-14 text-purple-400 font-semibold text-sm flex-shrink-0">Weekly</span>
+<div class="flex-1 bg-dark-700/50 rounded-lg px-3 py-2 text-sm text-neutral-300">/audit + /level-up every Friday — real compounding</div>
+</div>
+</div>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> The Day 1 philosophy</h3>
+<p class="text-neutral-300">/onboard was designed so that no question is blocking. If you don’t know the answer to Q4 right now, enter “Stripe — not integrated yet” and keep going. An AIOS with 80% correct context today is worth more than one with 100% in two weeks.</p>
+</div>
+</section>
+<!-- RESUMO -->
+<section class="mb-12">
+<div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
+<h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">🚀</span> Module Summary</h2>
+<div class="space-y-4 mb-8">
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div><strong class="text-white">/onboard = 7-question wizard</strong><span class="text-neutral-400"> — scaffolds the complete Day 1 file set in one session</span></div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div><strong class="text-white">Q2 doesn’t double</strong><span class="text-neutral-400"> — voice samples are ALWAYS verbatim, never typed during the session</span></div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div><strong class="text-white">File set: 6 files</strong><span class="text-neutral-400"> — about-me, about-business, priorities, voice, connections, and CLAUDE.md</span></div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div><strong class="text-white">Immediate wow moment</strong><span class="text-neutral-400"> — "what should I focus on this week?" plants the Default Shift</span></div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div><strong class="text-white">Idempotent</strong><span class="text-neutral-400"> — edit aios-intake.md and rerun without worrying about losing data</span></div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div><strong class="text-white">No .env on Day 1</strong><span class="text-neutral-400"> — connections and API keys are Day 2 work</span></div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div><strong class="text-white">Cadence: /onboard → /audit (Day 7) → /level-up (Fridays)</strong><span class="text-neutral-400"> — the compounding pace</span></div>
+</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+<h3 class="font-semibold text-purple-400 mb-2">Next Module:</h3>
+<p class="text-neutral-300">3.2 — /audit: Four-Cs Diagnosis · "Watch the score rise" · The honest score that shows where AIOS is strong and where it's thin.</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4">
+<a class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors" href="index.html">
+            ← Back to Track
+          </a>
+<a class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors" href="modulo-3-2.html">
+            Next Module →
+          </a>
+</div>
+</div>
+</section>
+</main>
+<!-- FOOTER -->
+<footer class="border-t border-dark-600 py-8 mt-16">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm space-y-1">
+<p>⚙️ AIS-OS — Your AI Operating System in Claude Code · <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" target="_blank">INEMA.CLUB</a> · 2026</p>
+<p>Based on the AIS-OS kit (MIT license). The Three Ms of AI™ and The Four Cs of an AIOS™ are trademarks of Nate Herk. © 2026 Nate Herk.</p>
+</div>
+</footer>
+<!-- SCRIPTS D1 -->
+<script>
+    const themeToggle=document.getElementById('theme-toggle'),tdi=document.getElementById('theme-toggle-dark-icon'),tli=document.getElementById('theme-toggle-light-icon'),H=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){tdi.classList.remove('hidden');H.classList.remove('dark');}else{tli.classList.remove('hidden');}
+    themeToggle.addEventListener('click',()=>{tdi.classList.toggle('hidden');tli.classList.toggle('hidden');H.classList.toggle('dark');localStorage.setItem('theme',H.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

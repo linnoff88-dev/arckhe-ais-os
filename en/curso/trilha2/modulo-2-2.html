@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>M2.2 Connections | AIS-OS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: {
+      primary: '#FACC15',
+      dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+    } } } }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    /* Light mode base */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    /* Light accent: blue (T2) */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37,99,235,0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.06); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37,99,235,0.18); }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+    /* Light accent: emerald (T1 nav) */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    /* Light accent: purple (T3 nav) */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    /* Light - remove gradients + specials */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185,28,28,0.06); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185,28,28,0.25); }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.06); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    /* Light - navbar */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+    /* Dark - softened borders */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+    /* SVG light-mode taming */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+    /* SVG pulse */
+    @keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+      .wf-a:nth-child(2){animation-delay:.25s} .wf-a:nth-child(3){animation-delay:.5s}
+      .wf-a:nth-child(4){animation-delay:.75s} .wf-a:nth-child(5){animation-delay:1s}
+    }
+  </style>
+<link href="https://inematds.github.io/ais-os/curso/trilha2/modulo-2-2.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/ais-os/en/curso/trilha2/modulo-2-2.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/ais-os/es/curso/trilha2/modulo-2-2.html" hreflang="es" rel="alternate"/></head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha2/modulo-2-2.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="modulo-2-2.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">EN</a><a href="../../../es/curso/trilha2/modulo-2-2.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">ES</a></div>
+<!-- NAVIGATION B2 — T2 ativa (blue) -->
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-14">
+<div class="flex items-center space-x-4">
+<a class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300" href="../../index.html">
+<span class="text-2xl">⚙️</span><span class="font-bold text-lg hidden sm:inline">AIS-OS</span>
+</a>
+<span class="text-neutral-600">|</span>
+<a class="text-sky-400 hover:text-sky-300 text-sm font-medium" href="https://inema.club" target="_blank">INEMA.CLUB</a>
+</div>
+<div class="flex items-center space-x-1 sm:space-x-2">
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" href="../trilha1/index.html"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Brain (3 Ms)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10" href="index.html"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Architecture (4 Cs)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors" href="../trilha3/index.html"><span class="sm:hidden">T3</span><span class="hidden sm:inline">In Practice</span></a>
+<button class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2" id="theme-toggle">
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<!-- BREADCRUMB -->
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+<div class="flex items-center space-x-2 text-sm text-neutral-400">
+<a class="hover:text-blue-400" href="../../index.html">Start</a>
+<span>/</span>
+<a class="hover:text-blue-400" href="index.html">Track 2</a>
+<span>/</span>
+<span class="text-blue-400">Module 2.2</span>
+</div>
+</div>
+<!-- HEADER -->
+<header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">
+        MODULE 2.2
+      </span>
+<h1 class="text-3xl sm:text-4xl font-bold mb-4">🔌 Connections: Connects to Your Tools</h1>
+<p class="text-lg text-neutral-400 max-w-3xl">
+        Live data, no pasting. Your AIOS is only useful if it can <strong class="text-blue-400">reach the systems where your work happens</strong> — calendar, email, projects, finances. This module maps the 7 Tier-1 domains, the 4 connection mechanisms, and why you should balance reading with writing.
+      </p>
+<div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-blue-400">7</div>
+<div class="text-xs text-neutral-400">Topics</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-blue-400">40</div>
+<div class="text-xs text-neutral-400">Minutes</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-blue-400">Interm.</div>
+<div class="text-xs text-neutral-400">Level</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-blue-400">Data</div>
+<div class="text-xs text-neutral-400">Type</div>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<!-- SVG FUTURISTA — Fan-out AIOS → 7 domínios Tier-1 -->
+<div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-3 sm:p-4 mb-10 overflow-hidden">
+<svg aria-label="AIOS at the center triggers connections to 7 Tier-1 domains: Revenue, Customer, Calendar, Communication, Projects, Meetings, and Knowledge" class="w-full h-auto" role="img" viewbox="0 0 1000 260">
+<defs>
+<lineargradient id="m22-grad" x1="0" x2="1" y1="0" y2="1">
+<stop offset="0" stop-color="#60a5fa"></stop><stop offset="1" stop-color="#3b82f6"></stop>
+</lineargradient>
+<filter height="180%" id="m22-glow" width="180%" x="-40%" y="-40%">
+<fegaussianblur result="b" stddeviation="1.8"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<pattern height="28" id="m22-grid" patternunits="userSpaceOnUse" width="28">
+<circle cx="1.2" cy="1.2" fill="#3b82f6" opacity="0.11" r="1.2"></circle>
+</pattern>
+<marker id="m22-ah" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#60a5fa"></path></marker>
+<marker id="m22-ahc" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"></path></marker>
+</defs>
+<rect fill="url(#m22-grid)" height="260" width="1000" x="0" y="0"></rect>
+<!-- Conexões do AIOS para os 7 domínios -->
+<g fill="none" opacity="0.6" stroke="#60a5fa" stroke-width="1.8">
+<path d="M204,130 C310,130 340,22 510,22" marker-end="url(#m22-ah)"></path>
+<path d="M204,130 C310,130 340,60 510,60" marker-end="url(#m22-ah)"></path>
+<path d="M204,130 C310,130 340,98 510,98" marker-end="url(#m22-ah)"></path>
+<path d="M204,130 L510,130" marker-end="url(#m22-ah)"></path>
+<path d="M204,130 C310,130 340,162 510,162" marker-end="url(#m22-ah)"></path>
+<path d="M204,130 C310,130 340,200 510,200" marker-end="url(#m22-ah)"></path>
+<path d="M204,130 C310,130 340,238 510,238" marker-end="url(#m22-ah)"></path>
+</g>
+<!-- AIOS Central -->
+<g filter="url(#m22-glow)">
+<rect fill="#0e1622" height="68" rx="14" stroke="url(#m22-grad)" stroke-width="2.5" width="160" x="44" y="96"></rect>
+</g>
+<text fill="#60a5fa" font-family="Inter,sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="124" y="124">AIOS</text>
+<text fill="#9ab8ff" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="124" y="144">your personal OS</text>
+<!-- 7 Domínios Tier-1 (ciano) -->
+<g font-family="Inter,sans-serif" font-size="11.5" font-weight="600">
+<g class="wf-a"><rect fill="#0e1b26" height="28" rx="8" stroke="#38bdf8" stroke-width="2" width="170" x="510" y="8"></rect><text fill="#bfe6ff" text-anchor="middle" x="595" y="27">💰 Revenue/Finance</text></g>
+<g class="wf-a"><rect fill="#0e1b26" height="28" rx="8" stroke="#38bdf8" stroke-width="2" width="170" x="510" y="46"></rect><text fill="#bfe6ff" text-anchor="middle" x="595" y="65">🤝 Client interactions</text></g>
+<g class="wf-a"><rect fill="#0e1b26" height="28" rx="8" stroke="#38bdf8" stroke-width="2" width="170" x="510" y="84"></rect><text fill="#bfe6ff" text-anchor="middle" x="595" y="103">📅 Calendar</text></g>
+<g class="wf-a"><rect fill="#0e1b26" height="28" rx="8" stroke="#38bdf8" stroke-width="2" width="170" x="510" y="116"></rect><text fill="#bfe6ff" text-anchor="middle" x="595" y="135">💬 Communication</text></g>
+<g class="wf-a"><rect fill="#0e1b26" height="28" rx="8" stroke="#38bdf8" stroke-width="2" width="170" x="510" y="148"></rect><text fill="#bfe6ff" text-anchor="middle" x="595" y="167">✅ Projects/Tasks</text></g>
+<g class="wf-a"><rect fill="#0e1b26" height="28" rx="8" stroke="#38bdf8" stroke-width="2" width="170" x="510" y="186"></rect><text fill="#bfe6ff" text-anchor="middle" x="595" y="205">🎙️ Meetings</text></g>
+<g class="wf-a"><rect fill="#0e1b26" height="28" rx="8" stroke="#38bdf8" stroke-width="2" width="170" x="510" y="224"></rect><text fill="#bfe6ff" text-anchor="middle" x="595" y="243">📁 Knowledge/Files</text></g>
+</g>
+<!-- Integration Ladder (direita) -->
+<g font-family="Inter,sans-serif">
+<text fill="#60a5fa" font-size="10" font-weight="600" opacity="0.9" x="740" y="22">Integration Ladder</text>
+<rect fill="#0e1622" height="22" rx="6" stroke="#60a5fa" stroke-width="1.8" width="120" x="738" y="30"></rect>
+<text fill="#9ab8ff" font-size="10" text-anchor="middle" x="798" y="45">API</text>
+<rect fill="#0e1622" height="22" opacity="0.8" rx="6" stroke="#60a5fa" stroke-width="1.5" width="112" x="746" y="58"></rect>
+<text fill="#9ab8ff" font-size="10" text-anchor="middle" x="802" y="73">CLI</text>
+<rect fill="#0e1622" height="22" opacity="0.65" rx="6" stroke="#60a5fa" stroke-width="1.3" width="102" x="756" y="86"></rect>
+<text fill="#9ab8ff" font-size="10" text-anchor="middle" x="807" y="101">Browser Auto.</text>
+<rect fill="#0e1622" height="22" opacity="0.45" rx="6" stroke="#60a5fa" stroke-width="1.1" width="90" x="766" y="114"></rect>
+<text fill="#9ab8ff" font-size="10" text-anchor="middle" x="811" y="129">Scraping</text>
+<line marker-end="url(#m22-ahc)" opacity="0.5" stroke="#38bdf8" stroke-width="1.5" x1="798" x2="798" y1="52" y2="57"></line>
+<line marker-end="url(#m22-ahc)" opacity="0.5" stroke="#38bdf8" stroke-width="1.5" x1="802" x2="802" y1="80" y2="85"></line>
+<line marker-end="url(#m22-ahc)" opacity="0.5" stroke="#38bdf8" stroke-width="1.5" x1="807" x2="807" y1="108" y2="113"></line>
+<text fill="#9ab8ff" font-family="Inter,sans-serif" font-size="10" opacity="0.7" text-anchor="middle" x="900" y="75">↑ more</text>
+<text fill="#9ab8ff" font-family="Inter,sans-serif" font-size="10" opacity="0.7" text-anchor="middle" x="900" y="88">reliable</text>
+</g>
+<!-- Legenda balanceamento -->
+<g font-family="Inter,sans-serif">
+<rect fill="#0e1622" height="90" opacity="0.9" rx="10" stroke="#374151" stroke-width="1.5" width="230" x="738" y="155"></rect>
+<text fill="#60a5fa" font-size="10.5" font-weight="600" text-anchor="middle" x="853" y="174">Read / Write Balance</text>
+<rect fill="#0e2018" height="18" rx="5" stroke="#34d399" stroke-width="1.5" width="88" x="752" y="182"></rect>
+<text fill="#86efac" font-size="9.5" text-anchor="middle" x="796" y="195">📖 READ</text>
+<rect fill="#1a0e26" height="18" rx="5" stroke="#c084fc" stroke-width="1.5" width="98" x="852" y="182"></rect>
+<text fill="#d8b4fe" font-size="9.5" text-anchor="middle" x="901" y="195">✍️ WRITE (≥1)</text>
+<text fill="#9ca3af" font-size="9" text-anchor="middle" x="853" y="218">If everything is read-only,</text>
+<text fill="#9ca3af" font-size="9" text-anchor="middle" x="853" y="232">AIOS is a viewer, not an OS.</text>
+</g>
+</svg>
+</div>
+<!-- h2 Conteúdo detalhado -->
+<h2 class="text-2xl font-bold mb-6">Detailed content</h2>
+<!-- TÓPICO 1 — O teste do Connections -->
+<section class="mb-16" id="topico-1">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+<h2 class="text-2xl font-bold">🧪 The Connections Test</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        There is a simple, brutal test to see whether your AIOS has real Connections: ask a question that requires <strong class="text-blue-400">live data</strong>. Not data you pasted into the chat — data the system needs to fetch on its own. If the answer comes back without you copying anything, your Connections works.
+      </p>
+<!-- Box Conceito Principal -->
+<div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+<span class="mr-2">🎯</span> The One-Sentence Test
+        </h3>
+<p class="text-neutral-300 mb-4">
+          "What’s on my calendar tomorrow, and which tasks are due?" — if that answer arrives <strong>without pasting</strong>, you have Connections.
+        </p>
+<ul class="space-y-2 text-neutral-300">
+<li class="flex items-start space-x-2">
+<span class="text-blue-400 mt-1">•</span>
+<span><strong>Pasted data</strong> = you're still doing the manual search work.</span>
+</li>
+<li class="flex items-start space-x-2">
+<span class="text-blue-400 mt-1">•</span>
+<span><strong>Live data</strong> = AIOS reaches the system, searches, and responds. You just read.</span>
+</li>
+<li class="flex items-start space-x-2">
+<span class="text-blue-400 mt-1">•</span>
+<span>The test applies to any domain—finance, tasks, communication, meetings.</span>
+</li>
+</ul>
+</div>
+<!-- Grid Fazer vs Evitar -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ Real connections</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>"What’s due today?" → automatic lookup</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Email summary → MCP or script</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Next meeting + agenda → Calendar API</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Monthly revenue → Finance API</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ False Connections</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Copy a Google Calendar meeting and paste it into the chat</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Manually export CSV and upload it to the context</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Type the tasks due into the prompt</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Make the AIOS ask "send me the data"</span></li>
+</ul>
+</div>
+</div>
+</section>
+<!-- TÓPICO 2 — Os 7 Domínios Tier-1 -->
+<section class="mb-16" id="topico-2">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+<h2 class="text-2xl font-bold">🗺️ The 7 Universal Tier-1 Domains</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        Every knowledge-work task passes through 7 domains. They’re called <strong class="text-blue-400">Universal Tier-1</strong> because they show up regardless of the industry — agency, SaaS, consulting, freelancer. Covering them is the foundation of a functional AIOS.
+      </p>
+<!-- Tabela dos 7 Domínios -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+<div class="p-4 border-b border-dark-600 bg-blue-500/10">
+<h3 class="font-semibold text-blue-400 flex items-center gap-2">
+<span>📋</span> Map of the 7 Domains — what to cover before anything else
+          </h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-sm">
+<thead>
+<tr class="border-b border-dark-600">
+<th class="text-left p-4 text-blue-400 font-semibold">#</th>
+<th class="text-left p-4 text-blue-400 font-semibold">Domain</th>
+<th class="text-left p-4 text-blue-400 font-semibold">What it includes</th>
+<th class="text-left p-4 text-blue-400 font-semibold">Examples of tools</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-dark-600">
+<tr class="hover:bg-dark-700/30 transition-colors">
+<td class="p-4 text-neutral-400">1</td>
+<td class="p-4 font-medium text-neutral-100">💰 Revenue/Finance</td>
+<td class="p-4 text-neutral-400">Revenue, expenses, cash flow</td>
+<td class="p-4 text-neutral-400">Stripe, QuickBooks, Notion finance</td>
+</tr>
+<tr class="hover:bg-dark-700/30 transition-colors">
+<td class="p-4 text-neutral-400">2</td>
+<td class="p-4 font-medium text-neutral-100">🤝 Client interactions</td>
+<td class="p-4 text-neutral-400">Leads, deals, support, feedback</td>
+<td class="p-4 text-neutral-400">HubSpot, Pipedrive, Intercom, Linear</td>
+</tr>
+<tr class="hover:bg-dark-700/30 transition-colors">
+<td class="p-4 text-neutral-400">3</td>
+<td class="p-4 font-medium text-neutral-100">📅 Calendar</td>
+<td class="p-4 text-neutral-400">Personal calendar, meetings, deadlines</td>
+<td class="p-4 text-neutral-400">Google Calendar, Calendly, Notion cal</td>
+</tr>
+<tr class="hover:bg-dark-700/30 transition-colors">
+<td class="p-4 text-neutral-400">4</td>
+<td class="p-4 font-medium text-neutral-100">💬 Communication</td>
+<td class="p-4 text-neutral-400">Email, chat, DMs, notifications</td>
+<td class="p-4 text-neutral-400">Gmail, Slack, Discord, Linear comments</td>
+</tr>
+<tr class="hover:bg-dark-700/30 transition-colors">
+<td class="p-4 text-neutral-400">5</td>
+<td class="p-4 font-medium text-neutral-100">✅ Projects/Tasks</td>
+<td class="p-4 text-neutral-400">To-dos, sprints, backlog, deliverables</td>
+<td class="p-4 text-neutral-400">Linear, Notion, Asana, Trello</td>
+</tr>
+<tr class="hover:bg-dark-700/30 transition-colors">
+<td class="p-4 text-neutral-400">6</td>
+<td class="p-4 font-medium text-neutral-100">🎙️ Meeting Intelligence</td>
+<td class="p-4 text-neutral-400">Transcripts, action items, recordings</td>
+<td class="p-4 text-neutral-400">Fireflies, Otter, Notion meetings</td>
+</tr>
+<tr class="hover:bg-dark-700/30 transition-colors">
+<td class="p-4 text-neutral-400">7</td>
+<td class="p-4 font-medium text-neutral-100">📁 Knowledge/Files</td>
+<td class="p-4 text-neutral-400">Docs, wikis, SOPs, knowledge base</td>
+<td class="p-4 text-neutral-400">Notion, Drive, Confluence, Obsidian</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Tip Box -->
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">💡</span> Practical Tip — Start with the domain that hurts the most
+        </h3>
+<p class="text-neutral-300">Don’t try to connect all 7 at once. Identify which domain takes the most time to search manually in your day. Connect that one first. /audit scores coverage across all 7 domains—0 domains = a 4x multiplier on the score penalty.</p>
+</div>
+</section>
+<!-- TÓPICO 3 — Os 4 Mecanismos -->
+<section class="mb-16" id="topico-3">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+<h2 class="text-2xl font-bold">⚙️ The 4 Mechanisms (tool-agnostic)</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        The AIS-OS kit is <strong class="text-blue-400">API-first and agnostic</strong>: no matter which tool you use, there are 4 ways to make AIOS reach a system. Each mechanism has tradeoffs in reliability, setup, and maintenance.
+      </p>
+<!-- Box mono — Tabela Connections.md -->
+<div class="bg-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6 font-mono text-sm overflow-x-auto">
+<div class="flex items-center gap-2 mb-4">
+<span class="text-blue-400 font-semibold not-italic font-sans text-base">📄 connections.md — Table Structure</span>
+</div>
+<table class="w-full">
+<thead>
+<tr class="text-blue-400 border-b border-dark-600">
+<th class="text-left pb-2 pr-4">#</th>
+<th class="text-left pb-2 pr-4">Domain</th>
+<th class="text-left pb-2 pr-4">Tool</th>
+<th class="text-left pb-2 pr-4">Mechanism</th>
+<th class="text-left pb-2 pr-4">Auth</th>
+<th class="text-left pb-2">Last check</th>
+</tr>
+</thead>
+<tbody class="text-neutral-300 divide-y divide-dark-700">
+<tr class="py-1">
+<td class="py-2 pr-4">1</td>
+<td class="py-2 pr-4">Calendar</td>
+<td class="py-2 pr-4">Google Calendar</td>
+<td class="py-2 pr-4 text-cyan-400">mcp</td>
+<td class="py-2 pr-4">OAuth</td>
+<td class="py-2">2026-06-01</td>
+</tr>
+<tr>
+<td class="py-2 pr-4">2</td>
+<td class="py-2 pr-4">Communication</td>
+<td class="py-2 pr-4">Gmail</td>
+<td class="py-2 pr-4 text-blue-400">script</td>
+<td class="py-2 pr-4">OAuth</td>
+<td class="py-2">2026-05-28</td>
+</tr>
+<tr>
+<td class="py-2 pr-4">3</td>
+<td class="py-2 pr-4">Projects</td>
+<td class="py-2 pr-4">Linear</td>
+<td class="py-2 pr-4 text-purple-400">key+ref</td>
+<td class="py-2 pr-4">.env API_KEY</td>
+<td class="py-2">2026-05-15</td>
+</tr>
+<tr>
+<td class="py-2 pr-4">4</td>
+<td class="py-2 pr-4">Knowledge</td>
+<td class="py-2 pr-4">Notion</td>
+<td class="py-2 pr-4 text-amber-400">export</td>
+<td class="py-2 pr-4">CSV dump</td>
+<td class="py-2">2026-05-01</td>
+</tr>
+</tbody>
+</table>
+<p class="text-neutral-500 mt-3 text-xs font-sans">One line per reachable system. Keep it up to date — /audit reads this file.</p>
+</div>
+<!-- Timeline dos 4 mecanismos -->
+<div class="space-y-4 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-4">The 4 mechanisms—from most to least integrated</h3>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+<span class="text-blue-400 font-bold text-sm">MCP</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">mcp — MCP server</h4>
+<p class="text-xs text-neutral-400 mb-2">More integration · more complex setup · bidirectional</p>
+<p class="text-neutral-300 text-sm">Claude Code connects directly to the tool’s MCP server. Real-time reading and writing. Requires configuration in <span class="font-mono bg-dark-700 px-1 rounded text-xs">.claude/settings.json</span>. It’s the preferred mechanism when available.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+<span class="text-blue-400 font-bold text-xs">script</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">script — Python/Bash calling an API</h4>
+<p class="text-xs text-neutral-400 mb-2">High flexibility · API-first · you’re in control</p>
+<p class="text-neutral-300 text-sm">Python or Bash scripts that call the tool’s REST API. Stored in <span class="font-mono bg-dark-700 px-1 rounded text-xs">scripts/</span>. Good when there’s no MCP. You version, test, and adapt it.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+<span class="text-blue-400 font-bold text-xs">key</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">key+ref — .env key + references/{tool}-api.md</h4>
+<p class="text-xs text-neutral-400 mb-2">Lightweight · quick to set up · a good foundation for future skills</p>
+<p class="text-neutral-300 text-sm">API key in <span class="font-mono bg-dark-700 px-1 rounded text-xs">.env</span> + reference guide in <span class="font-mono bg-dark-700 px-1 rounded text-xs">references/{tool}-api.md</span>. AIOS reads the guide and assembles the calls. The researched-once-saved-forever pattern.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-dark-700 flex items-center justify-center">
+<span class="text-neutral-400 font-bold text-xs">exp.</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">export — CSV/JSON dump</h4>
+<p class="text-xs text-neutral-400 mb-2">More manual · no ongoing integration · starting point</p>
+<p class="text-neutral-300 text-sm">Export manually and drop it into the context. Valid for Day 1 when the API is complex. But be careful: data becomes stale quickly. Use it as a starting point, not a final destination.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 4 — connections.md (registro) -->
+<section class="mb-16" id="topico-4">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+<h2 class="text-2xl font-bold">📋 connections.md — the central registry</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        O <span class="font-mono bg-dark-800 px-2 py-0.5 rounded text-blue-400">connections.md</span> is your AIOS integration manifest. One line per reachable system. The <strong class="text-blue-400">/audit reads this file directly</strong> to score coverage of the 7 domains and check connection freshness.
+      </p>
+<!-- Box Conceito Principal -->
+<div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+<span class="mr-2">📌</span> Required fields per row
+        </h3>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-3">
+<span class="text-blue-400 font-bold">#</span>
+<span><strong>Number</strong> — simple sequence. It means nothing beyond ordering.</span>
+</li>
+<li class="flex items-start space-x-3">
+<span class="text-blue-400 font-bold">Domain</span>
+<span><strong>One of the 7 Tier-1</strong> (or your own custom subdomain).</span>
+</li>
+<li class="flex items-start space-x-3">
+<span class="text-blue-400 font-bold">Tool</span>
+<span><strong>Exact name</strong> from the tool (Gmail, Notion, Linear…).</span>
+</li>
+<li class="flex items-start space-x-3">
+<span class="text-blue-400 font-bold">Mechanism</span>
+<span><strong>mcp / script / export / key+ref</strong> — how the connection works.</span>
+</li>
+<li class="flex items-start space-x-3">
+<span class="text-blue-400 font-bold">Auth</span>
+<span>OAuth / API Key / .env / no auth. Don’t put keys here—only the type.</span>
+</li>
+<li class="flex items-start space-x-3">
+<span class="text-blue-400 font-bold">Last check</span>
+<span>Date the connection was last tested/validated. /audit penalizes poor freshness.</span>
+</li>
+</ul>
+</div>
+<!-- Grid Fazer vs Evitar -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ Correct connections.md</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>One line per tool, simple</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Mechanism filled in (mcp/script/export/key+ref)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Current check date (less than 30 days old)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>7 domains represented</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ Common errors</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Put API keys in the file (it goes into git)</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Leave “Last checked” blank</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Don’t record export-type connections (they count toward the score)</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Read-only only (see Topic 6)</span></li>
+</ul>
+</div>
+</div>
+</section>
+<!-- TÓPICO 5 — Researched-once-saved-forever -->
+<section class="mb-16" id="topico-5">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+<h2 class="text-2xl font-bold">💾 Researched-Once-Saved-Forever</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        Every time you research how an API works—endpoints, authentication, queries—you’re investing research time. <strong class="text-blue-400">Save this investment in <span class="font-mono">references/{tool}-api.md</span></strong> is the "researched-once-saved-forever" pattern: you research once, and every future use — yours, a skill's, or an agent's — is instant.
+      </p>
+<!-- Box Dados/Pesquisa -->
+<div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+<span class="mr-2">📊</span> Why this matters so much
+        </h3>
+<ul class="space-y-3 text-neutral-300">
+<li><strong>Future skills don’t research things again</strong> — The skill reads references/{tool}-api.md and already knows the endpoints.</li>
+<li><strong>/audit rewards this</strong> — The presence of API guides in references/ is scored directly in the Connections score.</li>
+<li><strong>Real compounding</strong> — 10 API guides saved = an AIOS that's 10x faster for any new skill involving those systems.</li>
+<li><strong>No manual re-research</strong> — You documented the Linear API once. Every skill that uses Linear inherits that knowledge.</li>
+</ul>
+</div>
+<!-- Box mono — Estrutura do references/{tool}-api.md -->
+<div class="bg-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6 font-mono text-sm overflow-x-auto">
+<div class="flex items-center gap-2 mb-3">
+<span class="font-sans text-blue-400 font-semibold text-base">📄 references/linear-api.md — Suggested Structure</span>
+</div>
+<pre class="text-neutral-300 leading-relaxed"><span class="text-blue-400"># Linear API — Guia de Referência</span>
+<span class="text-neutral-500">## Base URL</span>
+https://api.linear.app/graphql
+
+<span class="text-neutral-500">## Auth</span>
+Header: Authorization: {API_KEY}
+Var: LINEAR_API_KEY no .env
+
+<span class="text-neutral-500">## Queries mais usadas</span>
+- Listar issues: query { issues { nodes { id title state } } }
+- Issues do usuário: query { viewer { assignedIssues { ... } } }
+
+<span class="text-neutral-500">## Mutations</span>
+- Criar issue: mutation { issueCreate(input: {...}) }
+- Fechar issue: mutation { issueUpdate(id: "...", input: {stateId: "..."}) }
+
+<span class="text-neutral-500">## Última atualização: 2026-06-01</span></pre>
+</div>
+<!-- Tip Box -->
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">💡</span> Tip — Document as you connect
+        </h3>
+<p class="text-neutral-300">Whenever you make a new connection (MCP, script, or key+ref), open the file <span class="font-mono bg-dark-800 px-1 rounded text-sm">references/{tool}-api.md</span> and record the endpoints you tested, the authentication that worked, and the most common parameters. It takes 5 minutes and saves hours in the future.</p>
+</div>
+</section>
+<!-- TÓPICO 6 — Read AND write balance -->
+<section class="mb-16" id="topico-6">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+<h2 class="text-2xl font-bold">⚖️ Read AND Write Balance</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        An AIOS that only reads is a <strong class="text-blue-400">sophisticated viewer</strong>, not an Operating System. To be a real OS, at least <strong>one connection needs to write</strong> — send email, create an issue, post a message, update a record. The ability to act in the world is what separates a consultation from automation.
+      </p>
+<!-- Box Conceito Principal -->
+<div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+<span class="mr-2">🔄</span> The distinction that matters
+        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-dark-800/60 rounded-lg p-4 border border-dark-600">
+<div class="text-emerald-400 font-bold mb-2">📖 READ (reference)</div>
+<ul class="space-y-1 text-neutral-300 text-sm">
+<li>• “What meetings do I have today?”</li>
+<li>• “How many open issues are there in Linear?”</li>
+<li>• “What was last month’s revenue?”</li>
+<li>• “Summarize my unread emails”</li>
+</ul>
+<p class="text-neutral-400 text-xs mt-3">Useful, but you still need to act manually.</p>
+</div>
+<div class="bg-dark-800/60 rounded-lg p-4 border border-blue-500/30">
+<div class="text-blue-400 font-bold mb-2">✍️ WRITE (action)</div>
+<ul class="space-y-1 text-neutral-300 text-sm">
+<li>• Send the follow-up email</li>
+<li>• Creates the issue in Linear</li>
+<li>• Schedules the meeting</li>
+<li>• Post the update in Slack</li>
+</ul>
+<p class="text-neutral-400 text-xs mt-3">AIOS takes action. You just approve (or don’t even need to).</p>
+</div>
+</div>
+</div>
+<!-- Box Alerta -->
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center">
+<span class="mr-2">⚠️</span> Caution — /audit penalizes all-read-only
+        </h3>
+<p class="text-neutral-300">If <strong>all</strong> if your connections are read-only, /audit applies a 2x multiplier to the Connections gap. That alone can take 8-12 points off your score. The requirement is small: <strong>1 connection with write capability</strong> already clears this penalty.</p>
+</div>
+<!-- Tip Box -->
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">💡</span> Where to start writing
+        </h3>
+<p class="text-neutral-300 mb-3">The simplest writing connection for most people: <strong>Gmail with permission to create drafts</strong>. AIOS creates the draft — you review and send it. It covers the write-balance without the risk of accidental sending.</p>
+<p class="text-neutral-300">As you build confidence: Bike Method phase = starts by creating drafts, progresses to sending with approval, then automatic sending for specific categories.</p>
+</div>
+</section>
+<!-- TÓPICO 7 — The Integration Ladder -->
+<section class="mb-16" id="topico-7">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">7</span>
+<h2 class="text-2xl font-bold">🪜 The Integration Ladder</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        Not every connection is equally trustworthy. The <strong class="text-blue-400">Integration Ladder</strong> defines a reliability hierarchy: use the highest available level for each tool. Lower levels are used when higher ones don't exist — never by preference.
+      </p>
+<!-- Box Conceito Principal (escada visual) -->
+<div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-6 flex items-center">
+<span class="mr-2">🪜</span> Reliability hierarchy — API at the top
+        </h3>
+<div class="space-y-3">
+<div class="flex items-center gap-4">
+<div class="flex-shrink-0 w-8 text-right font-bold text-blue-400 text-sm">1</div>
+<div class="flex-1 bg-blue-500/20 border border-blue-500/40 rounded-lg p-4">
+<div class="flex items-center justify-between mb-1">
+<span class="font-bold text-blue-400">Direct API</span>
+<span class="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">PREFERRED</span>
+</div>
+<p class="text-neutral-300 text-sm">Official, versioned, documented interface. Responds predictably. Has clear rate limits. Doesn’t break when the UI changes.</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex-shrink-0 w-8 text-right font-bold text-blue-400 text-sm">2</div>
+<div class="flex-1 bg-dark-800 border border-dark-600 rounded-lg p-4">
+<div class="flex items-center justify-between mb-1">
+<span class="font-semibold text-neutral-100">CLI (command line)</span>
+<span class="text-xs bg-dark-700 text-neutral-400 px-2 py-0.5 rounded-full">good alternative</span>
+</div>
+<p class="text-neutral-300 text-sm">Tools like <span class="font-mono text-xs bg-dark-700 px-1 rounded">gh</span> (GitHub), <span class="font-mono text-xs bg-dark-700 px-1 rounded">gcloud</span> (GCP). Less granular than an API, but much more stable than a browser.</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex-shrink-0 w-8 text-right font-bold text-neutral-500 text-sm">3</div>
+<div class="flex-1 bg-dark-800 border border-dark-600 rounded-lg p-4 opacity-80">
+<div class="flex items-center justify-between mb-1">
+<span class="font-semibold text-neutral-100">Browser Automation</span>
+<span class="text-xs bg-dark-700 text-neutral-400 px-2 py-0.5 rounded-full">use with caution</span>
+</div>
+<p class="text-neutral-300 text-sm">Playwright, Puppeteer, Computer Use. Fragile — any layout change breaks it. Higher maintenance costs. Use only when APIs and CLIs don’t exist.</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex-shrink-0 w-8 text-right font-bold text-neutral-600 text-sm">4</div>
+<div class="flex-1 bg-dark-800 border border-dark-600 rounded-lg p-4 opacity-60">
+<div class="flex items-center justify-between mb-1">
+<span class="font-semibold text-neutral-100">Scraping</span>
+<span class="text-xs bg-red-900/30 text-red-400 px-2 py-0.5 rounded-full">last resort</span>
+</div>
+<p class="text-neutral-300 text-sm">HTML parsing of public pages. Highly unstable — breaks with every deploy. Often prohibited by terms of service. Never use as a long-term solution.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Grid Fazer vs Evitar -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ Apply the Ladder</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Checks whether an API exists before Browser Automation</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Document the mechanism used in connections.md</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Plans to move to a higher tier when available</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ Ignore the Ladder</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Using scraping when an API exists (fragile + unnecessary)</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Browser automation for a tool with an official CLI</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Build integration one step at a time and never review it</span></li>
+</ul>
+</div>
+</div>
+</section>
+<!-- RESUMO DO MÓDULO -->
+<section class="mb-12">
+<div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+<h2 class="text-2xl font-bold mb-6 flex items-center">
+<span class="mr-3">🔌</span> Module 2.2 Summary
+        </h2>
+<div class="space-y-4 mb-8">
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1">✓</span>
+<div>
+<strong class="text-white">The Connections test</strong>
+<span class="text-neutral-400"> — live data without pasting. If you copy it, you still don’t have Connections.</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1">✓</span>
+<div>
+<strong class="text-white">7 Tier-1 Domains</strong>
+<span class="text-neutral-400"> — Revenue, Clients, Calendar, Communication, Projects, Meetings, Knowledge. Covering these is the foundation.</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1">✓</span>
+<div>
+<strong class="text-white">4 mechanisms</strong>
+<span class="text-neutral-400"> — mcp / script / key+ref / export. The kit is API-first and tool-agnostic.</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1">✓</span>
+<div>
+<strong class="text-white">connections.md</strong>
+<span class="text-neutral-400"> — integration manifest. Read by /audit to score coverage and freshness.</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Researched-once-saved-forever</strong>
+<span class="text-neutral-400"> — referencias/{tool}-api.md. Research once, use forever across skills and agents.</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Read AND Write</strong>
+<span class="text-neutral-400"> — at least 1 connection that writes. All-read-only = viewer, not OS.</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Integration Ladder</strong>
+<span class="text-neutral-400"> — API &gt; CLI &gt; Browser Automation &gt; Scraping. Always move up to the most reliable available level.</span>
+</div>
+</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+<h3 class="font-semibold text-blue-400 mb-2">Next Module:</h3>
+<p class="text-neutral-300">2.3 — Capabilities: Knows how to do the work 🧩</p>
+<p class="text-neutral-400 text-sm mt-1">One sentence triggers an artifact. Skills vs. Agents, the Autonomy Spectrum, and how /level-up builds capabilities week by week.</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 justify-start">
+<a class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors" href="index.html">
+            ← Back to Track
+          </a>
+<a class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors" href="modulo-2-3.html">
+            Next Module →
+          </a>
+</div>
+</div>
+</section>
+</main>
+<!-- FOOTER -->
+<footer class="border-t border-dark-600 py-8 mt-16">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm space-y-1">
+<p>⚙️ AIS-OS — Your AI Operating System in Claude Code · <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" target="_blank">INEMA.CLUB</a> · 2026</p>
+<p>Based on the AIS-OS kit (MIT license). The Three Ms of AI™ and The Four Cs of an AIOS™ are trademarks of Nate Herk. © 2026 Nate Herk.</p>
+</div>
+</footer>
+<!-- SCRIPTS D1 -->
+<script>
+    const themeToggle=document.getElementById('theme-toggle'),tdi=document.getElementById('theme-toggle-dark-icon'),tli=document.getElementById('theme-toggle-light-icon'),H=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){tdi.classList.remove('hidden');H.classList.remove('dark');}else{tli.classList.remove('hidden');}
+    themeToggle.addEventListener('click',()=>{tdi.classList.toggle('hidden');tli.classList.toggle('hidden');H.classList.toggle('dark');localStorage.setItem('theme',H.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

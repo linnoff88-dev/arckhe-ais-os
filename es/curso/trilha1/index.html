@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ruta 1 — El cerebro del operador (3 Ms) | AIS-OS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: {
+      primary: '#FACC15',
+      dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+    } } } }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    /* Light mode base */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    /* Light accent: emerald (T1) */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5,150,105,0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.06); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5,150,105,0.18); }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+    /* Light accent: blue (T2) */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37,99,235,0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.06); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37,99,235,0.18); }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+    /* Light accent: purple (T3) */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124,58,237,0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .bg-purple-900\/20 { background-color: rgba(124,58,237,0.06); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124,58,237,0.25); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124,58,237,0.18); }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; }
+    /* Light - remove gradients + special colors */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185,28,28,0.06); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185,28,28,0.25); }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    /* Light - navbar */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+    /* Dark - softened borders */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+    /* SVG light-mode taming */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+    /* SVG pulse */
+    @keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+      .wf-a:nth-child(2){animation-delay:.25s} .wf-a:nth-child(3){animation-delay:.5s}
+      .wf-a:nth-child(4){animation-delay:.75s} .wf-a:nth-child(5){animation-delay:1s}
+    }
+  </style>
+<link href="https://inematds.github.io/ais-os/curso/trilha1/" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/ais-os/en/curso/trilha1/" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/ais-os/es/curso/trilha1/" hreflang="es" rel="alternate"/></head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha1/" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="../../../en/curso/trilha1/" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">EN</a><a href="./" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">ES</a></div>
+<!-- NAV B1 -->
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-14">
+<div class="flex items-center space-x-4">
+<a class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300" href="../../index.html">
+<span class="text-2xl">⚙️</span><span class="font-bold text-lg hidden sm:inline">AIS-OS</span>
+</a>
+<span class="text-neutral-600">|</span>
+<a class="text-sky-400 hover:text-sky-300 text-sm font-medium" href="https://inema.club" target="_blank">INEMA.CLUB</a>
+</div>
+<div class="flex items-center space-x-1 sm:space-x-2">
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10" href="index.html"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Cerebro (3 Ms)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors" href="../trilha2/index.html"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitectura (4 Cs)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors" href="../trilha3/index.html"><span class="sm:hidden">T3</span><span class="hidden sm:inline">En la práctica</span></a>
+<button class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2" id="theme-toggle">
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<!-- HEADER DE TRILHA -->
+<header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">RUTA 1</span>
+<h1 class="text-3xl sm:text-4xl font-bold mb-4">🧠 El cerebro del operador (3 Ms)</h1>
+<p class="text-lg text-neutral-400 max-w-3xl mb-6">
+        Mindset → Method → Machine. El rewire que transforma a cualquier persona en un operador de IA de alto rendimiento. Sin este triple ajuste, la arquitectura es solo una estructura de carpetas.
+      </p>
+<!-- Hero SVG futurista: pipeline Mindset → Method → Machine -->
+<div class="rounded-2xl border border-emerald-500/30 bg-dark-900/40 p-4 mb-8 max-w-3xl">
+<svg aria-label="Pipeline de las 3 Ms: Mindset alimenta a Method, Method alimenta a Machine y Machine produce resultados" class="w-full h-auto" role="img" viewbox="0 0 800 180">
+<defs>
+<lineargradient id="em-grad" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#34d399"></stop>
+<stop offset="100%" stop-color="#38bdf8"></stop>
+</lineargradient>
+<filter height="180%" id="em-glow" width="140%" x="-20%" y="-40%">
+<fegaussianblur in="SourceGraphic" result="blur" stddeviation="3"></fegaussianblur>
+<femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<pattern height="40" id="em-grid" patternunits="userSpaceOnUse" width="40" x="0" y="0">
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="#34d39918" stroke-width="0.8"></path>
+</pattern>
+<marker id="em-ah" markerheight="6" markerwidth="8" orient="auto" refx="8" refy="3">
+<polygon fill="#34d399" points="0 0, 8 3, 0 6"></polygon>
+</marker>
+<marker id="em-ahc" markerheight="6" markerwidth="8" orient="auto" refx="8" refy="3">
+<polygon fill="#38bdf8" points="0 0, 8 3, 0 6"></polygon>
+</marker>
+</defs>
+<rect fill="url(#em-grid)" height="180" width="800" x="0" y="0"></rect>
+<!-- Nó Mindset -->
+<g filter="url(#em-glow)">
+<rect fill="#0e2018" height="60" rx="12" stroke="#34d399" stroke-width="2" width="160" x="30" y="60"></rect>
+</g>
+<text fill="#34d399" font-family="Inter,sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="110" y="85">🧠 Mentalidad</text>
+<text fill="#6ee7b7" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="110" y="105">Cómo pensar</text>
+<!-- Seta 1 -->
+<line class="wf-a" marker-end="url(#em-ah)" stroke="#34d399" stroke-width="2" x1="190" x2="260" y1="90" y2="90"></line>
+<!-- Nó Method -->
+<g filter="url(#em-glow)">
+<rect fill="#0e2018" height="60" rx="12" stroke="url(#em-grad)" stroke-width="2" width="160" x="265" y="60"></rect>
+</g>
+<text fill="#38bdf8" font-family="Inter,sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="345" y="85">🧭 Método</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="345" y="105">Cómo decidir</text>
+<!-- Seta 2 -->
+<line class="wf-a" marker-end="url(#em-ahc)" stroke="#38bdf8" stroke-width="2" x1="425" x2="495" y1="90" y2="90"></line>
+<!-- Nó Machine -->
+<g filter="url(#em-glow)">
+<rect fill="#0e2018" height="60" rx="12" stroke="#38bdf8" stroke-width="2" width="160" x="500" y="60"></rect>
+</g>
+<text fill="#38bdf8" font-family="Inter,sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="580" y="85">🛠️ Machine</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="580" y="105">Cómo construir</text>
+<!-- Seta 3 -->
+<line class="wf-a" marker-end="url(#em-ah)" stroke="#34d399" stroke-width="2" x1="660" x2="720" y1="90" y2="90"></line>
+<!-- Resultado -->
+<g filter="url(#em-glow)">
+<rect fill="#0e2018" height="44" rx="8" stroke="#34d399" stroke-width="1.5" width="60" x="725" y="68"></rect>
+</g>
+<text fill="#34d399" font-family="Inter,sans-serif" font-size="10" font-weight="700" text-anchor="middle" x="755" y="88">AIOS</text>
+<text fill="#6ee7b7" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="755" y="102">listo</text>
+<!-- Label inferior -->
+<text fill="#4b5563" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="400" y="158">Sin reconfigurar el cerebro, la arquitectura es solo una estructura de carpetas.</text>
+</svg>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-4 gap-4 max-w-2xl">
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-emerald-400">3</div>
+<div class="text-xs text-neutral-400">Módulos</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-emerald-400">20</div>
+<div class="text-xs text-neutral-400">Temas</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-emerald-400">~2h</div>
+<div class="text-xs text-neutral-400">Duración</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-emerald-400">Principiante</div>
+<div class="text-xs text-neutral-400">Nivel</div>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<!-- MAPA DA TRILHA -->
+<section class="mb-12">
+<h2 class="text-2xl font-bold mb-6">Mapa de la ruta</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+<a class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 p-5 transition-all" href="#modulo-1-1">
+<div class="flex items-center justify-between mb-2">
+<span class="text-emerald-400 font-bold text-sm">1.1</span>
+<span class="text-xs text-neutral-500">~35 min</span>
+</div>
+<h3 class="font-semibold mb-1 group-hover:text-emerald-400 transition-colors">🧠 Mentalidad</h3>
+<p class="text-xs text-neutral-400">Reescribe el reflejo</p>
+</a>
+<a class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 p-5 transition-all" href="#modulo-1-2">
+<div class="flex items-center justify-between mb-2">
+<span class="text-emerald-400 font-bold text-sm">1.2</span>
+<span class="text-xs text-neutral-500">~40 min</span>
+</div>
+<h3 class="font-semibold mb-1 group-hover:text-emerald-400 transition-colors">🧭 Método</h3>
+<p class="text-xs text-neutral-400">De «debería» a «voy a construirlo»</p>
+</a>
+<a class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 p-5 transition-all" href="#modulo-1-3">
+<div class="flex items-center justify-between mb-2">
+<span class="text-emerald-400 font-bold text-sm">1.3</span>
+<span class="text-xs text-neutral-500">~40 min</span>
+</div>
+<h3 class="font-semibold mb-1 group-hover:text-emerald-400 transition-colors">🛠️ Machine</h3>
+<p class="text-xs text-neutral-400">Boring es hermoso</p>
+</a>
+</div>
+</section>
+<!-- CONTEÚDO DETALHADO -->
+<h2 class="text-2xl font-bold mb-6">Contenido detallado</h2>
+<!-- ==================== MÓDULO 1.1 ==================== -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 mb-6" id="modulo-1-1">
+<div class="p-6 border-b border-dark-600">
+<div class="flex items-center justify-between mb-2">
+<span class="text-emerald-400 font-bold">1.1</span>
+<span class="text-xs text-neutral-500">~35 min</span>
+</div>
+<h3 class="text-2xl font-bold mb-2">🧠 Mentalidad — Cómo pensar</h3>
+<p class="text-neutral-400 text-sm">La primera M es la más importante: sin cambiar cómo piensas sobre la IA, ninguna herramienta lo resuelve. Siete temas que reescriben el reflejo: de «¿debo hacer esto?» a «¿cómo puede hacer esto la IA?».</p>
+</div>
+<!-- Tópicos -->
+<div class="divide-y divide-dark-600">
+<!-- Tópico 1 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">1</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">🔄 Default Shift</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">Antes de cada tarea: "¿cómo podría hacer esto la IA?"</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">El Default Shift es el hábito de hacerte una pregunta antes de cualquier tarea: "¿cómo podría hacer esto la IA?"; y si no puede hacerlo al 100 %, "¿y el primer 30 %?". La pregunta real no es binaria: es "¿hasta qué punto se puede aprovechar la IA aquí?".</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">Sin este cambio, sigues haciendo manualmente tareas que podrían automatizarse parcial o totalmente, y ni siquiera te das cuenta. Ejemplo real: cambiar enlaces en más de 300 descripciones de YouTube llevaría horas; con el Default Shift, se convirtió en un script con Claude Code mientras ibas por agua.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>La pregunta es «¿hasta qué punto?», no «¿sí o no?»</li>
+<li>Incluso un 10% de apalancamiento ya cambia la ecuación con el tiempo</li>
+<li>Se vuelve algo físico — como aprender a escribir a máquina: inconsciente después de instalarlo</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 2 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">2</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">🎚️ «¿Hasta qué punto?» (nunca binario)</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">80%, 10%, 30% — no lo sabes hasta que preguntas</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">El pensamiento de apalancamiento no es todo o nada. Para cada tarea, la respuesta correcta puede ser «la IA hace el 80 %» o «la IA hace el primer 10 % y yo lo perfecciono». La escala va del 0 al 100 %, no es un interruptor.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">La mayoría de las personas hace una prueba, la IA se equivoca en parte y concluyen «no funciona». Con el espectro de apalancamiento, evalúas dónde aporta valor la IA y la usas ahí, sin exigirle perfección donde no la ofrece.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>Espectro 0–100%: ¿en qué punto de este espectro aporta valor la IA?</li>
+<li>La combinación de humano+IA suele ser mejor que cualquiera de los dos por separado</li>
+<li>Automatiza la parte que domina la IA; tú te encargas del resto</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 3 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">3</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">🚀 La IA es mejor de lo que piensas (y mejora más rápido)</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">Lo que falla hoy, inténtalo el próximo mes</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">La frontera de lo que la IA puede hacer avanza mes a mes. Una tarea imposible hoy puede ser trivial en 90 días. El operador con experiencia mantiene una lista de «lo intenté y no funcionó» y vuelve a probar periódicamente.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">Ejemplo real: infografías consideradas "imposibles" para la IA estuvieron listas tres meses después con un nuevo modelo. Quienes desistieron en el primer intento perdieron meses de ganancias. La curva de mejora de los modelos es exponencial.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>Mantén un «backlog de imposibles» — revísalo trimestralmente</li>
+<li>Modelos diferentes, misma tarea: los resultados pueden diferir mucho</li>
+<li>Prueba mínima viable: 5 minutos antes de descartarlo</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 4 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">4</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">🧩 Desglose de funciones</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">Tu cargo = funciones; funciones = microtareas automatizables</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">No automatizas todo el trabajo: desglosas el cargo en funciones, cada función en microtareas, y automatizas UNA pieza a la vez. Después las encadenas. Ejemplo: «automatizar un video de YouTube» → ideación, guion, título, thumbnail, descripción, respuestas, timestamps, analytics: cada uno es un candidato independiente.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">La trampa más común es intentar automatizar «todo de una vez» y no automatizar nada. Function Breakdown permite abordar cualquier cargo: elige una parte, demuestra que funciona y amplía.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>Cargo → lista de funciones → cada función en 5–10 microtareas</li>
+<li>Empieza por la microtarea más repetitiva y menos crítica</li>
+<li>Encadenamiento: el output del paso 1 = el input del paso 2</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 5 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">5</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">🔍 Curiosity Rule (anti dark-code)</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">Nunca aceptes sin preguntar por qué: activo vs. pasivo</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">Nunca aceptes el resultado de la IA sin preguntar por qué. Pide 3 alternativas, cuál es la mejor y por qué. Trata a la IA como una mentora, no como una máquina de ventas. «Si construiste algo y no puedes explicar cómo funciona, construiste un pasivo, no un activo»</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">El código oscuro —automatizaciones que nadie entiende cómo funcionan— se convierte en deuda técnica invisible. Cuando se rompe, nadie sabe cómo repararlo. Curiosity Rule garantiza que entiendas lo que construiste y puedas mantenerlo.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>"Muestra 3 alternativas y di cuál es mejor y por qué"</li>
+<li>Activo = entiendo + puedo explicar + puedo modificar</li>
+<li>Pasivo = funciona, pero es una caja negra — riesgo oculto</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 6 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">6</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">📉 Espera la caída</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">~20% menos de output durante las primeras 2 semanas — normal</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">Al adoptar nuevos workflows de IA, espera una caída de ~20% en la producción durante las primeras 1–2 semanas. Es el costo del aprendizaje. En 2 semanas, la línea de base se duplica, pero solo para quienes superan el Dip sin volver a la forma anterior.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">La mayoría abandona durante el Dip: «antes era más rápido». Y es verdad, durante 2 semanas. Saber que el Dip es temporal y necesario es lo que separa a quienes adoptan el hábito de quienes vuelven a los métodos antiguos.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>El Dip dura 1–2 semanas para la mayoría de las personas</li>
+<li>No abandones durante el Dip: es señal de que el aprendizaje está ocurriendo</li>
+<li>Después del Dip: la línea de base se duplica. Quienes no lo superan no experimentan esto</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 7 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">7</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">⚡ Falla rápido, aprende más rápido</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">Los primeros 10 errores enseñan más que 10 aciertos</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">Llega a tus primeros 10 errores de la forma más rápida y segura posible. El aprendizaje real está en los errores, no en los aciertos. Cada error revela un límite, un caso límite, una oportunidad de mejora que el acierto no mostraría.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">El perfeccionismo durante la fase de aprendizaje es enemigo del progreso. El operador con experiencia crea entornos seguros para equivocarse rápido — sandbox, bajo volumen, reversible — y aprende de cada fallo antes de ampliar.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>Error ≠ fracaso: es un dato de mejora recopilado antes de escalar</li>
+<li>Crea entornos reversibles para fallar de forma segura</li>
+<li>Registro de errores: qué falló, por qué, qué cambió — activo de aprendizaje</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Botões -->
+<div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+<button class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors" onclick="openModal('modal-1-1')">
+          Ver en Modal
+        </button>
+<a class="px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors" href="modulo-1-1.html">
+          Ver completo
+        </a>
+</div>
+</div>
+<!-- ==================== MÓDULO 1.2 ==================== -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 mb-6" id="modulo-1-2">
+<div class="p-6 border-b border-dark-600">
+<div class="flex items-center justify-between mb-2">
+<span class="text-emerald-400 font-bold">1.2</span>
+<span class="text-xs text-neutral-500">~40 min</span>
+</div>
+<h3 class="text-2xl font-bold mb-2">🧭 Método — Cómo decidir</h3>
+<p class="text-neutral-400 text-sm">La segunda M transforma la intuición en un sistema. Seis frameworks para pasar de «debería automatizar algo» a «esto es exactamente lo que voy a construir, por qué vale la pena y cómo medirlo».</p>
+</div>
+<!-- Tópicos -->
+<div class="divide-y divide-dark-600">
+<!-- Tópico 1 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">1</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">🎯 Find the Constraint</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">Empieza por la restricción, no por la oportunidad más emocionante</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">Dos preguntas poderosas que revelan dónde actuar: "Si mañana llegaran 500 clientes nuevos, ¿qué se rompería primero?" (cuellos de botella existentes) y "¿Qué te conseguiría 500 clientes mañana?" (oportunidad de crecimiento). El candidato correcto siempre está en una de esas dos.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">La trampa más común es automatizar lo que es fácil o emocionante, y no lo que tiene más impacto. Las dos preguntas clave te obligan a mirar la restricción real antes de elegir qué construir.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>Pregunta sobre cuellos de botella: ¿qué se rompería con un aumento repentino de escala?</li>
+<li>Pregunta de crecimiento: ¿qué desbloquea el siguiente nivel?</li>
+<li>Empieza por la restricción — tiene un ROI garantizado</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 2 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">2</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">🗑️ EAD — Eliminar, Automatizar, Delegar</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">En ese orden. No automatices el desperdicio.</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">El framework de tres pasos en orden obligatorio: (1) Eliminar: "¿y si simplemente dejamos de hacer esto?" Si nadie lo notaría, elimínalo. (2) Automatizar: solo después de confirmar que vale la pena que exista. (3) Delegar a una persona: cuando es complejo, variable y requiere criterio.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">Automatizar antes de eliminar es el error más costoso: escalas un proceso que no debería existir. EAD garantiza que primero cuestiones si la tarea debe existir antes de invertir en hacerla eficiente.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>"¿Y si paramos?" — prueba de 48h: ¿alguien se queja?</li>
+<li>No automatices el desperdicio: escala el problema</li>
+<li>Delegar ≠ abandonar — requiere una especificación clara y un SOP antes de delegar</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 3 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">3</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">📊 Regla de Oro 60/30/10</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">La automatización total rara vez es el objetivo real</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">La combinación saludable de un AIOS maduro: ~60% totalmente automatizado (se ejecuta sin ti), ~30% asistido por IA (una persona revisa antes de enviar), ~10% manual (criterio humano irreemplazable). Quien prometa 100% de automatización está vendiendo algo.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">Buscar el 100% de automatización es una trampa: desperdicia tiempo en casos extremos poco frecuentes y crea sistemas frágiles. El 60/30/10 es la proporción que genera una ganancia real sin sunk cost en edge cases.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>60% automático: alto volumen, bajo riesgo, patrón claro</li>
+<li>30% asistido: riesgo moderado, resultado externo, reputación en juego</li>
+<li>10% manual: decisiones únicas, de alto riesgo, con criterio insustituible</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 4 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">4</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">🗺️ Map the Process (5 elementos)</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">Si no se lo puedes explicar a una persona, no se lo puedes explicar a la IA</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">Antes de construir cualquier automatización, mapea 5 elementos: Trigger (qué la activa), Data Sources (de dónde vienen los datos), Data Transformations (qué cambia en los datos), Decision Points (dónde hay bifurcaciones), Destination (adónde va el resultado). Regla de oro: "si no puedes explicárselo a una persona, no puedes explicárselo a una IA."</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">Las automatizaciones sin mapa fallan de formas inesperadas. El Map de los 5 elementos obliga a tener claridad antes de escribir código y revela brechas de datos o permisos que aún no habías detectado.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>Trigger: ¿evento, horario, webhook, manual?</li>
+<li>Puntos de decisión: dónde se bifurca el flujo — cada uno es un paso de IA o determinístico</li>
+<li>Destino: ¿se envió un email, se guardó un archivo, se actualizó una línea?</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 5 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">5</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">📶 Autonomy Spectrum (L0→L4)</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">Predeterminado = el nivel más bajo que funciona</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">Cinco niveles de autonomía: L0 Manual (tú haces todo), L1 Suggested (la IA sugiere, tú ejecutas), L2 Drafted (la IA redacta, tú apruebas), L3 Supervised (la IA actúa, tú supervisas), L4 Autonomous (la IA actúa sola). Predeterminado = el nivel MÁS BAJO que funciona. Los workflows superan a los agentes. Sube de nivel solo después de demostrar el nivel anterior.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">La tentación es ir directamente a L4. Pero L4 sin la confianza construida en los niveles anteriores crea riesgos que solo descubres después de un error costoso. El Autonomy Spectrum es el mapa de progresión responsable.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>Los workflows superan a los agentes: flujo determinista &gt; agente libre</li>
+<li>Avanza un nivel a la vez después de demostrar confiabilidad</li>
+<li>L3 es el punto ideal para la mayoría de las automatizaciones de negocio</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 6 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">6</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">📈 Tie It to a KPI</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">"Porque es genial" no es un caso de negocio</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">Toda automatización debe encajar en uno de estos 3 grupos: (1) más clientes, (2) más valor por cliente, (3) menos costos. Y en una métrica específica: tiempo de respuesta, tasa de error, conversión. "Si tu automatización no mueve un número, ¿para qué construirla?"</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">Sin KPI, no hay forma de priorizar entre candidatos, medir el éxito ni saber cuándo desmontar. Tie to KPI también evita el desperdicio más común: construir automatizaciones que "parecen útiles" pero no mueven ningún número.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>3 categorías: más clientes · más valor · menos costo</li>
+<li>Métrica específica: ¿qué cambia en números cuando funcione?</li>
+<li>"Porque es genial" no es un caso de negocio — descalifica al candidato</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Botões -->
+<div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+<button class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors" onclick="openModal('modal-1-2')">
+          Ver en Modal
+        </button>
+<a class="px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors" href="modulo-1-2.html">
+          Ver completo
+        </a>
+</div>
+</div>
+<!-- ==================== MÓDULO 1.3 ==================== -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 mb-6" id="modulo-1-3">
+<div class="p-6 border-b border-dark-600">
+<div class="flex items-center justify-between mb-2">
+<span class="text-emerald-400 font-bold">1.3</span>
+<span class="text-xs text-neutral-500">~40 min</span>
+</div>
+<h3 class="text-2xl font-bold mb-2">🛠️ Máquina — Cómo construir y operar</h3>
+<p class="text-neutral-400 text-sm">La tercera M: la disciplina de construcción que hace que las automatizaciones sean fáciles de mantener, auditables y seguras. Boring is beautiful: siete principios que transforman POCs frágiles en operaciones confiables.</p>
+</div>
+<!-- Tópicos -->
+<div class="divide-y divide-dark-600">
+<!-- Tópico 1 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">1</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">🧱 Principio Lego</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">1 entrada / 1 salida por bloque — la modularidad es libertad</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">Construye en los pasos más pequeños posibles: 1 input + 1 output por bloque. El output del bloque 1 es el input del bloque 2. Empieza por los pasos sin IA (determinísticos). La regla de oro: cada bloque debe poder probarse, cambiarse o eliminarse sin afectar a los demás.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text=" neutral-300"="">Los bloques monolíticos son imposibles de depurar. Cuando algo se rompe en un sistema monolítico, todo se detiene. Con Lego, aíslas dónde está el problema, cambias solo ese bloque y el resto sigue funcionando.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>Primero, cero IA: los pasos deterministas son más confiables</li>
+<li>Contrato de bloque: input → transformación → output, siempre documentados</li>
+<li>Reemplazable: cualquier bloque puede mejorarse sin reescribir el sistema</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 2 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">2</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">🏭 Línea de ensamblaje</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">Cada paso de IA hace UN trabajo especializado</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">No construyas un generalista: separa las responsabilidades. Una llamada de IA para textos publicitarios, otra para razonar y otra para clasificar. Cada paso está especializado y puede sustituirse por un modelo diferente sin reescribir el pipeline.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">Los prompts que hacen todo al mismo tiempo son frágiles e impredecibles. Cuando falla un aspecto, no puedes saber cuál. Assembly Line hace que cada pieza se pueda depurar, reemplazar y optimizar de forma independiente.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>Especialización: cada llamada tiene 1 job description clara</li>
+<li>Cambio de modelo: usa el más barato donde alcance y el más capaz donde haga falta</li>
+<li>Depuración aislada: un fallo en un paso no afecta a los demás</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 3 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">3</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">✅ Cadena de validación</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">Valida cada bloque antes de encadenar el siguiente</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">No construyas todo el pipeline para probarlo al final. Bloque 1 → ejecútalo → confirma el resultado → usa ese resultado real como entrada del Bloque 2 → confirma → encadena. Valida cada paso con datos reales antes de avanzar.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">Los errores en el paso 1 que solo aparecen en el paso 5 se multiplican en todos los pasos intermedios. La Validation Chain reduce el costo de depuración al detectar problemas lo antes posible, antes de construir sobre ellos.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>Output real como input: no uses datos sintéticos para validar</li>
+<li>Criterio de avance: ¿qué necesitas ver para confiar en el bloque?</li>
+<li>Falla aislada: ¿en qué punto exacto el output se desvía de lo esperado?</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 4 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">4</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">🔁 Iteration Mindset</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">El perfeccionismo es enemigo del deploy</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">No existe un producto terminado con IA. Los scripts deterministas PUEDEN estar «listos»; los pasos de IA evolucionan siempre con los modelos nuevos. Publica el POC y amplíalo a partir del uso real. El perfeccionismo es enemigo del deploy: ninguna automatización perfecta en planificación supera a una imperfecta en producción.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">El uso real revela casos límite que ningún plan puede anticipar. Una automatización en producción con un 80 % de precisión genera aprendizajes que ninguna iteración en un entorno aislado puede generar. El Iteration Mindset prioriza el ciclo de retroalimentación sobre la perfección inicial.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>POC en producción &gt; MVP en planificación eterna</li>
+<li>Cada ciclo de uso real = oportunidad de refinamiento</li>
+<li>Un proceso determinístico se puede dar por terminado; uno asistido por IA siempre tiene una siguiente versión</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 5 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">5</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">🚲 Bike Method (implementación por fases)</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">Con ruedas de apoyo → Guiado → Supervisado → Manos libres</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">Cuatro fases de implementación: Fase 1 Con rueditas (manual, corriges a mano), Fase 2 Guiada (se ejecuta, pero revisas todo antes de que salga), Fase 3 Supervisada (autónoma, pero la monitoreas con alertas), Fase 4 Manos libres. Incluso con un 90% de confianza, empieza con el 10% del volumen. Umbrales: alto→automático, medio→cola de borradores, bajo→humano.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">Ir directamente a la Fase 4 es el error que provoca incidentes públicos. El Bike Method construye confianza en cada fase antes de avanzar y mantiene al operador al control incluso mientras la automatización gana autonomía progresivamente.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>Fase 1: volumen real, corrección manual — aprende los casos límite</li>
+<li>Fase 3: confianza alta, pero alertas activas — red de seguridad</li>
+<li>Umbrales: la puntuación de confianza determina si es automático / borrador / humano</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 6 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">6</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">🧑‍💼 Regla interna</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">IA = contratado el Día 1: identidad propia, solo lectura, sin tus credenciales</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">Trata a la IA como a un empleado desde el Día 1: identidad propia (email/cuentas separadas), solo lectura por defecto, nunca se hace pasar por ti (firma "asistente de IA de [nombre]"), sin credenciales personales, registro de auditoría completo, permisos con el alcance mínimo. "No confiarías tu cuenta bancaria a alguien que acabas de conocer."</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">Los operadores que dan acceso total desde el inicio crean riesgos legales y reputacionales. La Intern Rule define el estándar de seguridad que permite escalar: puedes ampliar los permisos a medida que se construye la confianza, pero nunca al revés.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>Identidad separada: no confundas a la IA contigo en las comunicaciones externas</li>
+<li>Solo lectura por defecto: escribir requiere aprobación explícita y justificación</li>
+<li>Registro de auditoría: cada acción registrada — cuándo, qué y por qué</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Tópico 7 -->
+<div class="topic-item p-4">
+<button class="w-full flex items-center space-x-3 text-left hover:bg-dark-700/50 rounded-lg p-2 -m-2 transition-colors" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">7</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="text-sm font-semibold">🔴 Kill Switch + Principios Rectores</span>
+</div>
+<p class="text-xs text-neutral-400 mt-0.5">Desmontar sin costo hundido — 3 principios fundamentales</p>
+</div>
+<svg class="w-4 h-4 text-neutral-500 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="topic-explanation mt-3 pl-9 space-y-3">
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Qué es</p>
+<p class="text-sm text-neutral-300">Si una automatización necesita parches constantemente, produce baja calidad o cuesta más de lo que ahorra: desmóntala. Sin costos hundidos. Los 3 principios fundamentales que rigen todo AIS-OS: (1) Lo simple es hermoso, (2) Los pasos deterministas terminan; los pasos de IA evolucionan siempre, (3) Falla rápido, aprende más rápido.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Por qué aprender</p>
+<p class="text-sm text-neutral-300">Sin un Kill Switch definido, las automatizaciones malas quedan activas por inercia: consumen tiempo de mantenimiento y producen resultados malos en silencio. Los principios rectores son el filtro final: si la automatización infringe cualquiera de los tres, es candidata a ser desmontada.</p>
+</div>
+<div>
+<p class="text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-1">Conceptos clave</p>
+<ul class="text-sm text-neutral-300 space-y-1 list-disc list-inside">
+<li>Criterios de descarte: parches frecuentes, baja calidad, costo &gt; retorno</li>
+<li>Boring es hermoso: predecible y fácil de mantener &gt; impresionante y frágil</li>
+<li>Desmontar es una victoria: libera capacidad para construir algo mejor</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Botões -->
+<div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+<button class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors" onclick="openModal('modal-1-3')">
+          Ver en Modal
+        </button>
+<a class="px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors" href="modulo-1-3.html">
+          Ver completo
+        </a>
+</div>
+</div>
+<!-- NAVEGAÇÃO FIM -->
+<div class="flex justify-between items-center py-8 border-t border-dark-600 mt-8">
+<a class="flex items-center space-x-2 text-neutral-400 hover:text-emerald-400 transition-colors" href="../../index.html">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-sm">Volver al inicio</span>
+</a>
+<a class="flex items-center space-x-2 text-neutral-400 hover:text-blue-400 transition-colors" href="../trilha2/index.html">
+<span class="text-sm">Próxima ruta: Arquitectura (4 Cs)</span>
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+</main>
+<!-- FOOTER C -->
+<footer class="border-t border-dark-600 py-8 mt-16">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm space-y-1">
+<p>⚙️ AIS-OS — Tu sistema operativo de IA en Claude Code · <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" target="_blank">INEMA.CLUB</a> · 2026</p>
+<p>Basado en el kit AIS-OS (licencia MIT). The Three Ms of AI™ y The Four Cs of an AIOS™ son marcas de Nate Herk. © 2026 Nate Herk.</p>
+</div>
+</footer>
+<!-- MODAIS -->
+<div class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" id="modal-1-1" onclick="if(event.target === this) closeModal()">
+<div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+<div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+<div class="flex items-center space-x-3">
+<span class="text-emerald-400 font-bold">1.1</span>
+<span class="font-semibold">🧠 Mentalidad — Cómo pensar</span>
+</div>
+<button class="text-neutral-400 hover:text-white text-2xl leading-none" onclick="closeModal()">×</button>
+</div>
+<iframe class="flex-1 w-full rounded-b-xl" src="modulo-1-1.html"></iframe>
+</div>
+</div>
+<div class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" id="modal-1-2" onclick="if(event.target === this) closeModal()">
+<div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+<div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+<div class="flex items-center space-x-3">
+<span class="text-emerald-400 font-bold">1.2</span>
+<span class="font-semibold">🧭 Método — Cómo decidir</span>
+</div>
+<button class="text-neutral-400 hover:text-white text-2xl leading-none" onclick="closeModal()">×</button>
+</div>
+<iframe class="flex-1 w-full rounded-b-xl" src="modulo-1-2.html"></iframe>
+</div>
+</div>
+<div class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" id="modal-1-3" onclick="if(event.target === this) closeModal()">
+<div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+<div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+<div class="flex items-center space-x-3">
+<span class="text-emerald-400 font-bold">1.3</span>
+<span class="font-semibold">🛠️ Máquina — Cómo construir y operar</span>
+</div>
+<button class="text-neutral-400 hover:text-white text-2xl leading-none" onclick="closeModal()">×</button>
+</div>
+<iframe class="flex-1 w-full rounded-b-xl" src="modulo-1-3.html"></iframe>
+</div>
+</div>
+<!-- SCRIPTS D2 -->
+<script>
+    function toggleTopic(b){const t=b.closest('.topic-item'),e=t.querySelector('.topic-explanation'),c=b.closest('.bg-dark-800');c.querySelectorAll('.topic-explanation.active').forEach(x=>{if(x!==e)x.classList.remove('active');});e.classList.toggle('active');}
+    function openModal(id){const m=document.getElementById(id);if(m){m.classList.remove('hidden');document.body.style.overflow='hidden';}}
+    function closeModal(){document.querySelectorAll('.modal').forEach(m=>m.classList.add('hidden'));document.body.style.overflow='auto';}
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+    const themeToggle=document.getElementById('theme-toggle'),tdi=document.getElementById('theme-toggle-dark-icon'),tli=document.getElementById('theme-toggle-light-icon'),H=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){tdi.classList.remove('hidden');H.classList.remove('dark');}else{tli.classList.remove('hidden');}
+    themeToggle.addEventListener('click',()=>{tdi.classList.toggle('hidden');tli.classList.toggle('hidden');H.classList.toggle('dark');localStorage.setItem('theme',H.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

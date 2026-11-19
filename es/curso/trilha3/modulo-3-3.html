@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>M3.3 — /level-up: 1 automatización por semana | AIS-OS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: {
+      primary: '#FACC15',
+      dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+    } } } }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    /* Light mode base */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* Light mode — cores de acento (trilha purple) */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124, 58, 237, 0.18); }
+    html:not(.dark) .from-purple-900\/30 { --tw-gradient-from: rgba(88, 28, 135, 0.15); }
+    html:not(.dark) .from-purple-900\/40 { --tw-gradient-from: rgba(88, 28, 135, 0.18); }
+
+    /* Light mode — remove gradientes */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+
+    /* Light mode — cores especiais */
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+
+    /* Light mode — nav */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+
+    /* Dark mode — bordas suavizadas */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+
+    /* SVG light mode */
+    html:not(.dark) svg[role="img"] { filter: saturate(.82) brightness(.96); }
+
+    /* Pulse animation para SVG */
+    @keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+      .wf-a:nth-child(2){animation-delay:.25s} .wf-a:nth-child(3){animation-delay:.5s}
+      .wf-a:nth-child(4){animation-delay:.75s} .wf-a:nth-child(5){animation-delay:1s}
+    }
+  </style>
+<link href="https://inematds.github.io/ais-os/curso/trilha3/modulo-3-3.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/ais-os/en/curso/trilha3/modulo-3-3.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/ais-os/es/curso/trilha3/modulo-3-3.html" hreflang="es" rel="alternate"/></head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha3/modulo-3-3.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="../../../en/curso/trilha3/modulo-3-3.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">EN</a><a href="modulo-3-3.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">ES</a></div>
+<!-- NAV B3 — T3 ativa (purple) -->
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-14">
+<div class="flex items-center space-x-4">
+<a class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300" href="../../index.html">
+<span class="text-2xl">⚙️</span>
+<span class="font-bold text-lg hidden sm:inline">AIS-OS</span>
+</a>
+<span class="text-neutral-600">|</span>
+<a class="text-sky-400 hover:text-sky-300 text-sm font-medium" href="https://inema.club" target="_blank">INEMA.CLUB</a>
+</div>
+<div class="flex items-center space-x-1 sm:space-x-2">
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" href="../trilha1/index.html"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Cerebro (3 Ms)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors" href="../trilha2/index.html"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitectura (4 Cs)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10" href="index.html"><span class="sm:hidden">T3</span><span class="hidden sm:inline">En la práctica</span></a>
+<button class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2" id="theme-toggle">
+<svg class="hidden w-4 h-4 text-yellow-400" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+<svg class="hidden w-4 h-4 text-yellow-400" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- BREADCRUMB -->
+<nav class="flex items-center space-x-2 text-sm text-neutral-500 mb-8">
+<a class="hover:text-purple-400 transition-colors" href="../../index.html">Inicio</a>
+<span>›</span>
+<a class="hover:text-purple-400 transition-colors" href="index.html">Ruta 3</a>
+<span>›</span>
+<span class="text-purple-400">Módulo 3.3</span>
+</nav>
+<!-- HEADER -->
+<header class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-2xl border border-purple-500/30 p-8 mb-10">
+<div class="inline-block px-3 py-1 bg-purple-500/20 rounded-full text-purple-400 text-xs font-bold uppercase tracking-wider mb-4">MÓDULO 3.3</div>
+<h1 class="text-3xl sm:text-4xl font-bold text-neutral-100 mb-3">📈 /level-up: 1 automatización por semana</h1>
+<p class="text-neutral-300 text-lg mb-6">Una entrevista, un artefacto. Recorre los 3 Ms cada semana y publica UNA automatización real, hasta que tu cerebro vea oportunidades por sí solo.</p>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+<div class="bg-dark-800/60 rounded-xl p-4 text-center">
+<div class="text-2xl font-bold text-purple-400">7</div>
+<div class="text-xs text-neutral-500 mt-1">Temas</div>
+</div>
+<div class="bg-dark-800/60 rounded-xl p-4 text-center">
+<div class="text-2xl font-bold text-purple-400">40</div>
+<div class="text-xs text-neutral-500 mt-1">Minutos</div>
+</div>
+<div class="bg-dark-800/60 rounded-xl p-4 text-center">
+<div class="text-2xl font-bold text-purple-400">Inter</div>
+<div class="text-xs text-neutral-500 mt-1">Nivel</div>
+</div>
+<div class="bg-dark-800/60 rounded-xl p-4 text-center">
+<div class="text-2xl font-bold text-purple-400">Ritual</div>
+<div class="text-xs text-neutral-500 mt-1">Tipo</div>
+</div>
+</div>
+</header>
+<!-- SVG FUTURISTA — Pipeline Mindset→Method→Machine → 1 Artefato -->
+<div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-6 mb-10">
+<svg aria-label="Pipeline /level-up: las tres fases Mindset, Method y Machine convergen en un artefacto semanal" class="w-full h-auto" role="img" viewbox="0 0 720 240" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="m33-grad-p" x1="0" x2="1" y1="0" y2="1">
+<stop offset="0" stop-color="#c084fc"></stop><stop offset="1" stop-color="#a855f7"></stop>
+</lineargradient>
+<lineargradient id="m33-grad-c" x1="0" x2="1" y1="0" y2="1">
+<stop offset="0" stop-color="#38bdf8"></stop><stop offset="1" stop-color="#0ea5e9"></stop>
+</lineargradient>
+<filter height="180%" id="m33-glow" width="180%" x="-40%" y="-40%">
+<fegaussianblur result="b" stddeviation="1.8"></fegaussianblur>
+<femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<pattern height="32" id="m33-grid" patternunits="userSpaceOnUse" width="32">
+<circle cx="1.3" cy="1.3" fill="#a855f7" opacity="0.12" r="1.3"></circle>
+</pattern>
+<marker id="m33-ah" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5">
+<path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#c084fc"></path>
+</marker>
+<marker id="m33-ahc" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5">
+<path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"></path>
+</marker>
+</defs>
+<!-- grid de fundo -->
+<rect fill="url(#m33-grid)" height="240" rx="12" width="720"></rect>
+<!-- caixas das 3 fases -->
+<!-- Fase 1: Mindset -->
+<rect class="wf-a" fill="#1a1230" height="120" rx="10" stroke="#c084fc" stroke-width="2" width="140" x="20" y="60"></rect>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="90" y="88">FASE 1</text>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="14" font-weight="700" text-anchor="middle" x="90" y="108">🧠 Mentalidad</text>
+<text fill="#a78bfa" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="90" y="128">Encontrar al candidato</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="90" y="146">5 preguntas →</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="90" y="163">1-3 candidatos</text>
+<!-- Fase 2: Method -->
+<rect class="wf-a" fill="#1a1230" height="120" rx="10" stroke="#c084fc" stroke-width="2" width="140" x="210" y="60"></rect>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="280" y="88">FASE 2</text>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="14" font-weight="700" text-anchor="middle" x="280" y="108">🧭 Método</text>
+<text fill="#a78bfa" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="280" y="128">Definir el alcance de UNO</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="280" y="146">Buscar → EAD →</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="280" y="163">Map → KPI</text>
+<!-- Fase 3: Machine -->
+<rect class="wf-a" fill="#1a1230" height="120" rx="10" stroke="#c084fc" stroke-width="2" width="140" x="400" y="60"></rect>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="470" y="88">FASE 3</text>
+<text fill="#e9d5ff" font-family="Inter,sans-serif" font-size="14" font-weight="700" text-anchor="middle" x="470" y="108">🛠 Machine</text>
+<text fill="#a78bfa" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="470" y="128">Construir</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="470" y="146">Boring-is-</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="470" y="163">Beautiful</text>
+<!-- setas entre fases -->
+<line class="wf-a" marker-end="url(#m33-ah)" stroke="#c084fc" stroke-width="1.5" x1="161" x2="208" y1="120" y2="120"></line>
+<line class="wf-a" marker-end="url(#m33-ah)" stroke="#c084fc" stroke-width="1.5" x1="351" x2="398" y1="120" y2="120"></line>
+<line class="wf-a" marker-end="url(#m33-ahc)" stroke="#38bdf8" stroke-width="1.5" x1="541" x2="588" y1="120" y2="120"></line>
+<!-- Artefato final (ciano) -->
+<rect class="wf-a" fill="#0e1b26" filter="url(#m33-glow)" height="120" rx="10" stroke="#38bdf8" stroke-width="2" width="110" x="590" y="60"></rect>
+<text font-family="Inter,sans-serif" font-size="20" text-anchor="middle" x="645" y="96">📦</text>
+<text fill="#38bdf8" font-family="Inter,sans-serif" font-size="11" font-weight="700" text-anchor="middle" x="645" y="118">1 artefacto</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="645" y="136">por semana</text>
+<text fill="#7dd3fc" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="645" y="154">bike-method-</text>
+<text fill="#7dd3fc" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="645" y="168">phase: 1</text>
+<!-- label topo -->
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="13" font-weight="600" opacity="0.8" text-anchor="middle" x="360" y="24">/level-up · una entrevista = un artefacto</text>
+<line opacity="0.3" stroke="#c084fc" stroke-dasharray="6 4" stroke-width="0.8" x1="160" x2="560" y1="32" y2="32"></line>
+</svg>
+</div>
+<!-- TÍTULO CONTEÚDO DETALHADO -->
+<h2 class="text-2xl font-bold mb-8">Contenido detallado</h2>
+<!-- TÓPICO 1 -->
+<section class="mb-10" id="topico-1">
+<div class="flex items-start space-x-5 mb-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
+<span class="text-purple-400 font-bold text-lg">1</span>
+</div>
+<div>
+<h2 class="text-2xl font-bold text-neutral-100 mb-1">Qué hace /level-up</h2>
+<p class="text-neutral-400 text-sm">La skill semanal que transforma 3 Ms en un artefacto real</p>
+</div>
+</div>
+<p class="text-neutral-300 mb-6">O <code class="bg-dark-700 px-1.5 py-0.5 rounded text-purple-400 font-mono text-sm">/level-up</code> es un ritual semanal que recorre las 3 Ms (Mindset → Method → Machine) en busca de UNA automatización para publicar. La regla central: <strong class="text-white">una entrevista = un artefacto</strong>. Nada más y nada menos.</p>
+<div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+<span class="mr-2">🎯</span> ¿Por qué solo UN artefacto?
+        </h3>
+<p class="text-neutral-300 mb-4">Hacer dos es intentar hacer cero. La restricción es intencional: obliga a priorizar de verdad, entregar en días (no semanas) y crear el ciclo de feedback que enseña tu criterio para detectar el apalancamiento.</p>
+<ul class="space-y-2 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span><strong class="text-white">4–6 ejecuciones</strong> y empiezas a ver oportunidades sin necesitar la skill</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span>El brain-rewire ocurre mediante el hábito, no la reflexión</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span>Cada run registra una <em>decisión</em> en el log — evidencia acumulada de tu sistema</span></li>
+</ul>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ Qué ES /level-up</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Una entrevista estructurada que TÚ conduces</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Un ritual semanal con un resultado tangible</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Un instalador de los 3 Ms en tu cerebro</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Un acelerador del juicio sobre el apalancamiento</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ Qué NO ES /level-up</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Un coach (tú piensas, la skill te entrevista)</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Un planner con múltiples candidatos</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Un análisis del portafolio de automatizaciones</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Un generador de roadmap a largo plazo</span></li>
+</ul>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600 text-center">
+<div class="text-2xl mb-1">🧠</div>
+<div class="text-xs font-semibold text-purple-400">Mindset</div>
+<div class="text-xs text-neutral-500 mt-1">Encontrar al candidato</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600 text-center">
+<div class="text-2xl mb-1">🧭</div>
+<div class="text-xs font-semibold text-purple-400">Method</div>
+<div class="text-xs text-neutral-500 mt-1">Definir el alcance de UNO</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600 text-center">
+<div class="text-2xl mb-1">🛠</div>
+<div class="text-xs font-semibold text-purple-400">Machine</div>
+<div class="text-xs text-neutral-500 mt-1">Construir</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600 text-center">
+<div class="text-2xl mb-1">📦</div>
+<div class="text-xs font-semibold text-purple-400">Artefacto</div>
+<div class="text-xs text-neutral-500 mt-1">1 por semana</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 2 -->
+<section class="mb-10" id="topico-2">
+<div class="flex items-start space-x-5 mb-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
+<span class="text-purple-400 font-bold text-lg">2</span>
+</div>
+<div>
+<h2 class="text-2xl font-bold text-neutral-100 mb-1">Fase 1 — Mindset (encontrar al candidato)</h2>
+<p class="text-neutral-400 text-sm">Las 5 preguntas que revelan dónde se esconde tu mayor potencial</p>
+</div>
+</div>
+<p class="text-neutral-300 mb-6">La Fase 1 es una entrevista de diagnóstico. Respondes 5 preguntas; la skill clasifica a los candidatos según su potencial de apalancamiento. El objetivo no es enumerarlo todo: es encontrar de 1 a 3 candidatos que merezcan pasar al Method.</p>
+<!-- Box mono: as 5 perguntas -->
+<div class="bg-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6 font-mono text-sm">
+<div class="text-purple-400 font-bold mb-4 font-sans text-base">🔍 Las 5 preguntas de la Fase 1</div>
+<div class="space-y-3 text-neutral-300">
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 font-bold w-6 flex-shrink-0">P1</span>
+<span>Qué hiciste <strong class="text-white">3 o más veces</strong> ¿en las últimas semanas?</span>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 font-bold w-6 flex-shrink-0">P2</span>
+<span>Hay algo <strong class="text-white">manual o copiar y pegar</strong> ¿qué haces cada semana?</span>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 font-bold w-6 flex-shrink-0">P3</span>
+<span>Existe una tarea que <strong class="text-white">"un pasante inteligente podría encargarse"</strong> ¿si escribieras el paso a paso?</span>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 font-bold w-6 flex-shrink-0">P4</span>
+<span>Si <strong class="text-white">si llegaran 500 clientes mañana</strong>, ¿qué fallaría primero?</span>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 font-bold w-6 flex-shrink-0">P5</span>
+<span>Qué harías para <strong class="text-white">conseguir 500 clientes</strong>?</span>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-dark-600 text-neutral-500 text-xs font-sans">
+          → Resultado: 1–3 candidatos clasificados por apalancamiento estimado
+        </div>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">💡</span> Consejo práctico: no fuerces candidatos
+        </h3>
+<p class="text-neutral-300">Si respondes las 5 preguntas y no encuentras ningún candidato obvio, eso es información valiosa: tu sistema actual está bien operado. Regístralo en el log y sáltate la semana. Forzar un candidato débil genera un artefacto que nadie va a usar.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600">
+<div class="text-xs font-semibold text-purple-400 mb-1">Frecuencia</div>
+<div class="text-xs text-neutral-400">3+ veces = patrón real</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600">
+<div class="text-xs font-semibold text-purple-400 mb-1">Manual</div>
+<div class="text-xs text-neutral-400">Copiar y pegar = oportunidad</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600">
+<div class="text-xs font-semibold text-purple-400 mb-1">Escala</div>
+<div class="text-xs text-neutral-400">500x revela el cuello de botella</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600">
+<div class="text-xs font-semibold text-purple-400 mb-1">Resultado</div>
+<div class="text-xs text-neutral-400">1–3 candidatos clasificados</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 3 -->
+<section class="mb-10" id="topico-3">
+<div class="flex items-start space-x-5 mb-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
+<span class="text-purple-400 font-bold text-lg">3</span>
+</div>
+<div>
+<h2 class="text-2xl font-bold text-neutral-100 mb-1">Fase 2 — Método (delimitar uno)</h2>
+<p class="text-neutral-400 text-sm">Los 5 pasos del Bike Method aplicados al candidato elegido</p>
+</div>
+</div>
+<p class="text-neutral-300 mb-6">La Fase 2 toma al candidato con mayor potencial de apalancamiento y lo somete a 5 pasos obligatorios. Si algún paso no se completa —especialmente el KPI—, el proceso se detiene. <strong class="text-white">Sin KPI, no hay artefacto.</strong></p>
+<!-- Timeline: os 5 passos -->
+<div class="space-y-4 mb-6">
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
+<span class="text-purple-400 font-bold">1</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Encontrar la restricción</h4>
+<p class="text-sm text-neutral-400 mb-2">Identificar el cuello de botella real</p>
+<p class="text-neutral-300 text-sm">¿Qué restricción alivia este candidato? Nombra la restricción antes de construir; sin eso, optimizas la parte equivocada.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
+<span class="text-purple-400 font-bold">2</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">EAD — Eliminar antes de delegar</h4>
+<p class="text-sm text-neutral-400 mb-2">La pregunta contra el gold plating</p>
+<p class="text-neutral-300 text-sm">Puedo <em>eliminar</em> esta tarea en lugar de automatizarla? Si la respuesta es sí y «nada se rompe», registra la victoria y alégrate. La mejor automatización es la que no hace falta.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
+<span class="text-purple-400 font-bold">3</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Map — 5 elementos</h4>
+<p class="text-sm text-neutral-400 mb-2">Diseñar el flujo antes de construir</p>
+<p class="text-neutral-300 text-sm">Trigger · Input · Proceso · Output · Receptor. Los 5 elementos que definen el artefacto. Si no puedes completar los 5, el alcance es impreciso.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
+<span class="text-purple-400 font-bold">4</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Autonomía — nivel más bajo como predeterminado</h4>
+<p class="text-sm text-neutral-400 mb-2">¿Cuánta autonomía tendrá el artefacto?</p>
+<p class="text-neutral-300 text-sm">Predeterminado: el nivel más bajo que resuelve el problema. Más autonomía = más riesgo. Empieza de forma conservadora y escala solo si los datos lo justifican.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
+<span class="text-purple-400 font-bold">5</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600 border-l-2 border-l-primary">
+<h4 class="font-semibold text-white mb-1">KPI — obligatorio; si no, se detiene</h4>
+<p class="text-sm text-neutral-400 mb-2">Cubo + métrica · si no los tienes, no lo construyas</p>
+<p class="text-neutral-300 text-sm">Define: <em>qué categoría mide el éxito</em> (tiempo, dinero, calidad, riesgo) y <em>qué número objetivo</em>. Sin KPI, nunca sabrás si el artefacto valió la pena. /level-up se detiene aquí si no se define el KPI.</p>
+</div>
+</div>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">⚡</span> Consejo práctico: EAD antes del Map
+        </h3>
+<p class="text-neutral-300">Siempre ejecuta EAD antes de Map. Construir el mapa de una tarea que se podía eliminar crea apego al artefacto, y el apego es el enemigo de la simplicidad. Pregunta primero: "¿y si simplemente dejara de hacer esto?"</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+<div class="bg-dark-800 rounded-xl p-3 border border-dark-600 text-center"><div class="text-xs font-semibold text-purple-400">Buscar</div></div>
+<div class="bg-dark-800 rounded-xl p-3 border border-dark-600 text-center"><div class="text-xs font-semibold text-purple-400">EAD</div></div>
+<div class="bg-dark-800 rounded-xl p-3 border border-dark-600 text-center"><div class="text-xs font-semibold text-purple-400">Map</div></div>
+<div class="bg-dark-800 rounded-xl p-3 border border-dark-600 text-center"><div class="text-xs font-semibold text-purple-400">Autonomy</div></div>
+<div class="bg-dark-800 rounded-xl p-3 border border-primary/40 text-center"><div class="text-xs font-semibold text-primary">KPIs ⚡</div></div>
+</div>
+</section>
+<!-- TÓPICO 4 -->
+<section class="mb-10" id="topico-4">
+<div class="flex items-start space-x-5 mb-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
+<span class="text-purple-400 font-bold text-lg">4</span>
+</div>
+<div>
+<h2 class="text-2xl font-bold text-neutral-100 mb-1">Fase 3 — Máquina (construir)</h2>
+<p class="text-neutral-400 text-sm">Las 4 opciones de entrega: Boring-is-Beautiful como regla de oro</p>
+</div>
+</div>
+<p class="text-neutral-300 mb-6">La Fase 3 pregunta: <strong class="text-white">"¿Cómo quieres hacer el ship?"</strong> Hay 4 opciones, ordenadas de la más sencilla a la más compleja. El default siempre es la <em>la mayor opción posible SIN IA</em> que resuelve el problema.</p>
+<!-- Grid escada das 4 opções -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<div class="bg-dark-800 rounded-xl border border-emerald-500/30 p-5">
+<div class="flex items-center space-x-3 mb-3">
+<span class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm">1</span>
+<div>
+<div class="font-semibold text-white text-sm">Prompt guardado</div>
+<div class="text-xs text-neutral-500">Opción 1 · sin infraestructura</div>
+</div>
+</div>
+<p class="text-xs text-neutral-400">Un texto de instrucciones guardado en un archivo o una herramienta. Lo pegas, lo revisas y lo envías. Cero código, cero automatización. Pero es un artefacto real que reduce la fricción cognitiva cada vez.</p>
+<div class="mt-3 text-xs text-emerald-400 font-mono">→ skill.md / prompt.txt</div>
+</div>
+<div class="bg-dark-800 rounded-xl border border-purple-500/30 p-5">
+<div class="flex items-center space-x-3 mb-3">
+<span class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold text-sm">2</span>
+<div>
+<div class="font-semibold text-white text-sm">Skill determinista</div>
+<div class="text-xs text-neutral-500">Opción 2 · lógica fija</div>
+</div>
+</div>
+<p class="text-xs text-neutral-400">Una skill con lógica if/then, sin IA. Script, automatización, hoja de cálculo con fórmulas. Predecible, auditable, costo de inferencia cero. Prefiere siempre esta opción cuando la lógica se pueda codificar.</p>
+<div class="mt-3 text-xs text-purple-400 font-mono">→ script.py / n8n workflow</div>
+</div>
+<div class="bg-dark-800 rounded-xl border border-blue-500/30 p-5">
+<div class="flex items-center space-x-3 mb-3">
+<span class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-sm">3</span>
+<div>
+<div class="font-semibold text-white text-sm">Skill con asistencia de IA</div>
+<div class="text-xs text-neutral-500">Opción 3 · se necesita criterio</div>
+</div>
+</div>
+<p class="text-xs text-neutral-400">Una skill que llama a un LLM para las partes donde se necesita criterio (clasificar, resumir, redactar). Sigue siendo controlada: tú defines la entrada y la salida; la IA completa el medio.</p>
+<div class="mt-3 text-xs text-blue-400 font-mono">→ tool use + structured output</div>
+</div>
+<div class="bg-dark-800 rounded-xl border border-red-500/20 p-5">
+<div class="flex items-center space-x-3 mb-3">
+<span class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 font-bold text-sm">4</span>
+<div>
+<div class="font-semibold text-white text-sm">Subagente</div>
+<div class="text-xs text-neutral-500">Opción 4 · último recurso</div>
+</div>
+</div>
+<p class="text-xs text-neutral-400">Un agente autónomo que toma decisiones por su cuenta. Alto costo, alto riesgo y difícil de auditar. Úsalo SOLO cuando las 3 opciones anteriores sean realmente insuficientes.</p>
+<div class="mt-3 text-xs text-red-400 font-mono">→ solo cuando sea necesario</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ Boring-is-Beautiful: HACER</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Elige siempre la opción más sencilla que resuelva el problema</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Prefiere la lógica determinista cuando sea posible</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Lanza en horas, no en semanas</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Escala la complejidad solo con datos que lo justifiquen</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ Boring-is-Beautiful: EVITAR</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Ir directamente a sub-agent porque parece más poderoso</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Agregar IA donde basta con una lógica simple</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Construir la infraestructura antes de validar el uso</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Saltarte la Fase 1 por pensar que el candidato es obvio</span></li>
+</ul>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600 text-center">
+<div class="text-xl mb-1">📝</div>
+<div class="text-xs font-semibold text-emerald-400">Opción 1</div>
+<div class="text-xs text-neutral-500">Prompt guardado</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600 text-center">
+<div class="text-xl mb-1">⚙️</div>
+<div class="text-xs font-semibold text-purple-400">Opción 2</div>
+<div class="text-xs text-neutral-500">Skill determinista</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600 text-center">
+<div class="text-xl mb-1">🤖</div>
+<div class="text-xs font-semibold text-blue-400">Opción 3</div>
+<div class="text-xs text-neutral-500">Skill con asistencia de IA</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600 text-center">
+<div class="text-xl mb-1">🔴</div>
+<div class="text-xs font-semibold text-red-400">Opción 4</div>
+<div class="text-xs text-neutral-500">Subagente</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 5 -->
+<section class="mb-10" id="topico-5">
+<div class="flex items-start space-x-5 mb-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
+<span class="text-purple-400 font-bold text-lg">5</span>
+</div>
+<div>
+<h2 class="text-2xl font-bold text-neutral-100 mb-1">Bloqueo de Bike Method</h2>
+<p class="text-neutral-400 text-sm">El frontmatter que deja bloqueado por defecto todo artefacto en la Fase 1</p>
+</div>
+</div>
+<p class="text-neutral-300 mb-6">Todo artefacto creado por /level-up nace con un frontmatter estandarizado. El campo <code class="bg-dark-700 px-1.5 py-0.5 rounded text-purple-400 font-mono text-sm">bike-method-phase: 1</code> no es decoración — es el bloqueo que impide que el artefacto se salte la validación manual antes de ejecutarse de forma autónoma.</p>
+<!-- Box mono: frontmatter -->
+<div class="bg-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6 font-mono text-sm">
+<div class="text-purple-400 font-bold mb-3 font-sans text-base">📄 Frontmatter obligatorio de cada artefacto</div>
+<div class="text-neutral-300 leading-relaxed">
+<span class="text-neutral-500">---</span><br/>
+<span class="text-purple-400">title</span><span class="text-neutral-400">: </span><span class="text-emerald-400">"[nombre del artefacto]"</span><br/>
+<span class="text-purple-400">created</span><span class="text-neutral-400">: </span><span class="text-yellow-400">2026-06-01</span><br/>
+<span class="text-purple-400">responsable</span><span class="text-neutral-400">: </span><span class="text-emerald-400">"[tu nombre]"</span><br/>
+<span class="text-purple-400">bike-method-phase</span><span class="text-neutral-400">: </span><span class="text-red-400">1</span> <span class="text-neutral-600"># LOCK — no avances sin validación manual</span><br/>
+<span class="text-purple-400">kpi-balde</span><span class="text-neutral-400">: </span><span class="text-emerald-400">"[tiempo|dinero|calidad|riesgo]"</span><br/>
+<span class="text-purple-400">kpi-target</span><span class="text-neutral-400">: </span><span class="text-emerald-400">"[métrica y número]"</span><br/>
+<span class="text-purple-400">autonomy-level</span><span class="text-neutral-400">: </span><span class="text-yellow-400">1</span> <span class="text-neutral-600"># 1=manual-review; 2=notif; 3=auto</span><br/>
+<span class="text-neutral-500">---</span>
+</div>
+</div>
+<div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+<span class="mr-2">🔒</span> ¿Por qué el lock en la Fase 1?
+        </h3>
+<p class="text-neutral-300 mb-4">El Bike Method define 3 fases de madurez de un artefacto: <strong class="text-white">Fase 1</strong> (validación manual, revisas cada resultado), <strong class="text-white">Fase 2</strong> (notificación, recibes una alerta, pero el artefacto actúa), <strong class="text-white">Fase 3</strong> (totalmente autónomo). Todo artefacto empieza en la 1.</p>
+<ul class="space-y-2 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span>Avanzar de fase requiere <em>edición explícita</em> del frontmatter — no es automático</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span>La pantalla de cierre de /level-up recuerda: «revisa manualmente antes de confiar»</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span>El log de decisiones registra cada cambio de fase con su justificación</span></li>
+</ul>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+<div class="bg-dark-800 rounded-xl p-4 border border-emerald-500/30">
+<div class="text-xs font-semibold text-emerald-400 mb-1">Fase 1 · Lock</div>
+<div class="text-xs text-neutral-400">Validación manual obligatoria</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-yellow-500/30">
+<div class="text-xs font-semibold text-yellow-400 mb-1">Fase 2 · Notificar</div>
+<div class="text-xs text-neutral-400">El artefacto envejece y recibes una alerta</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-red-500/20">
+<div class="text-xs font-semibold text-red-400 mb-1">Fase 3 · Automático</div>
+<div class="text-xs text-neutral-400">Totalmente autónomo</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 6 -->
+<section class="mb-10" id="topico-6">
+<div class="flex items-start space-x-5 mb-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
+<span class="text-purple-400 font-bold text-lg">6</span>
+</div>
+<div>
+<h2 class="text-2xl font-bold text-neutral-100 mb-1">Contrato de salida</h2>
+<p class="text-neutral-400 text-sm">Qué produce obligatoriamente cada ejecución de /level-up</p>
+</div>
+</div>
+<p class="text-neutral-300 mb-6">Cada ejecución de /level-up termina con 3 entregas obligatorias. Si falta alguna, el run no está completo. No es documentación opcional: es el contrato que mantiene tu sistema auditable y el hábito real.</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+<div class="bg-dark-800 rounded-xl border border-purple-500/30 p-5">
+<div class="text-3xl mb-3">📋</div>
+<h4 class="font-semibold text-white mb-2">1. Entrada en decisions/log.md</h4>
+<p class="text-xs text-neutral-400">La spec del Method: candidato elegido, output del EAD, mapa de los 5 elementos, KPI definido, autonomía elegida. Registro permanente de la decisión.</p>
+</div>
+<div class="bg-dark-800 rounded-xl border border-purple-500/30 p-5">
+<div class="text-3xl mb-3">📦</div>
+<h4 class="font-semibold text-white mb-2">2. Artefacto con estructura inicial</h4>
+<p class="text-xs text-neutral-400">El archivo creado con el frontmatter completo, <code class="text-purple-400 font-mono">bike-method-phase: 1</code>, y una estructura mínima para usar de inmediato. No es un borrador — algo que funciona en la Fase 1.</p>
+</div>
+<div class="bg-dark-800 rounded-xl border border-purple-500/30 p-5">
+<div class="text-3xl mb-3">🏁</div>
+<h4 class="font-semibold text-white mb-2">3. Pantalla de cierre</h4>
+<p class="text-xs text-neutral-400">Resumen de la ejecución con un recordatorio explícito de la Fase 1: «este artefacto está bloqueado por revisión manual; valídalo antes de confiar en él». Refuerza el comportamiento correcto.</p>
+</div>
+</div>
+<div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+<span class="mr-2">📊</span> ¿Por qué importa el log?
+        </h3>
+<p class="text-neutral-300">Después de 4–6 ejecuciones, el <code class="bg-dark-700 px-1.5 py-0.5 rounded text-blue-400 font-mono text-sm">decisions/log.md</code> se convierte en un activo estratégico: puedes ver patrones (¿qué candidatos vuelven?, ¿qué artefactos avanzaron a la Fase 2?), calibrar tu criterio sobre el apalancamiento y mostrar el progreso del sistema a cualquier stakeholder.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600">
+<div class="text-xs font-semibold text-purple-400">Ejecución 1–2</div>
+<div class="text-xs text-neutral-500 mt-1">Aprender el ritual</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600">
+<div class="text-xs font-semibold text-purple-400">Ejecución 3–4</div>
+<div class="text-xs text-neutral-500 mt-1">Patrones emergentes</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600">
+<div class="text-xs font-semibold text-purple-400">Ejecución 5–6</div>
+<div class="text-xs text-neutral-500 mt-1">Brain-rewire activo</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-purple-500/30">
+<div class="text-xs font-semibold text-purple-400">Ejecución 7+</div>
+<div class="text-xs text-neutral-500 mt-1">Las oportunidades surgen solas</div>
+</div>
+</div>
+</section>
+<!-- TÓPICO 7 -->
+<section class="mb-10" id="topico-7">
+<div class="flex items-start space-x-5 mb-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
+<span class="text-purple-400 font-bold text-lg">7</span>
+</div>
+<div>
+<h2 class="text-2xl font-bold text-neutral-100 mb-1">El brain-rewire</h2>
+<p class="text-neutral-400 text-sm">Por qué ejecutarlo cada viernes es el único mecanismo que funciona</p>
+</div>
+</div>
+<p class="text-neutral-300 mb-6">El objetivo a largo plazo de /level-up no es crear artefactos: es <strong class="text-white">instalar los 3 Ms en tu sistema operativo cognitivo</strong>. Después de 4–6 runs, empiezas a ver oportunidades de automatización durante el día, sin necesidad de la skill. Eso es el brain-rewire.</p>
+<div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+<span class="mr-2">🧠</span> Cómo ocurre el brain-rewire
+        </h3>
+<p class="text-neutral-300 mb-4">No es coaching, no es reflexión ni estudio. Es repetición estructurada con un resultado tangible. Cada ejecución que termina con un artefacto real refuerza el circuito neural que asocia «trabajo manual» con «candidato a automatización».</p>
+<ul class="space-y-2 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span>A <strong class="text-white">anclaje temporal</strong> (viernes) elimina la decisión de "cuándo hacerlo"</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span>O <strong class="text-white">artefacto físico</strong> crea evidencia de progreso — no abstracción</span></li>
+<li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">•</span><span>O <strong class="text-white">registro acumulado</strong> da perspectiva del sistema creciendo semana a semana</span></li>
+</ul>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">📅</span> Consejo práctico: todos los viernes, sin negociar
+        </h3>
+<p class="text-neutral-300 mb-3">El cron no es necesario. Tú eres quien ancla el ritual. Reservar 30 minutos cada viernes, aunque la ejecución dé como resultado "ningún candidato esta semana", es lo que crea el hábito. La consistencia importa más que el resultado de cada ejecución individual.</p>
+<p class="text-neutral-300 text-sm text-neutral-400">Las ejecuciones que se posponen se convierten en «lo haré después» y terminan en nunca. /level-up no tiene valor teórico: solo tiene valor cuando se ejecuta.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ Qué crea el brain-rewire</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Repetición semanal sin saltarse ninguna</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Artefacto real al final de cada ejecución</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Registro que evidencia el crecimiento del sistema</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Anclaje en el mismo horario todas las semanas</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ Qué NO crea el brain-rewire</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Leer sobre automatización sin ejecutarla</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Hacer ejecuciones esporádicas "cuando haya tiempo"</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Construir sin KPI definido</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Saltarte el log e ir directo al artefacto</span></li>
+</ul>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600 text-center">
+<div class="text-xl mb-1">🔁</div>
+<div class="text-xs font-semibold text-purple-400">Repetición</div>
+<div class="text-xs text-neutral-500 mt-1">El mecanismo real</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600 text-center">
+<div class="text-xl mb-1">📦</div>
+<div class="text-xs font-semibold text-purple-400">Artefacto</div>
+<div class="text-xs text-neutral-500 mt-1">Evidencia física</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600 text-center">
+<div class="text-xl mb-1">📋</div>
+<div class="text-xs font-semibold text-purple-400">Registro</div>
+<div class="text-xs text-neutral-500 mt-1">Sistema visible</div>
+</div>
+<div class="bg-dark-800 rounded-xl p-4 border border-dark-600 text-center">
+<div class="text-xl mb-1">🧠</div>
+<div class="text-xs font-semibold text-purple-400">Brain-rewire</div>
+<div class="text-xs text-neutral-500 mt-1">4–6 ejecuciones</div>
+</div>
+</div>
+</section>
+<!-- RESUMO DO MÓDULO -->
+<section class="mb-12">
+<div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
+<h2 class="text-2xl font-bold mb-6 flex items-center">
+<span class="mr-3">📈</span> Resumen del módulo
+        </h2>
+<div class="space-y-4 mb-8">
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Una entrevista = un artefacto</strong>
+<span class="text-neutral-400"> — la regla central de /level-up: una ejecución, una entrega, nada más</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Fase 1 (Mindset)</strong>
+<span class="text-neutral-400"> — 5 preguntas que revelan dónde está tu apalancamiento real</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Fase 2 (Método)</strong>
+<span class="text-neutral-400"> — Buscar → EAD → Mapear → Autonomía → KPI: sin KPI, no hay artefacto</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Fase 3 (Máquina)</strong>
+<span class="text-neutral-400"> — Lo simple es mejor: la mejor opción SIN IA que resuelve el problema</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Bloqueo de Bike Method</strong>
+<span class="text-neutral-400"> — todo artefacto nace con <code class="font-mono text-sm bg-dark-700 px-1 rounded">bike-method-phase: 1</code> y bloquea la validación manual</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Contrato de salida</strong>
+<span class="text-neutral-400"> — log.md + artefacto inicializado + pantalla de cierre: los 3 elementos obligatorios de cada ejecución</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-purple-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Brain-rewire</strong>
+<span class="text-neutral-400"> — 4–6 ejecuciones cada viernes instalan las 3 Ms en tu sistema operativo cognitivo</span>
+</div>
+</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+<h3 class="font-semibold text-purple-400 mb-2">Próximo módulo:</h3>
+<p class="text-neutral-300">3.4 — Expansiones y cadencia semanal · 🌱 · ~35min</p>
+<p class="text-neutral-500 text-sm mt-1">Cómo escalar el sistema más allá del ritual semanal: cadencia multirruta, expansiones de contexto y operación sostenible.</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 justify-start">
+<a class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors" href="index.html">
+            ← Volver a Ruta
+          </a>
+<a class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors" href="modulo-3-4.html">
+            Próximo módulo →
+          </a>
+</div>
+</div>
+</section>
+</main>
+<!-- FOOTER C -->
+<footer class="border-t border-dark-600 py-8 mt-16">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm space-y-1">
+<p>⚙️ AIS-OS — Tu sistema operativo de IA en Claude Code · <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" target="_blank">INEMA.CLUB</a> · 2026</p>
+<p>Basado en el kit AIS-OS (licencia MIT). The Three Ms of AI™ y The Four Cs of an AIOS™ son marcas de Nate Herk. © 2026 Nate Herk.</p>
+</div>
+</footer>
+<!-- SCRIPTS D1 -->
+<script>
+    const themeToggle=document.getElementById('theme-toggle'),tdi=document.getElementById('theme-toggle-dark-icon'),tli=document.getElementById('theme-toggle-light-icon'),H=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){tdi.classList.remove('hidden');H.classList.remove('dark');}else{tli.classList.remove('hidden');}
+    themeToggle.addEventListener('click',()=>{tdi.classList.toggle('hidden');tli.classList.toggle('hidden');H.classList.toggle('dark');localStorage.setItem('theme',H.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

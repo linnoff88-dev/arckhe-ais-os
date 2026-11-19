@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>M2.1 Context: Know Your Business | AIS-OS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: {
+      primary: '#FACC15',
+      dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+    } } } }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    /* Light mode base */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    /* Light accent: emerald (T1) */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5,150,105,0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.06); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5,150,105,0.18); }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+    /* Light accent: blue (T2) */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37,99,235,0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.06); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37,99,235,0.18); }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+    /* Light accent: purple (T3) */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124,58,237,0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .bg-purple-900\/20 { background-color: rgba(124,58,237,0.06); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124,58,237,0.25); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124,58,237,0.18); }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; }
+    /* Light - remove gradients + special colors */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185,28,28,0.06); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185,28,28,0.25); }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    /* Light - navbar */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+    /* Dark - softened borders */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+    /* SVG light-mode taming */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+    /* SVG pulse */
+    @keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+      .wf-a:nth-child(2){animation-delay:.25s} .wf-a:nth-child(3){animation-delay:.5s}
+      .wf-a:nth-child(4){animation-delay:.75s} .wf-a:nth-child(5){animation-delay:1s}
+    }
+  </style>
+<link href="https://inematds.github.io/ais-os/curso/trilha2/modulo-2-1.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/ais-os/en/curso/trilha2/modulo-2-1.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/ais-os/es/curso/trilha2/modulo-2-1.html" hreflang="es" rel="alternate"/></head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../../../curso/trilha2/modulo-2-1.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="modulo-2-1.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">EN</a><a href="../../../es/curso/trilha2/modulo-2-1.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">ES</a></div>
+<!-- NAVEGAÇÃO -->
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-14">
+<div class="flex items-center space-x-4">
+<a class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300" href="../../index.html">
+<span class="text-2xl">⚙️</span><span class="font-bold text-lg hidden sm:inline">AIS-OS</span>
+</a>
+<span class="text-neutral-600">|</span>
+<a class="text-sky-400 hover:text-sky-300 text-sm font-medium" href="https://inema.club" target="_blank">INEMA.CLUB</a>
+</div>
+<div class="flex items-center space-x-1 sm:space-x-2">
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" href="../trilha1/index.html"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Brain (3 Ms)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10" href="index.html"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Architecture (4 Cs)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors" href="../trilha3/index.html"><span class="sm:hidden">T3</span><span class="hidden sm:inline">In Practice</span></a>
+<button class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2" id="theme-toggle">
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<!-- BREADCRUMB -->
+<nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+<div class="flex items-center space-x-2 text-sm text-neutral-400">
+<a class="hover:text-blue-400" href="../../index.html">Start</a>
+<span>/</span>
+<a class="hover:text-blue-400" href="index.html">Track 2</a>
+<span>/</span>
+<span class="text-blue-400">Module 2.1</span>
+</div>
+</nav>
+<!-- HEADER -->
+<header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">
+        MODULE 2.1
+      </span>
+<h1 class="text-3xl sm:text-4xl font-bold mb-4">🗂️ Context: Knows Your Business</h1>
+<p class="text-lg text-neutral-400 max-w-3xl">The unskippable foundation of your AIOS architecture. Without Context, there’s nothing. Claude Code needs to know who you are, what you sell, and how you think — before any Capability or Cadence.</p>
+<div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-blue-400">6</div>
+<div class="text-xs text-neutral-400">Topics</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-blue-400">35</div>
+<div class="text-xs text-neutral-400">Minutes</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-blue-400">Beginner</div>
+<div class="text-xs text-neutral-400">Level</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+<div class="text-xl font-bold text-blue-400">Foundation</div>
+<div class="text-xs text-neutral-400">Type</div>
+</div>
+</div>
+</div>
+</header>
+<!-- CONTEÚDO PRINCIPAL -->
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<!-- SVG FUTURISTA — Aninhamento: context/ contém os 5 arquivos -->
+<div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-3 sm:p-4 mb-8 overflow-hidden">
+<svg aria-label="The context/ folder as a parent container (blue, with a glow) holding five child files: about-me.md, about-business.md, priorities.md, voice.md, and decisions/log.md — showing the nesting and hierarchy of Context in AIOS" class="w-full h-auto" role="img" viewbox="0 0 900 260">
+<defs>
+<lineargradient id="m21-grad" x1="0" x2="1" y1="0" y2="1">
+<stop offset="0" stop-color="#60a5fa"></stop><stop offset="1" stop-color="#3b82f6"></stop>
+</lineargradient>
+<filter height="180%" id="m21-glow" width="180%" x="-40%" y="-40%">
+<fegaussianblur result="b" stddeviation="1.8"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<pattern height="32" id="m21-grid" patternunits="userSpaceOnUse" width="32">
+<circle cx="1.3" cy="1.3" fill="#60a5fa" opacity="0.12" r="1.3"></circle>
+</pattern>
+<marker id="m21-ah" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#60a5fa"></path></marker>
+<marker id="m21-ahc" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"></path></marker>
+</defs>
+<rect fill="url(#m21-grid)" height="260" width="900" x="0" y="0"></rect>
+<!-- Caixa pai: context/ -->
+<g filter="url(#m21-glow)">
+<rect fill="#0e1622" height="160" rx="16" stroke="url(#m21-grad)" stroke-width="2.5" width="170" x="30" y="50"></rect>
+</g>
+<text fill="#60a5fa" font-family="Inter,sans-serif" font-size="15" font-weight="600" text-anchor="middle" x="115" y="84">📁 context/</text>
+<text fill="#93c5fd" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="115" y="102">Context root folder</text>
+<!-- Seta context/ → filhos -->
+<line marker-end="url(#m21-ah)" opacity="0.5" stroke="#60a5fa" stroke-width="1.8" x1="200" x2="268" y1="130" y2="75"></line>
+<line marker-end="url(#m21-ah)" opacity="0.5" stroke="#60a5fa" stroke-width="1.8" x1="200" x2="268" y1="130" y2="115"></line>
+<line marker-end="url(#m21-ah)" opacity="0.5" stroke="#60a5fa" stroke-width="1.8" x1="200" x2="268" y1="130" y2="155"></line>
+<line marker-end="url(#m21-ahc)" opacity="0.5" stroke="#38bdf8" stroke-width="1.8" x1="200" x2="268" y1="130" y2="195"></line>
+<!-- Arquivo 1: about-me.md -->
+<g class="wf-a">
+<rect fill="#0e1b26" height="46" rx="10" stroke="#38bdf8" stroke-width="2" width="168" x="270" y="52"></rect>
+<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="13" font-weight="600" text-anchor="middle" x="354" y="72">about-me.md</text>
+<text fill="#7dd3fc" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="354" y="88">identity · role · top_pain</text>
+</g>
+<!-- Arquivo 2: about-business.md -->
+<g class="wf-a">
+<rect fill="#0e1b26" height="46" rx="10" stroke="#38bdf8" stroke-width="2" width="168" x="270" y="106"></rect>
+<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="13" font-weight="600" text-anchor="middle" x="354" y="126">about-business.md</text>
+<text fill="#7dd3fc" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="354" y="142">offer · ICP · revenue</text>
+</g>
+<!-- Arquivo 3: priorities.md -->
+<g class="wf-a">
+<rect fill="#0e1b26" height="46" rx="10" stroke="#38bdf8" stroke-width="2" width="168" x="270" y="160"></rect>
+<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="13" font-weight="600" text-anchor="middle" x="354" y="180">priorities.md</text>
+<text fill="#7dd3fc" font-family="Inter,sans-serif" font-size="10.5" text-anchor="middle" x="354" y="196">90 days · focus · OKRs</text>
+</g>
+<!-- Arquivo 4: voice.md (ciano mais destaque) -->
+<g class="wf-a">
+<rect fill="#0e1b26" height="34" rx="10" stroke="#38bdf8" stroke-width="2" width="168" x="270" y="214"></rect>
+<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="13" font-weight="600" text-anchor="middle" x="354" y="236">references/voice.md</text>
+</g>
+<!-- Seta central → CLAUDE.md -->
+<line marker-end="url(#m21-ah)" opacity="0.55" stroke="#60a5fa" stroke-width="1.8" x1="438" x2="500" y1="130" y2="130"></line>
+<!-- Caixa CLAUDE.md -->
+<rect fill="#0e1622" height="64" rx="12" stroke="#60a5fa" stroke-width="2" width="170" x="502" y="98"></rect>
+<text fill="#60a5fa" font-family="Inter,sans-serif" font-size="14" font-weight="600" text-anchor="middle" x="587" y="122">CLAUDE.md</text>
+<text fill="#93c5fd" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="587" y="140">operating manual</text>
+<text fill="#6b99d6" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="587" y="155">(canonical · project root)</text>
+<!-- Seta CLAUDE.md → decisions -->
+<line marker-end="url(#m21-ahc)" opacity="0.5" stroke="#38bdf8" stroke-width="1.8" x1="672" x2="730" y1="130" y2="130"></line>
+<!-- Caixa decisions/log.md -->
+<rect fill="#0e1b26" height="64" rx="12" stroke="#38bdf8" stroke-width="2" width="140" x="732" y="98"></rect>
+<text fill="#bfe6ff" font-family="Inter,sans-serif" font-size="12.5" font-weight="600" text-anchor="middle" x="802" y="122">decisions/</text>
+<text fill="#7dd3fc" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="802" y="140">log.md</text>
+<text fill="#6b99d6" font-family="Inter,sans-serif" font-size="10" text-anchor="middle" x="802" y="155">append-only · why</text>
+<!-- Label diagrama -->
+<text fill="#4b5563" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" x="450" y="248">Context Architecture — interpreted facts, not a document dump</text>
+</svg>
+</div>
+<h2 class="text-2xl font-bold mb-6">Detailed content</h2>
+<!-- TÓPICO 1 -->
+<section class="mb-16" id="topico-1">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+<h2 class="text-2xl font-bold">🧪 The Context Test</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        There is a simple, brutal test to see whether your Context works: open a <strong class="text-blue-400">completely fresh Claude session</strong> and ask <em>"what does this business do, and who works here?"</em>. If Claude answers without navigating any external files, you have Context. If it doesn’t answer, you don’t — regardless of how many docs exist elsewhere.
+      </p>
+<!-- Fluxo do teste: Sessão fresca → pergunta → resultado -->
+<div class="space-y-4 mb-6">
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+<span class="text-blue-400 font-bold">1</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Open a fresh session</h4>
+<p class="text-sm text-neutral-400">No history. No files opened manually. Claude Code automatically reads only what’s in the project via CLAUDE.md and context/.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+<span class="text-blue-400 font-bold">2</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Ask without hints</h4>
+<p class="text-sm text-neutral-400 mb-2">Exact test phrase:</p>
+<div class="bg-dark-900 rounded-lg px-4 py-2 font-mono text-sm text-blue-300 border border-blue-500/20">"What does this business do, and who works here?"</div>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+<span class="text-blue-400 font-bold">3</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-1">Evaluate the response</h4>
+<p class="text-sm text-neutral-400">An answer with real names, services, and roles = Functional context. A vague answer ("it’s a technology company...") = Insufficient or missing context.</p>
+</div>
+</div>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">💡</span> Why a “fresh session” matters
+        </h3>
+<p class="text-neutral-300">In an existing session, Claude already has context accumulated in the window. The test only counts in a new session because it replicates the real state of an automation, an agent, or a new collaborator entering your AIOS for the first time. It’s the honest litmus test.</p>
+</div>
+</section>
+<!-- TÓPICO 2 -->
+<section class="mb-16" id="topico-2">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+<h2 class="text-2xl font-bold">📁 The Folder <code class="text-blue-400 text-xl">context/</code></h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        The folder <strong class="text-blue-400">context/</strong> is the heart of your AIOS. It contains the three files that define who you are, what you sell, and where you're focused. It isn't a document dump — they're <strong class="text-blue-400">interpreted facts</strong>, written in the voice of someone who knows the business.
+      </p>
+<!-- Estrutura dos 3 arquivos em caixa mono -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6 font-mono text-sm">
+<div class="text-blue-400 font-semibold mb-3">📁 context/</div>
+<div class="space-y-2 pl-4">
+<div class="text-neutral-300">├── <span class="text-blue-300">about-me.md</span><span class="text-neutral-500 font-sans ml-4 text-xs">→ identity, role, top_pain</span></div>
+<div class="text-neutral-300">├── <span class="text-blue-300">about-business.md</span><span class="text-neutral-500 font-sans ml-4 text-xs">→ offer, ICP, revenue model</span></div>
+<div class="text-neutral-300">└── <span class="text-blue-300">priorities.md</span><span class="text-neutral-500 font-sans ml-4 text-xs">→ 90-day priorities</span></div>
+</div>
+<div class="text-blue-400 font-semibold mt-4 mb-3">📁 references/</div>
+<div class="space-y-2 pl-4">
+<div class="text-neutral-300">└── <span class="text-cyan-300">voice.md</span><span class="text-neutral-500 font-sans ml-4 text-xs">→ verbatim voice samples</span></div>
+</div>
+<div class="text-blue-400 font-semibold mt-4 mb-3">📁 decisions/</div>
+<div class="space-y-2 pl-4">
+<div class="text-neutral-300">└── <span class="text-cyan-300">log.md</span><span class="text-neutral-500 font-sans ml-4 text-xs">→ append-only log + why</span></div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ Interpreted facts</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>"We sell product consulting to B2B SaaS scale-ups"</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>"My top_pain is a long sales cycle (45-day average)"</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>"Q3 2026: close 3 new enterprise clients"</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Written as a brief for someone who doesn’t know you</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ Document dump</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Paste the complete pitch deck (50 slides)</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Client contracts or NDAs as “context”</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Complete sales email history</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Notes/misc/inbox as “context files”</span></li>
+</ul>
+</div>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">⚡</span> Golden rule
+        </h3>
+<p class="text-neutral-300">If you can’t write the file <strong>about-business.md</strong> in less than 30 minutes, the problem isn't a lack of information — it's a lack of clarity about your own business. The writing process is the diagnosis.</p>
+</div>
+</section>
+<!-- TÓPICO 3 -->
+<section class="mb-16" id="topico-3">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+<h2 class="text-2xl font-bold">📋 CLAUDE.md — Operating Manual</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">CLAUDE.md</strong> lives in the project root and is canonical — it's the only file Claude Code reads automatically in every session. It works as an operations manual: who you are, how you think (3 Ms), where things live, and how to work with you. It's filled in by the <code class="text-blue-300">/onboard</code>.
+      </p>
+<!-- Box com estrutura do CLAUDE.md -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6 font-mono text-sm">
+<div class="text-blue-400 font-semibold mb-3 font-sans">Minimum CLAUDE.md structure</div>
+<div class="space-y-1 text-neutral-300">
+<div><span class="text-blue-300"># CLAUDE.md — [Nome] AIS-OS</span></div>
+<div class="mt-2"><span class="text-neutral-500">## Who I am</span></div>
+<div class="pl-4 text-neutral-400">Name, company, role, top pain.</div>
+<div class="mt-2"><span class="text-neutral-500">## How I think (3 Ms)</span></div>
+<div class="pl-4 text-neutral-400">Default mindset, decision heuristics.</div>
+<div class="mt-2"><span class="text-neutral-500">## AIOS Architecture</span></div>
+<div class="pl-4 text-neutral-400">Where everything lives. Relative links.</div>
+<div class="mt-2"><span class="text-neutral-500">## How to work with me</span></div>
+<div class="pl-4 text-neutral-400">Tone, output format, constraints.</div>
+<div class="mt-2"><span class="text-neutral-500">## Active context</span></div>
+<div class="pl-4 text-neutral-400">→ context/about-me.md</div>
+<div class="pl-4 text-neutral-400">→ context/about-business.md</div>
+<div class="pl-4 text-neutral-400">→ context/priorities.md</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+<span class="mr-2">📊</span> Why only one CLAUDE.md
+          </h3>
+<ul class="space-y-2 text-neutral-300">
+<li><strong>Canonicity</strong> — no version conflicts between folders</li>
+<li><strong>Guaranteed workload</strong> — Claude Code reads it automatically</li>
+<li><strong>Simple maintenance</strong> — one place to update</li>
+<li><strong>Quarterly review</strong> — a natural, predictable cadence</li>
+</ul>
+</div>
+<div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+<span class="mr-2">🚫</span> What NOT to include
+          </h3>
+<ul class="space-y-2 text-neutral-300">
+<li>Credentials or API keys</li>
+<li>Sensitive client content</li>
+<li>CLAUDE.md nested in subfolders</li>
+<li>Duplicated information from context/</li>
+</ul>
+</div>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">💡</span> Practical tip
+        </h3>
+<p class="text-neutral-300">Run <code class="text-primary">/onboard</code> to generate the first CLAUDE.md — the skill guides you through 7 questions and puts everything together automatically. For future updates, edit it directly or run it again (idempotent). Recommended review: quarterly or when your strategic focus changes.</p>
+</div>
+</section>
+<!-- TÓPICO 4 -->
+<section class="mb-16" id="topico-4">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+<h2 class="text-2xl font-bold">🎙️ references/voice.md — The Voice Rule</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">references/voice.md</strong> stores real samples of your writing, pasted verbatim — never typed during a conversation. It’s the file that keeps Claude from inventing a “generic professional tone” when generating content in your name.
+      </p>
+<!-- Box de destaque: a regra que não dobra -->
+<div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+<span class="mr-2">⚠️</span> The one rule that doesn’t bend
+        </h3>
+<p class="text-neutral-300 mb-4">Voice samples need to be <strong class="text-blue-400">pasted verbatim</strong> from something you actually wrote — a real email, a published post, a Slack message. Never typed into the chat during a conversation with Claude.</p>
+<div class="bg-dark-900/60 rounded-lg p-4 font-mono text-sm border border-blue-500/20">
+<div class="text-red-400 mb-2"># ✗ Wrong — typed in chat</div>
+<div class="text-neutral-400">"I write directly and objectively, without fluff."</div>
+<div class="text-neutral-500 text-xs mt-1 font-sans">→ The sample is already contaminated by the conversation. Claude shaped your "voice" while you were describing it.</div>
+<div class="text-blue-400 mt-4 mb-2"># ✓ Right — pasted verbatim</div>
+<div class="text-neutral-300">Hey João, I saw you got stuck on the proposal. Tell me what held you up. I can jump on a 15-minute call tomorrow before 10.</div>
+<div class="text-neutral-500 text-xs mt-1 font-sans">→ A real email. The voice is there. Claude imitates the pattern, not the description.</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ Good voice samples</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Sales follow-up email sent</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Post published on LinkedIn without heavy editing</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Slack message for the team (informal tone)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Excerpt from a business proposal you wrote</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ Samples that don't count</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Text generated by AI and reviewed by you</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Description of how you write (“I’m direct...”)</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Text written during the conversation with Claude</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Post extensively edited by an external writer</span></li>
+</ul>
+</div>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">📌</span> Standard instruction in voice.md
+        </h3>
+<p class="text-neutral-300">Whenever you generate external content, include this at the end of the file:</p>
+<div class="bg-dark-900/60 rounded-lg p-3 mt-3 font-mono text-sm text-blue-300 border border-blue-500/20">"Combine this record; don’t impersonate me in external content without showing it to me first."</div>
+<p class="text-neutral-400 text-sm mt-2">This protects your reputation when Claude generates autonomous drafts via Cadence.</p>
+</div>
+</section>
+<!-- TÓPICO 5 -->
+<section class="mb-16" id="topico-5">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+<h2 class="text-2xl font-bold">📝 decisions/log.md — Decision Log</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">decisions/log.md</strong> is the append-only record of decisions and their reasons. It isn't a to-do list or a diary — it's the institutional memory of the reasoning behind every significant choice in your AIOS and your business.
+      </p>
+<!-- Formato de entrada do log -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6 font-mono text-sm">
+<div class="text-blue-400 font-semibold mb-3 font-sans">Entry format — decisions/log.md</div>
+<div class="space-y-1 text-neutral-300">
+<div><span class="text-blue-300">## 2026-06-01 — Adopt MCP for Calendar</span></div>
+<div class="mt-1"><span class="text-neutral-400">**Decision:** Connect Google Calendar via MCP server instead of a Python script.</span></div>
+<div class="mt-1"><span class="text-neutral-400">**Why:** MCP preserves context between sessions; a script would need to re-authenticate.</span></div>
+<div class="mt-1"><span class="text-neutral-400">**Alternatives considered:** Python script (rejected), CSV export (read-only, rejected).</span></div>
+<div class="mt-1"><span class="text-neutral-400">**Owner:** [your name]</span></div>
+</div>
+</div>
+<!-- Frase-chave do litmus test em destaque -->
+<div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+<span class="mr-2">🔑</span> The AIS-OS litmus test
+        </h3>
+<p class="text-neutral-300 text-lg leading-relaxed italic mb-3">
+          "While you’re away from your desk, your AIS-OS observes a real event and produces an output faster and more accurately than you would."
+        </p>
+<p class="text-neutral-400 text-sm">The decisions/log.md is what ensures the AIOS reproduces <em>your reasoning</em>, not just your tasks. Without the why recorded, every new session starts from scratch.</p>
+</div>
+<div class="space-y-4 mb-6">
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+<span class="text-blue-400 font-bold">📌</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-2">Append-only—never delete</h4>
+<p class="text-sm text-neutral-400">The log’s value grows over time. Old decisions explain why the system is configured a certain way. Deleting them means losing historical context you’ll need when something breaks.</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+<span class="text-blue-400 font-bold">🔗</span>
+</div>
+<div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+<h4 class="font-semibold text-white mb-2">Also generated by /level-up</h4>
+<p class="text-sm text-neutral-400">The /level-up skill creates an entry in decisions/log.md every time you scope a new automation—date, decision, why, alternatives, and owner. You don’t have to write it manually each time.</p>
+</div>
+</div>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">⚡</span> When to record a decision
+        </h3>
+<p class="text-neutral-300">Every decision that <strong>isn’t obvious</strong> or that you’ll want to explain to someone (including yourself 3 months from now). Rule of thumb: if you hesitated between two options for more than 30 seconds, record it. If you changed your approach midway, record why you changed it.</p>
+</div>
+</section>
+<!-- TÓPICO 6 -->
+<section class="mb-16" id="topico-6">
+<div class="flex items-center space-x-4 mb-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+<h2 class="text-2xl font-bold">📚 references/ — Interpreted Knowledge</h2>
+</div>
+<p class="text-neutral-300 mb-6 leading-relaxed">
+        The folder <strong class="text-blue-400">references/</strong> stores knowledge Claude needs to work with you — frameworks you use, API guides for connected tools, SOPs for your process. It’s the <em>operational wiki</em>, not a pile of raw documents.
+      </p>
+<!-- Estrutura references/ em caixa mono -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6 font-mono text-sm">
+<div class="text-blue-400 font-semibold mb-3 font-sans">📁 references/ — what goes here</div>
+<div class="space-y-1 text-neutral-300">
+<div>├── <span class="text-cyan-300">voice.md</span><span class="text-neutral-500 font-sans ml-4 text-xs">→ verbatim voice samples (see topic 4)</span></div>
+<div>├── <span class="text-blue-300">3ms-framework.md</span><span class="text-neutral-500 font-sans ml-4 text-xs">→ read-only · do not modify</span></div>
+<div>├── <span class="text-blue-300">sops/</span><span class="text-neutral-500 font-sans ml-4 text-xs">→ when someone new will rerun a process</span></div>
+<div>└── <span class="text-blue-300">{tool}-api.md</span><span class="text-neutral-500 font-sans ml-4 text-xs">→ endpoints, auth, queries for the connected tool</span></div>
+</div>
+<div class="text-neutral-500 mt-3 text-xs font-sans">Ex.: references/notion-api.md · references/hubspot-api.md</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+<h4 class="font-bold text-emerald-400 mb-4">✓ What goes in references/</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>API guide you researched once (researched-once-saved-forever)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>SOP for a recurring process others can replicate</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>External framework you apply (e.g., ICE scoring)</span></li>
+<li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Glossary of internal terms for your business</span></li>
+</ul>
+</div>
+<div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+<h4 class="font-bold text-red-400 mb-4">✗ What does NOT go in references/</h4>
+<ul class="space-y-3 text-neutral-300">
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Dump of emails or Slack threads</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Clients’ legal or contractual documents</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Unprocessed personal notes (misc, inbox)</span></li>
+<li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Folders within folders for no reason (folder-within-folder-within-folder)</span></li>
+</ul>
+</div>
+</div>
+<!-- Diagrama: referência researched-once-saved-forever -->
+<div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+<h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+<span class="mr-2">🔁</span> Principle: Researched-once, saved-forever
+        </h3>
+<p class="text-neutral-300 mb-3">When connecting a new tool, spend 30 minutes creating <code class="text-blue-300">references/{tool}-api.md</code> with endpoints, auth, and 3 sample queries. /audit rewards this; future skills won't research what you've already discovered again.</p>
+<div class="space-y-2">
+<div class="flex items-center space-x-3 text-sm">
+<span class="text-blue-400">→</span>
+<span class="text-neutral-300">Connected Notion? Create <code class="text-blue-300">references/notion-api.md</code></span>
+</div>
+<div class="flex items-center space-x-3 text-sm">
+<span class="text-blue-400">→</span>
+<span class="text-neutral-300">Connected HubSpot? Create <code class="text-blue-300">references/hubspot-api.md</code></span>
+</div>
+<div class="flex items-center space-x-3 text-sm">
+<span class="text-blue-400">→</span>
+<span class="text-neutral-300">Every future skill opens the file and already knows what to do</span>
+</div>
+</div>
+</div>
+<div class="bg-primary/10 rounded-xl border border-primary/30 p-6">
+<h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+<span class="mr-2">🧭</span> Context is non-skippable — by design
+        </h3>
+<p class="text-neutral-300 mb-2">In the dependency graph of the 4 Cs: <strong>Context comes first</strong>, always. Connections + Capabilities can be developed in parallel, but Cadence (recurring automations) only makes sense once Context is solid.</p>
+<p class="text-neutral-400 text-sm">If Context is empty, AIOS is flying blind. A Cadence automation without Context produces generic outputs—sometimes worse than nothing.</p>
+</div>
+</section>
+<!-- RESUMO DO MÓDULO -->
+<section class="mb-12">
+<div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+<h2 class="text-2xl font-bold mb-6 flex items-center">
+<span class="mr-3">✅</span> Module Summary
+        </h2>
+<div class="space-y-4 mb-8">
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Context test</strong>
+<span class="text-neutral-400"> — fresh session + question about the business without browsing. No answer = no Context.</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1">✓</span>
+<div>
+<strong class="text-white">context/</strong>
+<span class="text-neutral-400"> — three files of interpreted facts: about-me, about-business, priorities. Never a doc dump.</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1">✓</span>
+<div>
+<strong class="text-white">CLAUDE.md</strong>
+<span class="text-neutral-400"> — canonical manual at the root. Just one. Generated by /onboard, reviewed quarterly.</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1">✓</span>
+<div>
+<strong class="text-white">Voice Rule</strong>
+<span class="text-neutral-400"> — verbatim samples of real writing. Never typed in chat. Instruction: "combine this record".</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1">✓</span>
+<div>
+<strong class="text-white">decisions/log.md</strong>
+<span class="text-neutral-400"> — append-only; records the decision + why + alternatives. Memory of reasoning, not tasks.</span>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<span class="text-blue-400 mt-1">✓</span>
+<div>
+<strong class="text-white">references/</strong>
+<span class="text-neutral-400"> — operational wiki with voice.md, API guides (researched-once-saved-forever), and SOPs.</span>
+</div>
+</div>
+</div>
+<div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+<h3 class="font-semibold text-blue-400 mb-2">Next Module: 2.2 — Connections</h3>
+<p class="text-neutral-300 text-sm">With Context in place, AIOS knows who you are. Now it’s time to teach it what you have and where it is — connecting the tools that are part of your day.</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4">
+<a class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors" href="index.html">
+            ← Back to Track
+          </a>
+<a class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors" href="modulo-2-2.html">
+            Next Module →
+          </a>
+</div>
+</div>
+</section>
+</main>
+<!-- FOOTER -->
+<footer class="border-t border-dark-600 py-8 mt-16">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm space-y-1">
+<p>⚙️ AIS-OS — Your AI Operating System in Claude Code · <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" target="_blank">INEMA.CLUB</a> · 2026</p>
+<p>Based on the AIS-OS kit (MIT license). The Three Ms of AI™ and The Four Cs of an AIOS™ are trademarks of Nate Herk. © 2026 Nate Herk.</p>
+</div>
+</footer>
+<!-- SCRIPTS D1 -->
+<script>
+    const themeToggle=document.getElementById('theme-toggle'),tdi=document.getElementById('theme-toggle-dark-icon'),tli=document.getElementById('theme-toggle-light-icon'),H=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){tdi.classList.remove('hidden');H.classList.remove('dark');}else{tli.classList.remove('hidden');}
+    themeToggle.addEventListener('click',()=>{tdi.classList.toggle('hidden');tli.classList.toggle('hidden');H.classList.toggle('dark');localStorage.setItem('theme',H.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

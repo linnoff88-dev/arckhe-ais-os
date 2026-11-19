@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trilha 3 — Operar na Prática | AIS-OS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: {
+      primary: '#FACC15',
+      dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+    } } } }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    /* Light mode base */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    /* Light accent: emerald (T1) */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5,150,105,0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.06); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5,150,105,0.18); }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+    /* Light accent: blue (T2) */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37,99,235,0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.06); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37,99,235,0.18); }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+    /* Light accent: purple (T3) */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124,58,237,0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .bg-purple-900\/20 { background-color: rgba(124,58,237,0.06); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124,58,237,0.25); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124,58,237,0.18); }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; }
+    /* Light - remove gradients + special colors */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185,28,28,0.06); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185,28,28,0.25); }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    /* Light - navbar */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+    /* Dark - softened borders */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+    /* SVG light-mode taming */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+    /* SVG pulse */
+    @keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+      .wf-a:nth-child(2){animation-delay:.25s} .wf-a:nth-child(3){animation-delay:.5s}
+      .wf-a:nth-child(4){animation-delay:.75s} .wf-a:nth-child(5){animation-delay:1s}
+    }
+  </style>
+<link href="https://inematds.github.io/ais-os/curso/trilha3/" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/ais-os/en/curso/trilha3/" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/ais-os/es/curso/trilha3/" hreflang="es" rel="alternate"/></head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen"><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="./" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">PT</a><a href="../../en/curso/trilha3/" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">EN</a><a href="../../es/curso/trilha3/" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">ES</a></div>
+<!-- NAV B3 -->
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-14">
+<div class="flex items-center space-x-4">
+<a class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300" href="../../index.html">
+<span class="text-2xl">⚙️</span><span class="font-bold text-lg hidden sm:inline">AIS-OS</span>
+</a>
+<span class="text-neutral-600">|</span>
+<a class="text-sky-400 hover:text-sky-300 text-sm font-medium" href="https://inema.club" target="_blank">INEMA.CLUB</a>
+</div>
+<div class="flex items-center space-x-1 sm:space-x-2">
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" href="../trilha1/index.html"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Cérebro (3 Ms)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors" href="../trilha2/index.html"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitetura (4 Cs)</span></a>
+<a class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10" href="index.html"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Na Prática</span></a>
+<button class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2" id="theme-toggle">
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-dark-icon" viewbox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+<svg class="hidden w-5 h-5 text-neutral-300" fill="currentColor" id="theme-toggle-light-icon" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<!-- HEADER DA TRILHA -->
+<div class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-900 rounded-2xl border border-purple-500/30 p-8 mb-10">
+<div class="mb-4">
+<span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-bold rounded-full border border-purple-500/30 uppercase tracking-wider">TRILHA 3</span>
+</div>
+<h1 class="text-3xl sm:text-4xl font-bold mb-4">🛠️ Operar na Prática</h1>
+<p class="text-neutral-300 text-base sm:text-lg mb-4 max-w-3xl">
+        Três skills que transformam teoria em rotina: <strong class="text-purple-400">/onboard</strong> monta o file-set do Dia 1 em 7 perguntas,
+        <strong class="text-purple-400">/audit</strong> diagnostica seus 4 Cs e mostra o placar subir, e
+        <strong class="text-purple-400">/level-up</strong> encaixa uma automação nova por semana.
+        Juntas instalam o comportamento que faz o sistema crescer sozinho.
+      </p>
+<p class="text-neutral-400 text-sm mb-6">
+<span class="font-semibold text-purple-400">Quick start:</span>
+        clone o kit → rode <code class="bg-dark-700 px-1.5 py-0.5 rounded text-purple-300">/onboard</code> (Dia 1) →
+        use o sistema → Dia 7 rode <code class="bg-dark-700 px-1.5 py-0.5 rounded text-purple-300">/audit</code> →
+        Dia 14 rode <code class="bg-dark-700 px-1.5 py-0.5 rounded text-purple-300">/level-up</code> →
+        ritual semanal toda sexta.
+      </p>
+<!-- Stats 4 colunas -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+<div class="bg-dark-800/60 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-purple-400">4</div>
+<div class="text-xs text-neutral-500 mt-1">Módulos</div>
+</div>
+<div class="bg-dark-800/60 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-purple-400">27</div>
+<div class="text-xs text-neutral-500 mt-1">Tópicos</div>
+</div>
+<div class="bg-dark-800/60 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-purple-400">~2.5h</div>
+<div class="text-xs text-neutral-500 mt-1">Duração</div>
+</div>
+<div class="bg-dark-800/60 rounded-xl p-4 text-center border border-dark-600">
+<div class="text-2xl font-bold text-purple-400">Inic.→Int.</div>
+<div class="text-xs text-neutral-500 mt-1">Nível</div>
+</div>
+</div>
+</div>
+<!-- HERO SVG — Jornada Dia 1 → Dia 7 → Dia 14 → Ritual semanal -->
+<div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-6 mb-10 overflow-hidden">
+<svg aria-label="Jornada da Trilha 3: /onboard no Dia 1, /audit no Dia 7, /level-up no Dia 14 e ritual semanal contínuo" class="w-full h-auto" role="img" viewbox="0 0 820 260" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<!-- Gradiente purple -->
+<lineargradient id="t3-grad-purple" x1="0" x2="1" y1="0" y2="1">
+<stop offset="0" stop-color="#c084fc"></stop><stop offset="1" stop-color="#a855f7"></stop>
+</lineargradient>
+<!-- Gradiente ciano -->
+<lineargradient id="t3-grad-cyan" x1="0" x2="1" y1="0" y2="1">
+<stop offset="0" stop-color="#38bdf8"></stop><stop offset="1" stop-color="#0ea5e9"></stop>
+</lineargradient>
+<!-- Glow purple -->
+<filter height="180%" id="t3-glow-p" width="180%" x="-40%" y="-40%">
+<fegaussianblur result="b" stddeviation="2.5"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<!-- Glow ciano -->
+<filter height="180%" id="t3-glow-c" width="180%" x="-40%" y="-40%">
+<fegaussianblur result="b" stddeviation="2"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
+</filter>
+<!-- Grid de pontos -->
+<pattern height="30" id="t3-grid" patternunits="userSpaceOnUse" width="30">
+<circle cx="1.2" cy="1.2" fill="#a855f7" opacity="0.10" r="1.2"></circle>
+</pattern>
+<!-- Seta purple -->
+<marker id="t3-ah-p" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5">
+<path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#c084fc"></path>
+</marker>
+<!-- Seta ciano -->
+<marker id="t3-ah-c" markerheight="9" markerwidth="9" orient="auto" refx="6.5" refy="4.5">
+<path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"></path>
+</marker>
+</defs>
+<!-- Fundo com grid -->
+<rect fill="#0f0b1a" height="260" rx="12" width="820"></rect>
+<rect fill="url(#t3-grid)" height="260" rx="12" width="820"></rect>
+<!-- Título -->
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="13" font-weight="600" opacity="0.9" text-anchor="middle" x="410" y="28">Jornada de Operação — do Dia 1 ao Ritual Semanal</text>
+<!-- Linha tracejada de progressão -->
+<line opacity="0.25" stroke="#c084fc" stroke-dasharray="8 6" stroke-width="1.2" x1="100" x2="720" y1="130" y2="130"></line>
+<!-- DEGRAU 1 — Dia 1 /onboard -->
+<rect class="wf-a" fill="#1a1230" height="80" rx="10" stroke="#c084fc" stroke-width="1.5" width="120" x="58" y="90"></rect>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="118" y="118">🚀 /onboard</text>
+<text fill="#e2d4ff" font-family="Inter,sans-serif" font-size="10" opacity="0.8" text-anchor="middle" x="118" y="134">Dia 1</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="118" y="152">7 perguntas</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="118" y="164">file-set pronto</text>
+<!-- Seta 1→2 -->
+<line class="wf-a" marker-end="url(#t3-ah-p)" stroke="#c084fc" stroke-width="1.5" x1="182" x2="248" y1="130" y2="130"></line>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="8" opacity="0.6" text-anchor="middle" x="215" y="122">usa</text>
+<!-- DEGRAU 2 — Dia 7 /audit -->
+<rect class="wf-a" fill="#1a1230" height="94" rx="10" stroke="#c084fc" stroke-width="1.5" width="120" x="252" y="76"></rect>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="312" y="104">📊 /audit</text>
+<text fill="#e2d4ff" font-family="Inter,sans-serif" font-size="10" opacity="0.8" text-anchor="middle" x="312" y="120">Dia 7</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="312" y="138">diagnóstico</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="312" y="150">Four-Cs</text>
+<text fill="#38bdf8" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="312" y="162">placar sobe ↑</text>
+<!-- Seta 2→3 -->
+<line class="wf-a" marker-end="url(#t3-ah-p)" stroke="#c084fc" stroke-width="1.5" x1="376" x2="442" y1="123" y2="118"></line>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="8" opacity="0.6" text-anchor="middle" x="409" y="112">melhora</text>
+<!-- DEGRAU 3 — Dia 14 /level-up -->
+<rect class="wf-a" fill="#1a1230" filter="url(#t3-glow-p)" height="110" rx="10" stroke="#a855f7" stroke-width="2" width="124" x="446" y="60"></rect>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="508" y="89">📈 /level-up</text>
+<text fill="#e2d4ff" font-family="Inter,sans-serif" font-size="10" opacity="0.8" text-anchor="middle" x="508" y="105">Dia 14</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="508" y="123">1 entrevista</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="508" y="135">1 artefato</text>
+<text fill="#38bdf8" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="508" y="147">Boring-is-Beautiful</text>
+<text fill="#38bdf8" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="508" y="161">brain-rewire</text>
+<!-- Seta 3→4 -->
+<line class="wf-a" marker-end="url(#t3-ah-c)" stroke="#38bdf8" stroke-width="1.5" x1="574" x2="638" y1="115" y2="108"></line>
+<text fill="#38bdf8" font-family="Inter,sans-serif" font-size="8" opacity="0.6" text-anchor="middle" x="606" y="101">toda sexta</text>
+<!-- DEGRAU 4 — Ritual semanal -->
+<rect class="wf-a" fill="#0e1b26" filter="url(#t3-glow-c)" height="124" rx="10" stroke="#38bdf8" stroke-width="2" width="122" x="642" y="46"></rect>
+<text fill="#38bdf8" font-family="Inter,sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="703" y="76">🌱 Expansão</text>
+<text fill="#9ad6ff" font-family="Inter,sans-serif" font-size="10" opacity="0.9" text-anchor="middle" x="703" y="92">Ritual semanal</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="703" y="110">audit + level-up</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="703" y="122">cadências</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="703" y="134">sem virar</text>
+<text fill="#9ca3af" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" x="703" y="146">porão</text>
+<text fill="#38bdf8" font-family="Inter,sans-serif" font-size="8" text-anchor="middle" x="703" y="162">∞ automações</text>
+<!-- Seta de loop de volta (ciano) -->
+<path d="M703,172 Q703,220 508,220 Q312,220 118,200 Q98,198 98,172" fill="none" marker-end="url(#t3-ah-c)" opacity="0.4" stroke="#38bdf8" stroke-dasharray="7 5" stroke-width="1.2"></path>
+<text fill="#38bdf8" font-family="Inter,sans-serif" font-size="9" opacity="0.55" text-anchor="middle" x="410" y="238">loop de melhoria contínua</text>
+<!-- Labels de nível -->
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="8" opacity="0.5" text-anchor="middle" x="118" y="82">NÍVEL 1</text>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="8" opacity="0.5" text-anchor="middle" x="312" y="68">NÍVEL 2</text>
+<text fill="#c084fc" font-family="Inter,sans-serif" font-size="8" opacity="0.5" text-anchor="middle" x="508" y="52">NÍVEL 3</text>
+<text fill="#38bdf8" font-family="Inter,sans-serif" font-size="8" opacity="0.5" text-anchor="middle" x="703" y="38">NÍVEL 4+</text>
+</svg>
+</div>
+<!-- MAPA DA TRILHA -->
+<section class="mb-12">
+<h2 class="text-2xl font-bold mb-6">Mapa da trilha</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<a class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-purple-500/30 p-5 transition-all" href="#modulo-3-1">
+<div class="flex items-center justify-between mb-2">
+<span class="text-purple-400 font-bold text-sm">3.1</span>
+<span class="text-xs text-neutral-500">~35 min</span>
+</div>
+<h3 class="font-semibold mb-1 group-hover:text-purple-400 transition-colors">🚀 /onboard</h3>
+<p class="text-xs text-neutral-400">7 perguntas, Dia 1 pronto</p>
+</a>
+<a class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-purple-500/30 p-5 transition-all" href="#modulo-3-2">
+<div class="flex items-center justify-between mb-2">
+<span class="text-purple-400 font-bold text-sm">3.2</span>
+<span class="text-xs text-neutral-500">~35 min</span>
+</div>
+<h3 class="font-semibold mb-1 group-hover:text-purple-400 transition-colors">📊 /audit</h3>
+<p class="text-xs text-neutral-400">Veja o placar subir</p>
+</a>
+<a class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-purple-500/30 p-5 transition-all" href="#modulo-3-3">
+<div class="flex items-center justify-between mb-2">
+<span class="text-purple-400 font-bold text-sm">3.3</span>
+<span class="text-xs text-neutral-500">~40 min</span>
+</div>
+<h3 class="font-semibold mb-1 group-hover:text-purple-400 transition-colors">📈 /level-up</h3>
+<p class="text-xs text-neutral-400">Uma entrevista, um artefato</p>
+</a>
+<a class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-purple-500/30 p-5 transition-all" href="#modulo-3-4">
+<div class="flex items-center justify-between mb-2">
+<span class="text-purple-400 font-bold text-sm">3.4</span>
+<span class="text-xs text-neutral-500">~35 min</span>
+</div>
+<h3 class="font-semibold mb-1 group-hover:text-purple-400 transition-colors">🌱 Expansões</h3>
+<p class="text-xs text-neutral-400">Sem virar porão</p>
+</a>
+</div>
+</section>
+<!-- CONTEÚDO DETALHADO -->
+<h2 class="text-2xl font-bold mb-6">Conteúdo detalhado</h2>
+<!-- ====== MÓDULO 3.1 ====== -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 mb-6" id="modulo-3-1">
+<div class="p-6 border-b border-dark-600">
+<div class="flex items-center justify-between mb-2">
+<span class="text-purple-400 font-bold">3.1</span>
+<span class="text-xs text-neutral-500">~35 min</span>
+</div>
+<h3 class="text-2xl font-bold mb-2">🚀 /onboard: Setup do Dia 1</h3>
+<p class="text-neutral-400 text-sm">Wizard que lê e escreve <code class="bg-dark-700 px-1 rounded text-purple-300">aios-intake.md</code>, conduz 7 perguntas e scaffolda o file-set completo do Dia 1. Idempotente — pode rodar de novo sem perder nada.</p>
+</div>
+<div class="divide-y divide-dark-600">
+<!-- Tópico 1 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+<span class="text-lg">⚙️</span>
+<div>
+<span class="font-medium">O que o /onboard faz</span>
+<span class="text-neutral-500 text-sm ml-2">- Wizard combinado idempotente</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Uma skill que lê/escreve <code class="bg-dark-600 px-1 rounded text-purple-300">aios-intake.md</code>, conduz a entrevista de 7 perguntas e scaffolda o file-set do Dia 1 ao final. Idempotente: rodar novamente só atualiza o que mudou.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Sem /onboard o sistema fica genérico. Com ele, o Claude Code já conhece seu negócio, sua voz e suas prioridades desde a primeira conversa — instalando o Default Shift imediatamente.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Idempotência · wizard combinado · aios-intake.md · Default Shift · scaffold do Dia 1.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 2 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+<span class="text-lg">❓</span>
+<div>
+<span class="font-medium">As 7 perguntas (cap rígido)</span>
+<span class="text-neutral-500 text-sm ml-2">- Q1–Q7, cada uma &lt;60s</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Sete perguntas com cap rígido: Q1 quem/o que vende/pra quem · Q2 amostras de voz · Q3 prioridades 90 dias · Q4 onde a receita cai · Q5 onde fala com clientes/time · Q6 onde moram reuniões/docs · Q7 a tarefa que come a semana. Cada uma &lt;60s.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">O cap de 7 é intencional: mais perguntas = menos resposta. Sete é o mínimo para gerar contexto suficiente e o máximo para não cansar no Dia 1.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Cap rígido · 7 domínios de contexto · receita · voz · prioridades 90 dias.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 3 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+<span class="text-lg">🎤</span>
+<div>
+<span class="font-medium">A regra da voz (Q2)</span>
+<span class="text-neutral-500 text-sm ml-2">- A ÚNICA regra que não dobra</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">A única regra inquebrável do /onboard: amostras de voz devem ser COLADAS verbatim, nunca digitadas durante a conversa. "Se você digita aqui enquanto conversamos, a amostra já está moldada pela conversa."</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Voz é o diferencial do conteúdo gerado. Uma amostra contaminada pela sessão gera textos que parecem "IA genérica" em vez de soarem como você. O /onboard recusa ativamente se detectar digitação ao vivo.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Verbatim · contaminação de voz · references/voice.md · amostra vs. descrição de voz.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 4 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+<span class="text-lg">🗂️</span>
+<div>
+<span class="font-medium">Scaffold do Dia 1</span>
+<span class="text-neutral-500 text-sm ml-2">- O que é gerado ao final</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Ao final das 7 perguntas o /onboard gera: <code class="bg-dark-600 px-1 rounded text-purple-300">context/about-me.md</code>, <code class="bg-dark-600 px-1 rounded text-purple-300">context/about-business.md</code>, <code class="bg-dark-600 px-1 rounded text-purple-300">context/priorities.md</code>, <code class="bg-dark-600 px-1 rounded text-purple-300">references/voice.md</code>, <code class="bg-dark-600 px-1 rounded text-purple-300">connections.md</code> (7 linhas) e preenche o CLAUDE.md. Backup em <code class="bg-dark-600 px-1 rounded text-purple-300">archives/intake-{ts}/</code>.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Esses arquivos são a memória permanente do sistema. Sem eles, cada conversa começa do zero. Com eles, o Claude sabe quem você é, o que você vende e onde focar — sem re-explicar.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">File-set · context/ · references/ · CLAUDE.md · backup em archives/ · idempotência.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 5 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+<span class="text-lg">✨</span>
+<div>
+<span class="font-medium">O "wow moment"</span>
+<span class="text-neutral-500 text-sm ml-2">- O prompt de fechamento</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Prompt automático no fim do /onboard: "no que devo focar essa semana?". A resposta usa APENAS os arquivos de contexto gerados, em 3 bullets na voz do usuário, cada um amarrado a uma prioridade dos 90 dias.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">É o momento que planta o Default Shift: o usuário vê pela primeira vez o sistema respondendo como sócio estratégico, não como digitador. A primeira experiência define se o ritual vai persistir.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Default Shift · wow moment · 3 bullets · voz do usuário · prioridades 90 dias.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 6 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+<span class="text-lg">🔄</span>
+<div>
+<span class="font-medium">Idempotência + re-run</span>
+<span class="text-neutral-500 text-sm ml-2">- Editar e rodar de novo</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Edite <code class="bg-dark-600 px-1 rounded text-purple-300">aios-intake.md</code> e rode <code class="bg-dark-600 px-1 rounded text-purple-300">/onboard</code> de novo. Ele refresca só o que mudou, pula perguntas já respondidas e faz backup automático antes de sobrescrever.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Seu negócio muda. Quando muda, basta editar o intake e re-rodar — não precisa reconfigurar do zero. Idempotência transforma o onboarding em rotina de atualização.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Re-run · diff incremental · backup automático · aios-intake.md como fonte de verdade.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 7 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">7</span>
+<span class="text-lg">🚫</span>
+<div>
+<span class="font-medium">O que o /onboard NÃO faz</span>
+<span class="text-neutral-500 text-sm ml-2">- Limites intencionais</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Não passa de 7 perguntas · não escreve <code class="bg-dark-600 px-1 rounded text-purple-300">.env</code> (sem chaves no Dia 1 — conexões vêm no Dia 2) · não gera skills extras · read-only no <code class="bg-dark-600 px-1 rounded text-purple-300">3ms-framework.md</code>.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Limites explícitos evitam scope creep. O /onboard é narrow by design: faz uma coisa bem. Conexões e automações vêm nas trilhas seguintes — não misture.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Narrow by design · scope creep · conexões no Dia 2 · read-only · separação de responsabilidades.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Botões -->
+<div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+<button class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors" onclick="openModal('modal-3-1')">
+          Ver em Modal
+        </button>
+<a class="px-4 py-2 text-sm bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-colors" href="modulo-3-1.html">
+          Ver Completo
+        </a>
+</div>
+</div>
+<!-- ====== MÓDULO 3.2 ====== -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 mb-6" id="modulo-3-2">
+<div class="p-6 border-b border-dark-600">
+<div class="flex items-center justify-between mb-2">
+<span class="text-purple-400 font-bold">3.2</span>
+<span class="text-xs text-neutral-500">~35 min</span>
+</div>
+<h3 class="text-2xl font-bold mb-2">📊 /audit: Diagnóstico Four-Cs</h3>
+<p class="text-neutral-400 text-sm">Skill que varre o AIOS pelos 4 Cs, gera um placar de saúde e produz lista de ações priorizadas. Rode no Dia 7 e repita semanalmente para ver a evolução.</p>
+</div>
+<div class="divide-y divide-dark-600">
+<!-- Tópico 1 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+<span class="text-lg">🔍</span>
+<div>
+<span class="font-medium">O que o /audit faz</span>
+<span class="text-neutral-500 text-sm ml-2">- Diagnóstico automático dos 4 Cs</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">O /audit varre o sistema pelos 4 Cs (Context, Connections, Capabilities, Cadence), atribui um score para cada dimensão, identifica gaps e produz uma lista de próximas ações ordenadas por alavancagem.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Sem diagnóstico, melhorias são aleatórias. O /audit torna o progresso visível — você vê o placar subir semana após semana, o que ancora o comportamento e justifica o investimento de tempo.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">4 Cs · score de saúde · gaps · próximas ações · alavancagem.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 2 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+<span class="text-lg">📝</span>
+<div>
+<span class="font-medium">Context audit</span>
+<span class="text-neutral-500 text-sm ml-2">- O C mais fundamental</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Verifica se context/, references/voice.md, priorities.md e CLAUDE.md estão presentes, completos e atualizados. Score cai se arquivos estão vagos, desatualizados ou ausentes.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Context é a base de tudo. Um sistema com Capabilities e Connections excelentes mas Context pobre vai produzir respostas genéricas. O audit força revisão do contexto antes de escalar.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Context score · completude · atualidade · CLAUDE.md como radar.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 3 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+<span class="text-lg">🔌</span>
+<div>
+<span class="font-medium">Connections audit</span>
+<span class="text-neutral-500 text-sm ml-2">- Alcance e integrações</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Varre connections.md e MCPs configurados. Score reflete quantas ferramentas reais do seu negócio o sistema alcança versus quantas ainda exigem copy-paste manual.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Conexões são multiplicadores de leverage. Cada MCP conectado elimina uma ponte manual. O audit mostra exatamente onde estão as pontes restantes e prioriza quais quebrar primeiro.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">connections.md · MCPs · pontes manuais · leverage de integração.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 4 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+<span class="text-lg">🧩</span>
+<div>
+<span class="font-medium">Capabilities audit</span>
+<span class="text-neutral-500 text-sm ml-2">- Skills e automações</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Conta e avalia as skills em <code class="bg-dark-600 px-1 rounded text-purple-300">.claude/skills/</code> e artefatos em <code class="bg-dark-600 px-1 rounded text-purple-300">decisions/log.md</code>. Score mede profundidade (skills especializadas) vs. breadth (áreas cobertas).</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Capabilities crescem com cada /level-up. O audit mostra se você está acumulando skills de forma estratégica ou aleatória — e identifica áreas do negócio ainda sem cobertura.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Skills · artefatos · decisions/log.md · profundidade vs. breadth · cobertura estratégica.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 5 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+<span class="text-lg">⏰</span>
+<div>
+<span class="font-medium">Cadence audit</span>
+<span class="text-neutral-500 text-sm ml-2">- Ritmo e automações rodando</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Verifica se há cadências definidas, quais estão rodando sem pedido explícito e quais ainda dependem de trigger manual. Score penaliza tarefas que "deveriam rodar sozinhas" mas não rodam.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Cadence é o C mais difícil de instalar. O audit torna óbvio o gap entre "automatizei" e "está rodando de fato" — diferença que normalmente leva semanas para descobrir sem diagnóstico.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Cadências · trigger manual vs. automático · gap de execução · score de Cadence.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 6 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+<span class="text-lg">📈</span>
+<div>
+<span class="font-medium">O placar e a lista de ações</span>
+<span class="text-neutral-500 text-sm ml-2">- Output do /audit</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Ao final o /audit entrega: placar com score 0-100 por C + total · lista de ações priorizadas (alto impacto primeiro) · sugestão de próximo /level-up target.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">O placar cria accountability. Ver o número subir de 42 para 67 em duas semanas é o que converte o operador de "estou tentando" para "estou progredindo". A lista remove a paralisia de escolha.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Score 0-100 · accountability · lista priorizada · próximo target · progresso visível.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 7 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">7</span>
+<span class="text-lg">📅</span>
+<div>
+<span class="font-medium">Cadência do /audit</span>
+<span class="text-neutral-500 text-sm ml-2">- Quando e com que frequência rodar</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Primeira rodada: Dia 7 após o /onboard. A partir daí: semanal (pode combinar com o /level-up toda sexta) ou quinzenal para quem está em fase de expansão acelerada.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Frequência define velocidade de melhoria. Audit mensal = feedback muito lento. Audit diário = overhead sem sinal claro. Semanal é o ponto de equilíbrio comprovado pelo kit AIS-OS.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Dia 7 · ritual semanal · frequência de feedback · overhead vs. sinal.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Botões -->
+<div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+<button class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors" onclick="openModal('modal-3-2')">
+          Ver em Modal
+        </button>
+<a class="px-4 py-2 text-sm bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-colors" href="modulo-3-2.html">
+          Ver Completo
+        </a>
+</div>
+</div>
+<!-- ====== MÓDULO 3.3 ====== -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 mb-6" id="modulo-3-3">
+<div class="p-6 border-b border-dark-600">
+<div class="flex items-center justify-between mb-2">
+<span class="text-purple-400 font-bold">3.3</span>
+<span class="text-xs text-neutral-500">~40 min</span>
+</div>
+<h3 class="text-2xl font-bold mb-2">📈 /level-up: 1 automação por semana</h3>
+<p class="text-neutral-400 text-sm">Caminha os 3 Ms toda semana para achar e shippar UMA automação. Uma entrevista, um artefato. Após 4-6 runs você começa a ver oportunidades sozinho.</p>
+</div>
+<div class="divide-y divide-dark-600">
+<!-- Tópico 1 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+<span class="text-lg">🎯</span>
+<div>
+<span class="font-medium">O que o /level-up faz</span>
+<span class="text-neutral-500 text-sm ml-2">- Uma entrevista, um artefato</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Skill que caminha os 3 Ms (Mindset → Method → Machine) toda semana para achar e shippar UMA automação. Além de entregar o artefato, instala os 3 Ms na cabeça do operador.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">A maioria das pessoas tenta automatizar tudo de uma vez e não entrega nada. O /level-up força foco em UMA coisa por semana — que é o ritmo que produz 52 automações/ano sem burnout.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">3 Ms · uma automação/semana · brain-rewire · entrevista estruturada · artefato scaffoldado.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 2 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+<span class="text-lg">🧠</span>
+<div>
+<span class="font-medium">Fase 1 — Mindset (achar o candidato)</span>
+<span class="text-neutral-500 text-sm ml-2">- 5 perguntas de triagem</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">5 perguntas para achar candidatos: o que fez 3+ vezes? algo manual/copy-paste? "um estagiário esperto daria conta"? se 500 clientes chegassem o que quebraria? o que daria 500 clientes? Resultado: 1-3 candidatos rankeados por alavancagem.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">A maioria quer automatizar o que é empolgante, não o que trava. As 5 perguntas forçam identificar o gargalo real antes de construir qualquer coisa.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Candidato · ranking por alavancagem · gargalo real · copy-paste mental · scale bottleneck.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 3 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+<span class="text-lg">🧭</span>
+<div>
+<span class="font-medium">Fase 2 — Method (escopar um)</span>
+<span class="text-neutral-500 text-sm ml-2">- EAD + Map + KPI obrigatório</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">5 passos: Find constraint → EAD (Eliminar primeiro; se "nada quebra", sai feliz e loga a vitória) → Map (5 elementos) → Autonomy (default no menor nível) → KPI (balde + métrica, obrigatório, senão para).</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">EAD é a etapa mais contraintuitiva e mais valiosa: às vezes o melhor "automação" é eliminar a tarefa inteira. O KPI obrigatório evita construir coisas impossíveis de medir — logo, impossíveis de melhorar.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">EAD · constraint · Map 5 elementos · Autonomy ladder · KPI como portão de saída.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 4 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+<span class="text-lg">🛠️</span>
+<div>
+<span class="font-medium">Fase 3 — Machine (construir)</span>
+<span class="text-neutral-500 text-sm ml-2">- Boring-is-Beautiful em 4 opções</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">4 opções em ordem Boring-is-Beautiful: (1) prompt salvo → (2) skill determinístico → (3) skill IA-assistido → (4) sub-agent (último recurso). Default = a maior opção SEM IA que resolve.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">A tendência natural é ir direto para o sub-agent complexo. Boring-is-Beautiful reverte isso: soluções simples são mais confiáveis, mais fáceis de debugar e entregam mais rápido. IA é o último recurso, não o padrão.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Boring-is-Beautiful · escada de complexidade · prompt salvo → skill → sub-agent · default simples.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 5 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+<span class="text-lg">🚲</span>
+<div>
+<span class="font-medium">Bike Method lock</span>
+<span class="text-neutral-500 text-sm ml-2">- Trava na Fase 1</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Todo artefato nasce com <code class="bg-dark-600 px-1 rounded text-purple-300">bike-method-phase: 1</code> no frontmatter. Isso trava o usuário na Fase 1 (validação manual). Avançar para a Fase 2 exige edição explícita do arquivo — sem atalhos.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">A maioria pula validação manual e só descobre que a automação não funciona depois de semanas. O lock força um ciclo de feedback humano antes de escalar — salva tempo e evita bugs em produção.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">bike-method-phase · frontmatter · validação manual · Fase 1 → 2 → 3 explícita · feedback loop.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 6 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+<span class="text-lg">📋</span>
+<div>
+<span class="font-medium">Contrato de saída</span>
+<span class="text-neutral-500 text-sm ml-2">- O que cada run produz</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Cada run do /level-up produz exatamente: 1 entrada no <code class="bg-dark-600 px-1 rounded text-purple-300">decisions/log.md</code> (spec do Method) + 1 artefato scaffoldado + 1 tela de fechamento com lembrete da Fase 1.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">O contrato de saída garante rastreabilidade. Sem log de decisions você não sabe o que foi decidido e por quê. Com ele, em 6 meses você tem um histórico de 24+ automações com rationale.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">decisions/log.md · spec · artefato scaffoldado · rastreabilidade · rationale.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 7 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">7</span>
+<span class="text-lg">🔮</span>
+<div>
+<span class="font-medium">O brain-rewire</span>
+<span class="text-neutral-500 text-sm ml-2">- Você vê sozinho depois de 4-6 runs</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Após 4-6 semanas rodando o /level-up toda sexta, os 3 Ms ficam internalizados. Você começa a identificar oportunidades de automação durante reuniões, emails e conversas — sem precisar da skill para enxergar.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">O /level-up não é só uma ferramenta: é um programa de treinamento cognitivo. O objetivo final não é a skill em si, mas instalar o mindset de operador de AIOS permanentemente.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Brain-rewire · 3 Ms internalizados · mindset de operador · 4-6 runs · rituais toda sexta.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Botões -->
+<div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+<button class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors" onclick="openModal('modal-3-3')">
+          Ver em Modal
+        </button>
+<a class="px-4 py-2 text-sm bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-colors" href="modulo-3-3.html">
+          Ver Completo
+        </a>
+</div>
+</div>
+<!-- ====== MÓDULO 3.4 ====== -->
+<div class="bg-dark-800 rounded-xl border border-dark-600 mb-6" id="modulo-3-4">
+<div class="p-6 border-b border-dark-600">
+<div class="flex items-center justify-between mb-2">
+<span class="text-purple-400 font-bold">3.4</span>
+<span class="text-xs text-neutral-500">~35 min</span>
+</div>
+<h3 class="text-2xl font-bold mb-2">🌱 Expansões &amp; Cadência semanal</h3>
+<p class="text-neutral-400 text-sm">Como crescer o kit sem virar porão de acumulador. O que adicionar, quando adicionar, a regra dos 3 sins e as cadências que mantêm o sistema limpo e navegável.</p>
+</div>
+<div class="divide-y divide-dark-600">
+<!-- Tópico 1 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+<span class="text-lg">📦</span>
+<div>
+<span class="font-medium">O que vem no kit (não remova)</span>
+<span class="text-neutral-500 text-sm ml-2">- Estrutura base obrigatória</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Estrutura base imutável: <code class="bg-dark-600 px-1 rounded text-purple-300">context/</code> · <code class="bg-dark-600 px-1 rounded text-purple-300">references/</code> · <code class="bg-dark-600 px-1 rounded text-purple-300">decisions/log.md</code> · <code class="bg-dark-600 px-1 rounded text-purple-300">archives/</code> · <code class="bg-dark-600 px-1 rounded text-purple-300">connections.md</code> · <code class="bg-dark-600 px-1 rounded text-purple-300">.claude/skills/</code> · <code class="bg-dark-600 px-1 rounded text-purple-300">aios-intake.md</code> · <code class="bg-dark-600 px-1 rounded text-purple-300">CLAUDE.md</code>. Remover qualquer um quebra o sistema.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Saber o que não remover é tão importante quanto saber o que adicionar. Cada arquivo da base tem uma função crítica — sem ele uma skill inteira para de funcionar.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Estrutura base · imutabilidade da core · dependências implícitas · kit integridade.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 2 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+<span class="text-lg">➕</span>
+<div>
+<span class="font-medium">O que adicionar conforme cresce</span>
+<span class="text-neutral-500 text-sm ml-2">- Expansões legítimas</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Quando a operação justifica: <code class="bg-dark-600 px-1 rounded text-purple-300">projects/</code> (2+ workstreams) · <code class="bg-dark-600 px-1 rounded text-purple-300">templates/</code> (parou de copiar prompt) · <code class="bg-dark-600 px-1 rounded text-purple-300">brand-assets/</code> · <code class="bg-dark-600 px-1 rounded text-purple-300">references/sops/</code> · <code class="bg-dark-600 px-1 rounded text-purple-300">references/{tool}-api.md</code> · <code class="bg-dark-600 px-1 rounded text-purple-300">scripts/</code> · <code class="bg-dark-600 px-1 rounded text-purple-300">.claude/agents/</code> · sub-OS folders.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Cada expansão tem um gatilho claro ("parou de copiar prompt" = templates/). Sem esse critério você cria pastas por antecipação — que viram porão em 2 semanas.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Gatilho de expansão · templates/ · projects/ · sub-OS · expansão por demanda.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 3 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+<span class="text-lg">🚫</span>
+<div>
+<span class="font-medium">Anti-padrões (o que NÃO adicionar)</span>
+<span class="text-neutral-500 text-sm ml-2">- Os 5 cemitérios</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Cinco anti-padrões fatais: dump de email/Slack em references/ · folder-of-folders (flat com bom nome vence) · notes/misc/tmp/inbox (cemitérios) · pré-criar pastas · duplicar decisions · mais de 1 CLAUDE.md na raiz.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Cada anti-padrão transforma o AIOS em um porão. A diferença entre "negócio bem gerido" e "bagunça digital" é seguir essas 5 regras de higiene consistentemente.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Anti-padrões · flat structure · cemitério digital · pré-criar · duplicação · CLAUDE.md único.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 4 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+<span class="text-lg">📅</span>
+<div>
+<span class="font-medium">Cadências sugeridas</span>
+<span class="text-neutral-500 text-sm ml-2">- O ritmo que mantém o sistema vivo</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Cadências por arquivo: decisions/log.md (toda decisão tomada) · archives/ (limpeza trimestral) · sops/ (quando alguém novo re-roda um processo) · connections.md (cada tool novo) · CLAUDE.md (revisão trimestral).</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Sem cadência os arquivos ficam desatualizados e perdem valor. Com cadência, o sistema cresce organicamente — cada arquivo tem um responsável temporal claro.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Cadência por arquivo · decisão imediata · limpeza trimestral · revisão periódica · sistema vivo.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 5 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+<span class="text-lg">3️⃣</span>
+<div>
+<span class="font-medium">A regra dos 3 sins</span>
+<span class="text-neutral-500 text-sm ml-2">- Antes de criar qualquer pasta</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Antes de criar uma pasta: (1) é conceitualmente novo? (2) vou tocar 3+ vezes no próximo mês? (3) o /level-up rotearia uma skill futura pra cá? 2 sins = adiciona. 1 sim = espera.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">É o portão de entrada para qualquer expansão. A maioria cria pasta no primeiro uso. A regra exige evidência de padrão antes de estruturar — previne 80% dos porões.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">3 sins · portão de expansão · padrão antes de estrutura · 2/3 sins = cria · 1/3 = espera.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tópico 6 -->
+<div class="topic-item">
+<button class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left" onclick="toggleTopic(this)">
+<span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+<span class="text-lg">🚀</span>
+<div>
+<span class="font-medium">Branch frameworks &amp; filosofia</span>
+<span class="text-neutral-500 text-sm ml-2">- "Negócio bem gerido, não porão"</span>
+</div>
+</button>
+<div class="topic-explanation px-6 pb-4">
+<div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+<div>
+<span class="text-purple-400 font-semibold">O que é:</span>
+<p class="text-neutral-300 text-sm">Frameworks avançados para quando o sistema cresce: Data Retrieval Hierarchy · Integration Ladder · Error Handling Playbook · Model Selection · Context Engineering · Discovery · Security &amp; Permissions. Filosofia central: "Seu AIOS deve parecer um negócio pequeno e bem-gerido — não um porão de acumulador."</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Por que aprender:</span>
+<p class="text-neutral-300 text-sm">Quando o sistema escala esses frameworks fornecem padrões para decisões que não têm resposta óbvia. Conhecê-los antes de precisar significa não improvisar sob pressão.</p>
+</div>
+<div>
+<span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+<p class="text-neutral-300 text-sm">Branch frameworks · escala · porão vs. negócio bem-gerido · decisões sob pressão · filosofia operacional.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Botões -->
+<div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+<button class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors" onclick="openModal('modal-3-4')">
+          Ver em Modal
+        </button>
+<a class="px-4 py-2 text-sm bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-colors" href="modulo-3-4.html">
+          Ver Completo
+        </a>
+</div>
+</div>
+<!-- NAVEGAÇÃO FIM DE TRILHA -->
+<div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-10 pt-8 border-t border-dark-600">
+<a class="flex items-center space-x-2 px-5 py-3 bg-dark-800 hover:bg-dark-700 rounded-xl border border-dark-600 transition-colors text-sm font-medium" href="../trilha2/index.html">
+<span>←</span>
+<span>Trilha anterior: Arquitetura (4 Cs)</span>
+</a>
+<a class="flex items-center space-x-2 px-5 py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-xl transition-colors text-sm font-medium" href="../../index.html">
+<span>Voltar ao início</span>
+<span>→</span>
+</a>
+</div>
+</main>
+<!-- FOOTER C -->
+<footer class="border-t border-dark-600 py-8 mt-16">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm space-y-1">
+<p>⚙️ AIS-OS — Seu AI Operating System no Claude Code · <a class="text-sky-400 hover:text-sky-300" href="https://inema.club" target="_blank">INEMA.CLUB</a> · 2026</p>
+<p>Baseado no kit AIS-OS (licença MIT). The Three Ms of AI™ e The Four Cs of an AIOS™ são marcas de Nate Herk. © 2026 Nate Herk.</p>
+</div>
+</footer>
+<!-- MODAIS IFRAME -->
+<div class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" id="modal-3-1" onclick="if(event.target === this) closeModal()">
+<div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+<div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+<div class="flex items-center space-x-3">
+<span class="text-purple-400 font-bold">3.1</span>
+<span class="font-semibold">🚀 /onboard: Setup do Dia 1</span>
+</div>
+<button class="text-neutral-400 hover:text-white text-2xl leading-none" onclick="closeModal()">×</button>
+</div>
+<iframe class="flex-1 w-full rounded-b-xl" src="modulo-3-1.html"></iframe>
+</div>
+</div>
+<div class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" id="modal-3-2" onclick="if(event.target === this) closeModal()">
+<div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+<div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+<div class="flex items-center space-x-3">
+<span class="text-purple-400 font-bold">3.2</span>
+<span class="font-semibold">📊 /audit: Diagnóstico Four-Cs</span>
+</div>
+<button class="text-neutral-400 hover:text-white text-2xl leading-none" onclick="closeModal()">×</button>
+</div>
+<iframe class="flex-1 w-full rounded-b-xl" src="modulo-3-2.html"></iframe>
+</div>
+</div>
+<div class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" id="modal-3-3" onclick="if(event.target === this) closeModal()">
+<div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+<div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+<div class="flex items-center space-x-3">
+<span class="text-purple-400 font-bold">3.3</span>
+<span class="font-semibold">📈 /level-up: 1 automação por semana</span>
+</div>
+<button class="text-neutral-400 hover:text-white text-2xl leading-none" onclick="closeModal()">×</button>
+</div>
+<iframe class="flex-1 w-full rounded-b-xl" src="modulo-3-3.html"></iframe>
+</div>
+</div>
+<div class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" id="modal-3-4" onclick="if(event.target === this) closeModal()">
+<div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+<div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+<div class="flex items-center space-x-3">
+<span class="text-purple-400 font-bold">3.4</span>
+<span class="font-semibold">🌱 Expansões &amp; Cadência semanal</span>
+</div>
+<button class="text-neutral-400 hover:text-white text-2xl leading-none" onclick="closeModal()">×</button>
+</div>
+<iframe class="flex-1 w-full rounded-b-xl" src="modulo-3-4.html"></iframe>
+</div>
+</div>
+<!-- SCRIPTS D2 -->
+<script>
+    function toggleTopic(b){const t=b.closest('.topic-item'),e=t.querySelector('.topic-explanation'),c=b.closest('.bg-dark-800');c.querySelectorAll('.topic-explanation.active').forEach(x=>{if(x!==e)x.classList.remove('active');});e.classList.toggle('active');}
+    function openModal(id){const m=document.getElementById(id);if(m){m.classList.remove('hidden');document.body.style.overflow='hidden';}}
+    function closeModal(){document.querySelectorAll('.modal').forEach(m=>m.classList.add('hidden'));document.body.style.overflow='auto';}
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+    const themeToggle=document.getElementById('theme-toggle'),tdi=document.getElementById('theme-toggle-dark-icon'),tli=document.getElementById('theme-toggle-light-icon'),H=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){tdi.classList.remove('hidden');H.classList.remove('dark');}else{tli.classList.remove('hidden');}
+    themeToggle.addEventListener('click',()=>{tdi.classList.toggle('hidden');tli.classList.toggle('hidden');H.classList.toggle('dark');localStorage.setItem('theme',H.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>
