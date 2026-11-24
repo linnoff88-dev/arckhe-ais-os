@@ -1,4 +1,4 @@
-﻿# âš™ï¸ AIS-OS â€” Seu AI Operating System no Claude Code
+# âš™ï¸ AIS-OS â€” Seu AI Operating System no Claude Code
 
 <div align="center">
   <img src="capa/logo.svg" alt="Arckhé AI" height="48" />
@@ -6,9 +6,9 @@
 </div>
 
 
-Curso gratuito (formato INEMA.CLUB) que transforma o **Claude Code** num **AI Operating System (AIOS)** pessoal: um sistema que conhece seu negÃ³cio, alcanÃ§a suas ferramentas, sabe fazer o trabalho e roda sem ser pedido.
+Curso gratuito (formato ARCKHÉ AI) que transforma o **Claude Code** num **AI Operating System (AIOS)** pessoal: um sistema que conhece seu negÃ³cio, alcanÃ§a suas ferramentas, sabe fazer o trabalho e roda sem ser pedido.
 
-**ðŸŒ Acesse o curso:** https://inematds.github.io/ais-os/
+**ðŸŒ Acesse o curso:** https://linnoff88-dev.github.io/
 
 Baseado no kit open-source **AIS-OS** (licenÃ§a MIT) de Nate Herk â€” destrinchado em trilhas, mÃ³dulos e tÃ³picos com diagramas SVG, modo claro/escuro e navegaÃ§Ã£o completa.
 
@@ -49,7 +49,7 @@ Site estÃ¡tico, sem build. Funciona abrindo os arquivos no navegador ou via Gi
 
 ## LicenÃ§a e atribuiÃ§Ã£o
 
-ConteÃºdo educacional do INEMA.CLUB. Baseado no kit **AIS-OS** (MIT) de Nate Herk.
+ConteÃºdo educacional do ARCKHÉ AI. Baseado no kit **AIS-OS** (MIT) de Nate Herk.
 *The Three Ms of AIâ„¢* e *The Four Cs of an AIOSâ„¢* sÃ£o marcas de **Nate Herk**. Â© 2026 Nate Herk.
 
 ---
